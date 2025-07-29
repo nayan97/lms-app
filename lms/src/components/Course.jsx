@@ -48,7 +48,7 @@ const Course = ({title,level,enrolled,customClasses}) => {
                 <div className="d-flex py-2 justify-content-between align-items-center">
                     <div className="price">$50</div>
                     <div className="add-to-cart">
-                        <a href="/detail" className="btn btn-primary" >Read More</a>
+                        <a href="/cource-detail" className="btn btn-primary" >Read More</a>
                     </div>
                 </div>
             </div>
