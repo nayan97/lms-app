@@ -1,10 +1,11 @@
 import React from 'react';
+import Layout from '../Shared/Layout';
 
 const Home = () => {
     return (
-        <div>
-            Ami Home
-        </div>
+   <Layout>
+    <h1>home</h1>
+   </Layout>
     );
 };
 
