@@ -9,6 +9,7 @@ import MyAccount from "./pages/account/MyAccount"
 import ChangePassword from "./pages/account/ChangePassword"
 import CourceEnroled from "./pages/account/CourceEnroled"
 import WatchCource from "./pages/account/WatchCource"
+import MyCourses from './pages/account/MyCourses'
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/account/login" element={<Login></Login>} ></Route>
           <Route path="/account/register" element={<Register></Register>} ></Route>
           <Route path="/account/my-account" element={<MyAccount></MyAccount>} ></Route>
+          <Route path="/account/my-courses" element={<MyCourses></MyCourses>} ></Route>
           <Route path="/account/change-password" element={<ChangePassword></ChangePassword>} ></Route>
           <Route path="/account/cource-enroled" element={<CourceEnroled></CourceEnroled>} ></Route>
           <Route path="/account/watch-cource" element={<WatchCource></WatchCource>} ></Route>
