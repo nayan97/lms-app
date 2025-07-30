@@ -3,7 +3,7 @@ import UserSidebar from '../../components/Shared/UserSidebar';
 import CourceEnroled from './CourseEnroled';
 import Layout from '../../components/Shared/Layout';
 
-const CoursesEnroled = () => {
+const MyLearning = () => {
     return (
         <Layout>
               <section className='section-4'>
@@ -33,4 +33,4 @@ const CoursesEnroled = () => {
     );
 };
 
-export default CoursesEnroled;
+export default MyLearning;

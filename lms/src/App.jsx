@@ -7,7 +7,7 @@ import Login from "./pages/account/Login"
 import Register from "./pages/account/Register"
 import MyAccount from "./pages/account/MyAccount"
 import ChangePassword from "./pages/account/ChangePassword"
-import CoursesEnroled from "./pages/account/CoursesEnroled"
+import MyLearning from "./pages/account/MyLearning"
 import WatchCource from "./pages/account/WatchCource"
 import MyCourses from './pages/account/MyCourses'
 
@@ -27,8 +27,8 @@ function App() {
           <Route path="/account/my-account" element={<MyAccount></MyAccount>} ></Route>
           <Route path="/account/my-courses" element={<MyCourses></MyCourses>} ></Route>
           <Route path="/account/change-password" element={<ChangePassword></ChangePassword>} ></Route>
-          <Route path="/account/cource-enroled" element={<CoursesEnroled></CoursesEnroled>} ></Route>
-          <Route path="/account/watch-cource" element={<WatchCource></WatchCource>} ></Route>
+          <Route path="/account/course-enroled" element={<MyLearning></MyLearning>} ></Route>
+          <Route path="/account/watch-course" element={<WatchCource></WatchCource>} ></Route>
         </Routes>
       </BrowserRouter>
     </>
