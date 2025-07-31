@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./components/pages/Home";
 import CourceDetail from "./components/pages/CourceDetail";
@@ -10,14 +10,16 @@ import ChangePassword from "./pages/account/ChangePassword"
 import MyLearning from "./pages/account/MyLearning"
 import WatchCource from "./pages/account/WatchCource"
 import MyCourses from './pages/account/MyCourses'
+import { Toaster } from "react-hot-toast";
 
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   return (
     <>
       <BrowserRouter>
+         <Toaster position="top-right" />
         <Routes>
           <Route path="/" element={<Home></Home>} ></Route>
           <Route path="/cource-detail" element={<CourceDetail></CourceDetail>} ></Route>
