@@ -12,6 +12,7 @@ import WatchCource from "./pages/account/WatchCource"
 import MyCourses from './pages/account/MyCourses'
 import Dashboard from './pages/account/Dashboard'
 import { Toaster } from "react-hot-toast";
+import { RequireAuth } from "./components/Shared/RequireAuth";
 
 
 function App() {
@@ -25,7 +26,13 @@ function App() {
           <Route path="/" element={<Home></Home>} ></Route>
           <Route path="/cource-detail" element={<CourceDetail></CourceDetail>} ></Route>
           <Route path="/courses" element={<Courses></Courses>} ></Route>
-          <Route path="/account/dashboard" element={<Dashboard></Dashboard>} ></Route>
+
+          <Route path="/account/dashboard" element={
+            <RequireAuth>
+              <Dashboard></Dashboard>
+            </RequireAuth>
+          } >
+          </Route>
           <Route path="/account/login" element={<Login></Login>} ></Route>
           <Route path="/account/register" element={<Register></Register>} ></Route>
           <Route path="/account/my-account" element={<MyAccount></MyAccount>} ></Route>

@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import Layout from "../../components/Shared/Layout";
 import { apiUrl } from "../../components/Shared/Config";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../components/context/Auth";
 
 const Login = () => {
-
+  const {login} = useContext(AuthContext)
    const navigate = useNavigate();
   const {
     register,
@@ -36,6 +37,7 @@ const onSubmit = async (data) => {
           }
 
           localStorage.setItem('userInfoLms', JSON.stringify(userInfo));
+          login(userInfo)
            navigate('/account/dashboard');
         }else{
            toast.error(result.message);
