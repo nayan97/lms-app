@@ -1,45 +1,46 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Layout from "../../components/Shared/Layout";
 import { useForm } from "react-hook-form";
 import { apiUrl } from "../../components/Shared/Config"
 import { toast } from 'react-hot-toast';
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors },
-    handleSubmit, setError
+    handleSubmit,
   } = useForm();
 
-const onSubmit = async (data) => {
-  try {
-    const response = await fetch(`${apiUrl}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch(`${apiUrl}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      const message = result.message || 'Something went wrong';
-      toast.error(message);
-      return;
+      if (!response.ok) {
+        const message = result.message || "Something went wrong";
+        toast.error(message);
+        return;
+      }
+
+      toast.success("User registered successfully!");
+      // Optionally reset form or redirect
+      // reset();
+      navigate('/login');
+    } catch (error) {
+      console.error("Fetch error:", error);
+      toast.error("Network error. Please try again.");
     }
-
-    toast.success('User registered successfully!');
-    // Optionally reset form or redirect
-    // reset();
-    // navigate('/login');
-  } catch (error) {
-    console.error('Fetch error:', error);
-    toast.error('Network error. Please try again.');
-  }
-};
+  };
 
 
   return (
