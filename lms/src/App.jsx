@@ -12,8 +12,10 @@ import WatchCource from "./pages/account/WatchCource";
 import MyCourses from "./pages/account/MyCourses";
 import Dashboard from "./pages/account/Dashboard";
 import AddCourse from "./pages/account/Courses/AddCourse";
+import EditCourses from "./pages/account/Courses/EditCourses";
 import { Toaster } from "react-hot-toast";
 import { RequireAuth } from "./components/Shared/RequireAuth";
+
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -47,6 +49,17 @@ function App() {
               </RequireAuth>
             }
           ></Route>
+          
+          <Route
+            path="/account/courses-edit/:id"
+            element={
+              <RequireAuth>
+                <EditCourses></EditCourses>
+              </RequireAuth>
+            }
+          ></Route>
+
+
           <Route path="/account/login" element={<Login></Login>}></Route>
           <Route
             path="/account/register"

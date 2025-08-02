@@ -30,7 +30,7 @@ const AddCourse = () => {
         if (result.status === 200){
           toast.success(result.message);
       
-           navigate('/account/courses/edit/'+result.data.id);
+           navigate('/account/courses-edit/'+result.data.id);
         }else{
            toast.error(result.message);
           // const errors = result.errors;
