@@ -29,7 +29,7 @@ const onSubmit = async (data) => {
     .then(res => res.json())
     .then (result => {
         if (result.status === 200){
-          // toast.success(result.success);
+          toast.success(result.message);
           const userInfo = {
             name: result.name,
             id:result.id,
