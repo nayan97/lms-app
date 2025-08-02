@@ -57,7 +57,7 @@ class AccountController extends Controller
 
     if (!$user || !Hash::check($credentials['password'], $user->password)) {
         return response()->json([
-            'status' => false,
+            'status' => 400,
             'message' => 'Invalid email or password.'
         ], 401);
     }
@@ -71,7 +71,7 @@ class AccountController extends Controller
         'name' => $user->name,
         'id' => $user->id,
         'token' => $token,
-    ], 401);
+    ], 200);
         
     }
 }
