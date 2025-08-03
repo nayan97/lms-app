@@ -1,17 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import UserSidebar from "../../../components/Shared/UserSidebar";
 import Layout from "../../../components/Shared/Layout";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
+import { apiUrl, token } from "../../../components/Shared/Config";
+import toast from "react-hot-toast";
 
 const EditCourses = () => {
+  const params  = useParams();
   const {
     register,
-    formState: { errors },
+    formState: { errors }, reset,
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    defaultValues: async () => {
+      await fetch(`${apiUrl}/course/${params.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
 
-  const onSubmit = () => {};
+          if (result.status === 200) {
+            reset({
+              
+            });
+          } else {
+            toast.error(result.message);
+          }
+        });
+    },
+  });
+  const [categories, setCategories] = useState([]);
+  const [Levels, setLevels] = useState([]);
+  const [languages, setlanguages] = useState([]);
+
+  const onSubmit = async (data) => {
+    await fetch(`${apiUrl}/course`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.status === 200) {
+          toast.success(result.message);
+        } else {
+          toast.error(result.message);
+          // const errors = result.errors;
+          //   Object.keys(errors.foreach(field => {
+          //     setError(field, {message: errors[field[0]]})
+          //   }))
+          // }
+        }
+      });
+  };
+
+  const courseMetaData = async () => {
+    await fetch(`${apiUrl}/course/meta-data`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+
+        if (result.status === 200) {
+          setCategories(result.categories);
+          setLevels(result.levels);
+          setlanguages(result.languages);
+        } else {
+          toast.error(result.message);
+        }
+      });
+  };
+
+  useEffect(() => {
+    courseMetaData();
+  }, []);
 
   return (
     <Layout>
@@ -85,38 +164,51 @@ const EditCourses = () => {
 
                       <div className="mb-3">
                         <label htmlFor="category_id" className="form-label">
-                          Category ID
+                          Category
                         </label>
-                        <input
-                          type="number"
-                          {...register("category_id")}
-                          className="form-control"
-                          placeholder="Optional"
-                        />
+                        <select className="form-select" name="" id="category">
+                          <option value="">Select a category</option>
+                          {categories &&
+                            categories.map((category) => {
+                              return (
+                                <option value={category.id}>
+                                  {category.name}
+                                </option>
+                              );
+                            })}
+                        </select>
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="level_id" className="form-label">
                           Level ID
                         </label>
-                        <input
-                          type="number"
-                          {...register("level_id")}
-                          className="form-control"
-                          placeholder="Optional"
-                        />
+                        <select className="form-select" name="" id="levels">
+                          <option value="">Select a Levels</option>
+                          {Levels &&
+                            Levels.map((Level) => {
+                              return (
+                                <option value={Level.id}>{Level.name}</option>
+                              );
+                            })}
+                        </select>
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="language_id" className="form-label">
                           Language ID
                         </label>
-                        <input
-                          type="number"
-                          {...register("language_id")}
-                          className="form-control"
-                          placeholder="Optional"
-                        />
+                        <select className="form-select" name="" id="levels">
+                          <option value="">Select a Levels</option>
+                          {languages &&
+                            languages.map((language) => {
+                              return (
+                                <option value={language.id}>
+                                  {language.name}
+                                </option>
+                              );
+                            })}
+                        </select>
                       </div>
 
                       <div className="mb-3">
