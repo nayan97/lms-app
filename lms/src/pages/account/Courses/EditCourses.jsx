@@ -7,10 +7,11 @@ import { apiUrl, token } from "../../../components/Shared/Config";
 import toast from "react-hot-toast";
 
 const EditCourses = () => {
-  const params  = useParams();
+  const params = useParams();
   const {
     register,
-    formState: { errors }, reset,
+    formState: { errors },
+    reset,
     handleSubmit,
   } = useForm({
     defaultValues: async () => {
@@ -27,8 +28,19 @@ const EditCourses = () => {
           console.log(result);
 
           if (result.status === 200) {
+            // reset({
+            //   ...result.data,
+            // });
             reset({
-              
+              title: result.data.title || "",
+              user_id: result.data.user_id || "",
+              category_id: result.data.category_id || "",
+              level_id: result.data.level_id || "",
+              language_id: result.data.language_id || "",
+              description: result.data.description || "",
+              price: result.data.price || "",
+              cross_price: result.data.cross_price || "",
+              image: result.data.image || "",
             });
           } else {
             toast.error(result.message);
@@ -147,9 +159,8 @@ const EditCourses = () => {
                         </label>
                         <input
                           type="number"
-                          {...register("user_id", {
-                            required: "User ID is required",
-                          })}
+                          {...register("user_id")}
+                          readOnly
                           className={`form-control ${
                             errors.user_id ? "is-invalid" : ""
                           }`}
@@ -166,7 +177,16 @@ const EditCourses = () => {
                         <label htmlFor="category_id" className="form-label">
                           Category
                         </label>
-                        <select className="form-select" name="" id="category">
+                        <select
+                          {...register("category", {
+                            required: "category is required",
+                          })}
+                          className={`form-select ${
+                            errors.category ? "is-invalid" : ""
+                          }`}
+                          name=""
+                          id="category"
+                        >
                           <option value="">Select a category</option>
                           {categories &&
                             categories.map((category) => {
@@ -177,13 +197,27 @@ const EditCourses = () => {
                               );
                             })}
                         </select>
+                        {errors.category && (
+                          <div className="text-danger">
+                            {errors.category.message}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="level_id" className="form-label">
                           Level ID
                         </label>
-                        <select className="form-select" name="" id="levels">
+                        <select
+                          {...register("Level", {
+                            required: "Level is required",
+                          })}
+                          className={`form-select ${
+                            errors.Level ? "is-invalid" : ""
+                          }`}
+                          name=""
+                          id="levels"
+                        >
                           <option value="">Select a Levels</option>
                           {Levels &&
                             Levels.map((Level) => {
@@ -192,14 +226,28 @@ const EditCourses = () => {
                               );
                             })}
                         </select>
+                        {errors.Level && (
+                          <div className="text-danger">
+                            {errors.Level.message}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="language_id" className="form-label">
-                          Language ID
+                          Languages
                         </label>
-                        <select className="form-select" name="" id="levels">
-                          <option value="">Select a Levels</option>
+                        <select
+                          {...register("Language", {
+                            required: "Language is required",
+                          })}
+                          className={`form-select ${
+                            errors.Language ? "is-invalid" : ""
+                          }`}
+                          name=""
+                          id="languages"
+                        >
+                          <option value="">Select a Languages</option>
                           {languages &&
                             languages.map((language) => {
                               return (
@@ -209,6 +257,11 @@ const EditCourses = () => {
                               );
                             })}
                         </select>
+                        {errors.Language && (
+                          <div className="text-danger">
+                            {errors.Language.message}
+                          </div>
+                        )}
                       </div>
 
                       <div className="mb-3">
