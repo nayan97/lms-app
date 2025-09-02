@@ -34,9 +34,9 @@ const EditCourses = () => {
             reset({
               title: result.data.title || "",
               user_id: result.data.user_id || "",
-              category_id: result.data.category_id || "",
-              level_id: result.data.level_id || "",
-              language_id: result.data.language_id || "",
+              category: result.data.category_id || "",
+              level: result.data.level_id || "",
+              language: result.data.language_id || "",
               description: result.data.description || "",
               price: result.data.price || "",
               cross_price: result.data.cross_price || "",
@@ -49,33 +49,8 @@ const EditCourses = () => {
     },
   });
   const [categories, setCategories] = useState([]);
-  const [Levels, setLevels] = useState([]);
+  const [levels, setLevels] = useState([]);
   const [languages, setlanguages] = useState([]);
-
-  const onSubmit = async (data) => {
-    await fetch(`${apiUrl}/course`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        if (result.status === 200) {
-          toast.success(result.message);
-        } else {
-          toast.error(result.message);
-          // const errors = result.errors;
-          //   Object.keys(errors.foreach(field => {
-          //     setError(field, {message: errors[field[0]]})
-          //   }))
-          // }
-        }
-      });
-  };
 
   const courseMetaData = async () => {
     await fetch(`${apiUrl}/course/meta-data`, {
@@ -100,6 +75,30 @@ const EditCourses = () => {
       });
   };
 
+  const onSubmit = async (data) => {
+    await fetch(`${apiUrl}/course/${params.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.status === 200) {
+          toast.success(result.message);
+        } else {
+          toast.error(result.message);
+          // const errors = result.errors;
+          //   Object.keys(errors.foreach(field => {
+          //     setError(field, {message: errors[field[0]]})
+          //   }))
+          // }
+        }
+      });
+  };
   useEffect(() => {
     courseMetaData();
   }, []);
@@ -174,28 +173,21 @@ const EditCourses = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label htmlFor="category_id" className="form-label">
+                        <label htmlFor="category" className="form-label">
                           Category
                         </label>
                         <select
-                          {...register("category", {
-                            required: "category is required",
+                          {...register("category_id", {
+                            required: "Category is required",
                           })}
-                          className={`form-select ${
-                            errors.category ? "is-invalid" : ""
-                          }`}
-                          name=""
-                          id="category"
+                          defaultValue=""
                         >
                           <option value="">Select a category</option>
-                          {categories &&
-                            categories.map((category) => {
-                              return (
-                                <option value={category.id}>
-                                  {category.name}
-                                </option>
-                              );
-                            })}
+                          {categories.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))}
                         </select>
                         {errors.category && (
                           <div className="text-danger">
@@ -203,63 +195,51 @@ const EditCourses = () => {
                           </div>
                         )}
                       </div>
-
                       <div className="mb-3">
-                        <label htmlFor="level_id" className="form-label">
-                          Level ID
+                        <label htmlFor="level" className="form-label">
+                          Level
                         </label>
                         <select
-                          {...register("Level", {
+                          {...register("level_id", {
                             required: "Level is required",
                           })}
-                          className={`form-select ${
-                            errors.Level ? "is-invalid" : ""
-                          }`}
-                          name=""
-                          id="levels"
+                          defaultValue=""
                         >
-                          <option value="">Select a Levels</option>
-                          {Levels &&
-                            Levels.map((Level) => {
-                              return (
-                                <option value={Level.id}>{Level.name}</option>
-                              );
-                            })}
+                          <option value="">Select a level</option>
+                          {levels.map((l) => (
+                            <option key={l.id} value={l.id}>
+                              {l.name}
+                            </option>
+                          ))}
                         </select>
-                        {errors.Level && (
+                        {errors.level && (
                           <div className="text-danger">
-                            {errors.Level.message}
+                            {errors.level.message}
                           </div>
                         )}
                       </div>
 
                       <div className="mb-3">
-                        <label htmlFor="language_id" className="form-label">
-                          Languages
+                        <label htmlFor="language" className="form-label">
+                          Language
                         </label>
+
                         <select
-                          {...register("Language", {
+                          {...register("language_id", {
                             required: "Language is required",
                           })}
-                          className={`form-select ${
-                            errors.Language ? "is-invalid" : ""
-                          }`}
-                          name=""
-                          id="languages"
+                          defaultValue=""
                         >
-                          <option value="">Select a Languages</option>
-                          {languages &&
-                            languages.map((language) => {
-                              return (
-                                <option value={language.id}>
-                                  {language.name}
-                                </option>
-                              );
-                            })}
+                          <option value="">Select a language</option>
+                          {languages.map((lang) => (
+                            <option key={lang.id} value={lang.id}>
+                              {lang.name}
+                            </option>
+                          ))}
                         </select>
-                        {errors.Language && (
+                        {errors.language && (
                           <div className="text-danger">
-                            {errors.Language.message}
+                            {errors.language.message}
                           </div>
                         )}
                       </div>
