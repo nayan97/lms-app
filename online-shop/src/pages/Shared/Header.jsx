@@ -1,6 +1,20 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
+import useAuth from "../../hooks/useAuth";
+
+
+
 const Header = () => {
+  const { user, logout } = useAuth();
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        console.log("logout successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const Navlinks = (
   <>
@@ -76,13 +90,57 @@ const Header = () => {
               {Navlinks}
             </ul>
           </div>
-          <Link to="/">home</Link>
+          <Link to="/">Home</Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
         </div>
         <div className="navbar-end space-x-2">
-     
+          {user ? (
+            <>
+              {" "}
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img src={user.photoURL} />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                >
+                  <li>
+                    <a className="justify-between">{user.displayName}</a>
+                  </li>
+                  <li>
+                    <a className="justify-between">{user.email}</a>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard">Dashboard</NavLink>
+                  </li>
+                  <li>
+                    {" "}
+                    <a href="/login" className="" onClick={handleLogout}>
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </>
+          ) : (
+            <>
+              <NavLink className="btn" to="/login">
+                Login
+              </NavLink>
+              <NavLink className="btn btn-success text-white" to="/register">
+                Register
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
    
@@ -90,5 +148,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
