@@ -2,12 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Api\SizeController;
-
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AddColorController;
 use App\Http\Controllers\Api\CategoryController;
@@ -22,7 +25,8 @@ Route::post('/login', [AccountController::class, 'authenticate']);
 Route::get('/home',[HomeController::class,'index']);
 
 Route::get('/product/{id}',[HomeController::class, 'productDetails']);
-
+Route::get('/districts', [CheckoutController::class, 'getDistricts']);
+Route::get('/districts/{id}/subdistricts', [CheckoutController::class, 'getSubdistricts']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,10 +43,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     
     Route::get('/products-detail', [ProductDetailController::class, 'index']);
     Route::get('/users/{email}', [UserController::class, 'show']);
-    
-    Route::post('/course', [CourseController::class, 'store']);
-    Route::get('/course/meta-data', [CourseController::class, 'metaData']);
-    Route::get('/course/{id}', [CourseController::class, 'show']);
-    Route::put('/course/{id}', [CourseController::class, 'update']);
+
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart/{id}', [CartController::class, 'store']);
+    Route::get('/checkout-data', [CheckoutController::class, 'checkoutData']);
 
 });
