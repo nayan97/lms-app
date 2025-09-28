@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('chapters', function (Blueprint $table) {
+        Schema::create('subdistricts', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->integer('sort_order')->default(0);
-            $table->integer('status')->default(1); // 1 = active, 0 = inactive
+            $table->foreignId('district_id')->constrained()->onDelete('cascade');
+            $table->string('name');     // English name
+            $table->string('bn_name');  // Bangla name
             $table->timestamps();
         });
-
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapters');
+        Schema::dropIfExists('subdistricts');
     }
 };

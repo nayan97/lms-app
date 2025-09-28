@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('outcomes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->text('text');
-            $table->integer('sort_order')->default(0);
-            $table->timestamps();
-        });
+        Schema::table('users', function (Blueprint $table) {
+             $table->string('avatar')->nullable()->after('email');
 
+        });
     }
 
     /**
@@ -26,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('outcomes');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

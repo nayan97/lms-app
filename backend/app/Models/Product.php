@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Product extends Model
+{
+       use HasFactory;
+
+    // protected $fillable = [
+    //     'title',
+    //     'user_id',
+    //     'category_id',
+    //     'description',
+    //     'sizes',
+    //     'colors',
+    //     'price',
+    //     'cross_price',
+    //     'source_price',
+    //     'source_url',
+    //     'profit',
+    //     'status',
+    //     'is_featured',
+    //     'image',
+    //     'image_gal',
+    // ];
+
+    // protected $casts = [
+    //     'sizes' => 'array',
+    //     'colors' => 'array',
+    //     'image_gal' => 'array',
+    // ];
+
+    protected $fillable = [
+        'title',
+        'image',
+        'image_gal',
+        'sizes',
+        'colors',
+        'price',
+        'cross_price',
+        'short_description',
+        'description',
+        'status',
+        'category_id',
+        // ...other fields
+    ];
+
+    protected $casts = [
+        'sizes' => 'array',
+        'colors' => 'array',
+        'image_gal' => 'array',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+}

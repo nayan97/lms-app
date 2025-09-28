@@ -11,25 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-      
-
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Assuming relation to users table
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('level_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('language_id')->nullable()->constrained()->onDelete('cascade');
-            $table->text('description')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->text('short_description')->nullable();
             $table->decimal('price', 8, 2)->default(0.00);
             $table->decimal('cross_price', 8, 2)->nullable();
-            $table->integer('status')->default(0); // e.g. 1 = active, 0 = inactive
+            $table->integer('status')->default(0); 
             $table->enum('is_featured', ['yes', 'no'])->default('no');
             $table->string('image')->nullable();
             $table->timestamps();
         });
-
-        
     }
 
     /**
@@ -37,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('products');
     }
 };
