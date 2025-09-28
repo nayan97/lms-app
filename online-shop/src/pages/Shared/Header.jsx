@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
+import { FaHeart, FaShoppingBag } from 'react-icons/fa';
 
 
 
-const Header = () => {
+
+
+const Header = ({ wishlistCount, cartCount }) => {
   const { user, logout } = useAuth();
   const handleLogout = () => {
     logout()
@@ -22,7 +25,7 @@ const Header = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            isActive ? "text-green-400 font-bold my-2" : "my-2"
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
           Home
@@ -30,19 +33,19 @@ const Header = () => {
       </li>
       <li>
         <NavLink
-          to="/community"
+          to="/shop"
           className={({ isActive }) =>
-            isActive ? "text-green-400 font-bold my-2" : "my-2"
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
-          Community
+          Shop
         </NavLink>
       </li>
       <li>
         <NavLink
           to="/about-us"
           className={({ isActive }) =>
-            isActive ? "text-green-400 font-bold my-2" : "my-2"
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
           About Us
@@ -52,7 +55,51 @@ const Header = () => {
         <NavLink
           to="/all-trips"
           className={({ isActive }) =>
-            isActive ? "text-green-400 font-bold my-2" : "my-2"
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
+          }
+        >
+          Trips
+        </NavLink>
+      </li>
+    </>
+  );
+    const Menulinks = (
+  <>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/shop"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          Shop
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/about-us"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          About Us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/all-trips"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
           }
         >
           Trips
@@ -63,7 +110,7 @@ const Header = () => {
 
   return (
   
-      <div className="navbar bg-base-100 shadow-sm fixed top-0 z-50">
+      <div className="navbar shadow-sm">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -85,9 +132,9 @@ const Header = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm bg-base-100 dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
-              {Navlinks}
+              {Menulinks}
             </ul>
           </div>
           <Link to="/">Home</Link>
@@ -96,6 +143,26 @@ const Header = () => {
           <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
         </div>
         <div className="navbar-end space-x-2">
+          <div className="">
+                <ul className="flex space-x-4 items-center">
+      <li>
+        <Link to="/wishlist" className="relative btn btn-ghost btn-circle">
+          <FaHeart className="text-xl" />
+          <span className="badge badge-sm badge-primary absolute -top-2 -right-2">
+            {wishlistCount}
+          </span>
+        </Link>
+      </li>
+      <li>
+        <Link to="/my-cart" className="relative btn btn-ghost btn-circle">
+          <FaShoppingBag className="text-xl" />
+          <span className="badge badge-sm badge-primary absolute -top-2 -right-2">
+            {cartCount}
+          </span>
+        </Link>
+      </li>
+    </ul>
+          </div>
           {user ? (
             <>
               {" "}

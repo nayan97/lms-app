@@ -13,7 +13,7 @@ import {
   PackageSearch,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
-import logo from "../../assets/logo/logo.jpeg";
+// import logo from "../../assets/logo/logo.jpeg";
 
 const Sidebar = ({ isOpen }) => {
   const { role, isLoading } = useUserRole();
@@ -22,19 +22,17 @@ const Sidebar = ({ isOpen }) => {
 
   return (
     <aside
-      className={`bg-[#ddd] h-full p-4 transition-all duration-300 ${
+      className={`bg-base-100 h-full p-4 transition-all duration-300 ${
         isOpen ? "w-40 lg:w-64" : "w-16"
       } overflow-hidden`}
     >
       <div className="space-y-2">
         <div className="p-1 mt-[-15px] ml-[-15px]">
           <NavLink to="/" className="flex justify-start p-2 ml-[-8]">
-           
-              <span className="flex items-start gap-2">
-                <img src={logo} alt="Logo" className="ml-2 h-12 w-12 rounded-full" />
-                <span className="pt-4 pl-2">Go Bangla</span>
-              </span>
-           
+            <span className="flex items-start gap-2">
+              <img src="" alt="Logo" className="ml-2 h-12 w-12 rounded-full" />
+              <span className="pt-4 pl-2">Go Bangla</span>
+            </span>
           </NavLink>
         </div>
 
@@ -43,14 +41,26 @@ const Sidebar = ({ isOpen }) => {
           {isOpen && <span>Dashboard</span>}
         </NavLink>
 
-        <NavLink to="/dashboard/add-story" className={linkClasses}>
+        <NavLink to="/dashboard/add-category" className={linkClasses}>
           <FileText className="w-5 h-5" />
-          {isOpen && <span>Add Story</span>}
+          {isOpen && <span>Category</span>}
         </NavLink>
 
-        <NavLink to="/dashboard/manage-stories" className={linkClasses}>
+        <NavLink to="/dashboard/add-size" className={linkClasses}>
           <Boxes className="w-5 h-5" />
-          {isOpen && <span>Manage Story</span>}
+          {isOpen && <span>Add Size</span>}
+        </NavLink>
+        <NavLink to="/dashboard/add-color" className={linkClasses}>
+          <Boxes className="w-5 h-5" />
+          {isOpen && <span>Add Color</span>}
+        </NavLink>
+              <NavLink to="/dashboard/add-product-detail" className={linkClasses}>
+          <Boxes className="w-5 h-5" />
+          {isOpen && <span>Add Product Detail</span>}
+        </NavLink>
+             <NavLink to="/dashboard/add-product" className={linkClasses}>
+          <Boxes className="w-5 h-5" />
+          {isOpen && <span>Add Product</span>}
         </NavLink>
 
         {!isLoading && role === "admin" && (
@@ -64,8 +74,7 @@ const Sidebar = ({ isOpen }) => {
               <PackagePlus className="w-5 h-5" />
               {isOpen && <span>Add Tour Plan</span>}
             </NavLink>
-               <NavLink to="/dashboard/manage-tour" className={linkClasses}>
-              
+            <NavLink to="/dashboard/manage-tour" className={linkClasses}>
               <PackageSearch className="w-5 h-5" />
               {isOpen && <span>Manage Tour Plan</span>}
             </NavLink>

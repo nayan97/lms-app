@@ -1,12 +1,10 @@
 import { Menu } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
-import EditProfileModal from "../../components/EditProfileModal";
 import { Link } from "react-router";
 
 const Navbar = ({ toggleSidebar }) => {
   const { user, logoutUser } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   // console.log(user);
 
@@ -20,7 +18,7 @@ const Navbar = ({ toggleSidebar }) => {
       });
   };
   return (
-    <div className="navbar bg-black border-b justify-between px-4 text-white">
+    <div className="navbar bg-[#ff9100] border-b justify-between px-4 text-white">
       <button onClick={toggleSidebar} className="btn btn-ghost">
         <Menu />
       </button>
@@ -35,7 +33,6 @@ const Navbar = ({ toggleSidebar }) => {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img src={user.photoURL} alt="User Avatar" />
                 </div>
               </div>
               <ul
@@ -44,7 +41,7 @@ const Navbar = ({ toggleSidebar }) => {
               >
                 <li>
                   <span className="justify-between hover:bg-blue-950">
-                    {user.displayName}
+                 
                   </span>
                 </li>
                 <li>
@@ -69,12 +66,12 @@ const Navbar = ({ toggleSidebar }) => {
               </ul>
             </div>
 
-            {isModalOpen && (
+            {/* {isModalOpen && (
               <EditProfileModal
                 user={user}
                 onClose={() => setIsModalOpen(false)}
               />
-            )}
+            )} */}
           </>
         )}
       </div>
