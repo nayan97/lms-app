@@ -47,5 +47,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/{id}', [CartController::class, 'store']);
     Route::get('/checkout-data', [CheckoutController::class, 'checkoutData']);
+    Route::post('/checkout-data', [CheckoutController::class, 'checkoutOrders']);
 
 });
