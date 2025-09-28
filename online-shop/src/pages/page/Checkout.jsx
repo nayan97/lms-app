@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useUserAxios from "../../hooks/useUserAxios";
+import Spinner from "../../components/Spinner";
 
 const Checkout = () => {
   const axiosSecure = useAxiosSecure(); // protected routes
@@ -13,18 +14,14 @@ const Checkout = () => {
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
-    cell: "",
-    email: "",
-    district: "",
-    subdistrict: "",
-    address: "",
-    opaddress: "",
-    city: "",
-    state_text: "",
-    zip: "",
-    paymethod: "cash",
+    customer_name: "",
+    customer_number: "",
+    district_id: "",
+    upazila_id: "",
+    delivery_address: "",
+    additional_instruction: "",
+    reseller_sell_price: "", // ✅ required by backend
+    paymethod: "Cash On",
   });
 
   // ✅ Fetch checkout data (user carts)
@@ -100,17 +97,18 @@ const Checkout = () => {
 
     console.log("Checkout Form Submitted:", payload);
 
-    // Example API call for order placement
-    // try {
-    //   const res = await axiosSecure.post("/place-order", payload);
-    //   console.log("Order placed:", res.data);
-    // } catch (err) {
-    //   console.error("Order failed:", err);
-    // }
+    try {
+      const res = await axiosSecure.post("/checkout-data", payload);
+      console.log("Order placed:", res.data);
+      alert(res.data.message || "Order placed successfully!");
+    } catch (err) {
+      console.error("Order failed:", err);
+      alert("Order failed. Please try again.");
+    }
   };
 
   if (loading) {
-    return <p>Loading checkout...</p>;
+    return <Spinner />;
   }
 
   return (
@@ -124,52 +122,28 @@ const Checkout = () => {
         >
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-4">
-            {/* Name */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="label">First Name*</label>
-                <input
-                  type="text"
-                  name="fname"
-                  className="input input-bordered w-full"
-                  value={formData.fname}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Last Name*</label>
-                <input
-                  type="text"
-                  name="lname"
-                  className="input input-bordered w-full"
-                  value={formData.lname}
-                  onChange={handleChange}
-                />
-              </div>
+            {/* Customer Name */}
+            <div>
+              <label className="label">Customer Name*</label>
+              <input
+                type="text"
+                name="customer_name"
+                className="input input-bordered w-full"
+                value={formData.customer_name}
+                onChange={handleChange}
+              />
             </div>
 
-            {/* Contact */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="label">Phone*</label>
-                <input
-                  type="text"
-                  name="cell"
-                  className="input input-bordered w-full"
-                  value={formData.cell}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Email*</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="input input-bordered w-full"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
+            {/* Phone */}
+            <div>
+              <label className="label">Phone*</label>
+              <input
+                type="text"
+                name="customer_number"
+                className="input input-bordered w-full"
+                value={formData.customer_number}
+                onChange={handleChange}
+              />
             </div>
 
             {/* District/Subdistrict */}
@@ -177,9 +151,9 @@ const Checkout = () => {
               <div>
                 <label className="label">Select District</label>
                 <select
-                  name="district"
+                  name="district_id"
                   className="select select-bordered w-full"
-                  value={formData.district}
+                  value={formData.district_id}
                   onChange={(e) => {
                     handleChange(e);
                     setDistrictId(e.target.value);
@@ -196,9 +170,9 @@ const Checkout = () => {
               <div>
                 <label className="label">Select Subdistrict</label>
                 <select
-                  name="subdistrict"
+                  name="upazila_id"
                   className="select select-bordered w-full"
-                  value={formData.subdistrict}
+                  value={formData.upazila_id}
                   onChange={handleChange}
                   disabled={!districtId}
                 >
@@ -217,23 +191,33 @@ const Checkout = () => {
               <label className="label">Address*</label>
               <input
                 type="text"
-                name="address"
+                name="delivery_address"
                 placeholder="Street Address"
-                className="input input-bordered w-full mb-2"
-                value={formData.address}
+                className="input input-bordered w-full"
+                value={formData.delivery_address}
                 onChange={handleChange}
               />
             </div>
 
-            {/* Other Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Additional Instruction */}
+            <div>
+              <label className="label">Additional Instructions</label>
+              <textarea
+                name="additional_instruction"
+                className="textarea textarea-bordered w-full"
+                value={formData.additional_instruction}
+                onChange={handleChange}
+              ></textarea>
+            </div>
 
+            {/* Reseller Price */}
+            <div>
+              <label className="label">Reseller Sell Price*</label>
               <input
-                type="text"
-                name="zip"
-                placeholder="Postcode / ZIP*"
-                className="input input-bordered w-full col-span-2"
-                value={formData.zip}
+                type="number"
+                name="reseller_sell_price"
+                className="input input-bordered w-full"
+                value={formData.reseller_sell_price}
                 onChange={handleChange}
               />
             </div>
@@ -264,12 +248,12 @@ const Checkout = () => {
                 <input
                   type="radio"
                   name="paymethod"
-                  value="cash"
-                  checked={formData.paymethod === "cash"}
+                  value="Cash On"
+                  checked={formData.paymethod === "Cash On"}
                   onChange={handleChange}
                   className="radio radio-primary"
                 />
-                <span className="label-text ml-2">Cash On</span>
+                <span className="label-text ml-2">Cash On Delivery</span>
               </label>
             </div>
 
