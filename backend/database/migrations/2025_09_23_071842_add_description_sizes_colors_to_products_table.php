@@ -15,6 +15,7 @@ return new class extends Migration
             $table->longText('description')->nullable()->after('title');
             $table->json('sizes')->nullable()->after('description');
             $table->json('colors')->nullable()->after('sizes');
+            $table->integer('max_price')->nullable()->after('colors');
         });
     }
 

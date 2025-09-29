@@ -11,23 +11,36 @@ use App\Models\Product;
 class CartController extends Controller
 {
     // ✅ Get all cart items for logged-in user
-    public function index()
-    {
-        if (Auth::check()) {
-            $logid = Auth::id();
-            $cartItems = Cart::where('user_id', $logid)->get();
+public function index()
+{
+    if (Auth::check()) {
+        $logid = Auth::id();
 
-            return response()->json([
-                'success' => true,
-                'cartItems' => $cartItems
-            ]);
-        }
+        $cartItems = Cart::with('product')
+            ->where('user_id', $logid)
+            ->get()
+            ->map(function ($cart) {
+              
+                    $cart->image_url = $cart->photo
+                        ? asset('storage/' . $cart->photo)
+                        : null;
+               
+                return $cart;
+            });
 
         return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized'
-        ], 401);
+            'success' => true,
+            'cartItems' => $cartItems,
+        ]);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Unauthorized'
+    ], 401);
+}
+
+
 
 // app/Http/Controllers/CartController.php
 
@@ -41,7 +54,9 @@ public function store(Request $request, $id)
     }
 
     $request->validate([
-        'qty' => 'required|integer|min:1'
+        'qty' => 'required|integer|min:1',
+        'size' => 'required|string|max:255',
+        'color' => 'required|string|max:255',
     ]);
 
     $user = Auth::user();
@@ -57,6 +72,8 @@ public function store(Request $request, $id)
     // ✅ ensure price is integer
     $unitPrice = (int) ($product->cross_price ?? $product->price);
     $qty = (int) $request->qty;
+    $cart->size =  $request->size;
+     $cart->color =  $request->color;
 
     $cart->price = $unitPrice * $qty;  // total price as integer
     $cart->product_id = $product->id;

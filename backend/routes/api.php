@@ -11,6 +11,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Api\SizeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\WishListController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AddColorController;
 use App\Http\Controllers\Api\CategoryController;
@@ -46,6 +47,14 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/{id}', [CartController::class, 'store']);
+
+    //------------------------Wishlist------------------------//
+
+    Route::get('/wishlist',[WishListController::class, 'showWishList']);
+    Route::post('/wishlist/{id}', [WishListController::class, 'addToWishList']);
+    Route::post('/wishlist/move-to-cart/{id}', [WishListController::class, 'moveToCart']);
+    Route::delete('/wishlist/remove/{id}', [WishListController::class, 'destroy']);
+
     Route::get('/checkout-data', [CheckoutController::class, 'checkoutData']);
     Route::post('/checkout-data', [CheckoutController::class, 'checkoutOrders']);
 

@@ -32,7 +32,7 @@ class HomeController extends Controller
             })
             ->orderBy('is_featured', 'desc')
             ->latest()
-            ->take(4)
+            ->take(6)
             ->get()
             ->map(function ($product) {
                 $product->image_url = $product->image 

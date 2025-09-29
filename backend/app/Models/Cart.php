@@ -14,6 +14,8 @@ class Cart extends Model
         'product_id',
         'quantity',
         'price',
+        'size',
+        'color'
     ];
 
     // Each cart belongs to one product

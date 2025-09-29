@@ -49,6 +49,7 @@ class ProductController extends Controller
             'source_price' => 'nullable|numeric',
             'source_url' => 'nullable|url',
             'cross_price' => 'nullable|numeric',
+            'max_price' => 'nullable|numeric',
             'profit' => 'nullable|numeric',
             'status' => 'required|boolean',
             'is_featured' => 'required|in:yes,no',

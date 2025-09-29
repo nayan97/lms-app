@@ -15,7 +15,7 @@ class CheckoutController extends Controller
     // ✅ Get all districts
     public function getDistricts()
     {
-        $districts = District::select('id', 'name')->get();
+        $districts = District::select('id', 'name', 'bn_name')->get();
 
         return response()->json([
             'status' => true,
@@ -27,9 +27,7 @@ class CheckoutController extends Controller
     public function getSubdistricts($districtId)
     {
         $subdistricts = Subdistrict::where('district_id', $districtId)
-            ->select('id', 'name')
-            ->get();
-
+            ->select('id', 'name', 'bn_name')->get();
         return response()->json([
             'status' => true,
             'subdistricts' => $subdistricts
@@ -48,8 +46,16 @@ class CheckoutController extends Controller
             }
 
             $userId = Auth::id();
-            $carts = Cart::with('product')->where('user_id', $userId)->get();
-
+            $carts = Cart::with('product')->where('user_id', $userId)
+            ->get()
+              ->map(function ($cart) {
+              
+                    $cart->image_url = $cart->photo
+                        ? asset('storage/' . $cart->photo)
+                        : null;
+               
+                return $cart;
+            });
             return response()->json([
                 'status' => true,
                 'carts' => $carts,
