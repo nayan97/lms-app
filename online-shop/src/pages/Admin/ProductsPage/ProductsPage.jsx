@@ -327,6 +327,15 @@ const ProductsPage = () => {
                   placeholder="Profit"
                   className="w-full border rounded p-2"
                 />
+                
+                {/* max_price */}
+                <input
+                  type="number"
+                  step="0.01"
+                  name="max_price"
+                  placeholder="Max Price"
+                  className="w-full border rounded p-2"
+                />
 
                 {/* Status */}
                 <select

@@ -4,51 +4,43 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 
-const ShoppingCart = () => {
+const Wishlist = () => {
   const axios = useAxiosSecure();
-  const [cartItems, setCartItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { t } = useTranslation();
+  const { t} = useTranslation();
 
-  // Fetch cart data
+
+
+  // ✅ Fetch wishlist data
   useEffect(() => {
-    const fetchCart = async () => {
+    const fetchWishlist = async () => {
       try {
-        const response = await axios.get("/cart", { withCredentials: true });
+        const response = await axios.get("/wishlist", { withCredentials: true });
 
-        console.log("Cart Response:", response.data);
-
-        if (response.data.success && Array.isArray(response.data.cartItems)) {
-          setCartItems(response.data.cartItems);
+        if (response.data.status && Array.isArray(response.data.wishlist)) {
+          setWishlistItems(response.data.wishlist);
         } else {
-          setCartItems([]);
+          setWishlistItems([]);
         }
       } catch (err) {
-        console.error("Error fetching cart:", err);
-        setError("Failed to load cart.");
+        console.error("Error fetching wishlist:", err);
+        setError(t("wishlistLoadFailed"));
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCart();
-  }, [axios]);
+    fetchWishlist();
+  }, [axios, t]);
 
-  // ✅ Subtotal
-  const subtotal = cartItems.reduce((sum, item) => {
-    const price = Number(item.price) || 0;
-    const qty = Number(item.product_qty) || 0;
-    return sum + price * qty;
-  }, 0);
-
-  // ✅ Update quantity
   const handleQtyChange = async (id, newQty) => {
     if (newQty < 1) return;
 
     try {
       await axios.put(`/cart/${id}`, { product_qty: newQty });
-      setCartItems((prev) =>
+      setWishlistItems((prev) =>
         prev.map((item) =>
           item.id === id ? { ...item, product_qty: newQty } : item
         )
@@ -56,7 +48,7 @@ const ShoppingCart = () => {
       Swal.fire({
         icon: "success",
         title: t("qtyUpdated"),
-        text: `${t("productQtyUpdated")}`,
+        text: t("productQtyUpdated"),
         timer: 1500,
         showConfirmButton: false,
       });
@@ -65,27 +57,6 @@ const ShoppingCart = () => {
         icon: "error",
         title: t("error"),
         text: t("updateFailed"),
-      });
-    }
-  };
-
-  // ✅ Remove item
-  const handleRemove = async (id) => {
-    try {
-      await axios.delete(`/cart/${id}`);
-      setCartItems((prev) => prev.filter((item) => item.id !== id));
-      Swal.fire({
-        icon: "success",
-        title: t("removed"),
-        text: t("itemRemoved"),
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: t("error"),
-        text: t("removeFailed"),
       });
     }
   };
@@ -107,37 +78,35 @@ const ShoppingCart = () => {
   }
 
   return (
-    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-3">
-      {/* Welcome Section */}
-      <section className="text-center py-4">
-        <h1 className="mt-4 text-xl">{t("welcome")}</h1>
-      </section>
-
+    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] p-6">
       {/* Breadcrumb Section */}
-      <section className="text-center py-6">
-        <h2 className="text-2xl font-bold">{t("cart")}</h2>
+      <section className="flex justify-between items-center py-6">
+        <h2 className="text-2xl font-bold">{t("myWishlist")}</h2>
+
+  
       </section>
 
-      {/* Cart Section */}
-      <section className="shopping-cart">
+      {/* Wishlist Section */}
+      <section className="wishlist">
         <div className="container mx-auto">
-          {cartItems.length > 0 ? (
+          {wishlistItems.length > 0 ? (
             <>
-              {/* Cart Table */}
+              {/* Wishlist Table */}
               <div className="overflow-x-auto">
                 <table className="table w-full bg-white rounded-xl shadow">
                   <thead className="bg-gray-200 text-gray-700">
                     <tr>
                       <th>Id</th>
                       <th>{t("products")}</th>
-                      <th>{t("price")}</th>
-                      <th className="hidden sm:table-cell">{t("quantity")}</th>
-                      <th className="hidden sm:table-cell">{t("total")}</th>
-                      <th>{t("Action")}</th>
+                      <th>{t("size")}</th>
+                      <th>{t("color")}</th>
+                      <th>{t("qty")}</th>
+                      <th>{t("total")}</th>
+                      <th>{t("action")}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {cartItems.map((item) => {
+                    {wishlistItems.map((item) => {
                       const price = Number(item.price) || 0;
                       const qty = Number(item.product_qty) || 0;
                       const total = price * qty;
@@ -155,8 +124,9 @@ const ShoppingCart = () => {
                               {item.product_title}
                             </h5>
                           </td>
-                          <td className="font-medium">${price}</td>
-                          <td className="hidden sm:table-cell">
+                          <td>{item.size || "-"}</td>
+                          <td>{item.color || "-"}</td>
+                          <td>
                             <input
                               type="number"
                               value={qty}
@@ -167,12 +137,12 @@ const ShoppingCart = () => {
                               }
                             />
                           </td>
-                          <td className="font-medium hidden sm:table-cell">
-                            ${total}
-                          </td>
+                          <td className="font-medium">${total}</td>
                           <td>
                             <button
-                              onClick={() => handleRemove(item.id)}
+                              onClick={() =>
+                                console.log("remove from wishlist", item.id)
+                              }
                               className="btn btn-sm btn-error text-white"
                             >
                               ✕
@@ -185,43 +155,21 @@ const ShoppingCart = () => {
                 </table>
               </div>
 
-              {/* Buttons + Totals */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                <div>
-                  <Link
-                    to="/shop"
-                    className="btn bg-white text-gray-800 shadow rounded-xl"
-                  >
-                    {t("continueShopping")}
-                  </Link>
-                </div>
-
-                <div className="card bg-white shadow rounded-xl p-4">
-                  <h5 className="text-lg font-semibold mb-2">
-                    {t("cartTotal")}
-                  </h5>
-                  <ul className="text-gray-700 space-y-1 mb-4">
-                    <li className="flex justify-between">
-                      <span>{t("subtotal")}</span>
-                      <span>${subtotal}</span>
-                    </li>
-                    <li className="flex justify-between font-semibold">
-                      <span>{t("total")}</span>
-                      <span>${subtotal}</span>
-                    </li>
-                  </ul>
-                  <Link
-                    to="/checkout"
-                    className="btn btn-primary w-full rounded-xl"
-                  >
-                    {t("proceedCheckout")}
-                  </Link>
-                </div>
+              {/* Buttons */}
+              <div className="flex justify-between mt-6">
+                <Link
+                  to="/shop"
+                  className="btn bg-white text-gray-800 shadow rounded-xl"
+                >
+                  {t("continueShopping")}
+                </Link>
               </div>
             </>
           ) : (
             <div className="text-center py-12">
-              <h1 className="text-2xl font-bold mb-4">{t("noProduct")}</h1>
+              <h1 className="text-2xl font-bold mb-4">
+                {t("wishlistEmpty")}
+              </h1>
               <Link
                 to="/shop"
                 className="btn bg-white shadow rounded-xl text-gray-800"
@@ -236,4 +184,4 @@ const ShoppingCart = () => {
   );
 };
 
-export default ShoppingCart;
+export default Wishlist;

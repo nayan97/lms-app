@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from "react";
-
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import useUserAxios from "../../hooks/useUserAxios";
-
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-
-import { useParams } from "react-router";
-
+import { useNavigate, useParams } from "react-router";
 import Spinner from "../../components/Spinner";
-
-import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const ProductDetails = () => {
   const { id } = useParams();
-
-  // console.log(id);
-
+  const navigate = useNavigate();
   const axios = useUserAxios();
-
   const axiosSecure = useAxiosSecure();
+  const { t } = useTranslation();
 
   const [product, setProduct] = useState(null);
-
   const [sizes, setSizes] = useState([]);
-
+  const [selectedSize, setSelectedSize] = useState("");
   const [colors, setColors] = useState([]);
-
+  const [selectedColor, setSelectedColor] = useState("");
   const [loading, setLoading] = useState(true);
-
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
@@ -35,13 +28,8 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`/product/${id}`);
-
-        // console.log(data);
-
         setProduct(data.data.product);
-
         setSizes(data.data.sizes || []);
-
         setColors(data.data.colors || []);
       } catch (error) {
         console.error("Failed to load product:", error);
@@ -53,49 +41,100 @@ const ProductDetails = () => {
     fetchProduct();
   }, [axios, id]);
 
-  if (loading) {
-    return <Spinner></Spinner>;
-  }
+  if (loading) return <Spinner />;
+  if (!product)
+    return (
+      <p className="text-center py-10 text-red-500">{t("productNotFound")}</p>
+    );
 
-  if (!product) {
-    return <p className="text-center py-10 text-red-500">Product not found!</p>;
-  }
-
+  // ✅ Add to cart
   const handleAddToCart = async (e) => {
     e.preventDefault();
 
-    try {
-      // Send only qty in body, product ID is in URL
+    if (!selectedSize) {
+      Swal.fire({
+        icon: "warning",
+        title: t("selectSize"),
+      });
+      return;
+    }
+    if (!selectedColor) {
+      Swal.fire({
+        icon: "warning",
+        title: t("selectColor"),
+      });
+      return;
+    }
 
+    try {
       const res = await axiosSecure.post(`/cart/${id}`, {
-        qty,
+        qty: Number(qty),
+        size: selectedSize,
+        color: selectedColor,
       });
 
       if (res.data.success) {
-        toast.success(res.data.message || "Added to cart!");
-
-        // Optional: update local cart state or refetch cart
-
-        // setCartItems(prev => [...prev, res.data.cartItem]);
+        Swal.fire({
+          icon: "success",
+          title: t("addedToCart"),
+          text: res.data.message || t("cartSuccess"),
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        setQty(1);
+        navigate("/shop");
       } else {
-        toast.error(res.data.message || "Failed to add to cart");
+        Swal.fire({
+          icon: "error",
+          title: t("error"),
+          text: res.data.message || t("cartFailed"),
+        });
       }
     } catch (error) {
-      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: t("error"),
+        text: error.response?.data?.message || t("cartFailed"),
+      });
+    }
+  };
 
-      // Show backend error message if exists
+  // ✅ Add to wishlist
+  const handleAddToWishlist = async () => {
+    const wishlistData = {
+      product_id: product.id,
+      size: selectedSize,
+      color: selectedColor,
+      qty,
+    };
 
-      toast.error(error.response?.data?.message || "Failed to add to cart");
+    try {
+      const res = await axiosSecure.post(`/wishlist/${id}`, wishlistData);
+      Swal.fire({
+        icon: "success",
+        title: t("addedToWishlist"),
+        text: res.data.message || t("wishlistSuccess"),
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: t("error"),
+        text: error.response?.data?.message || t("wishlistFailed"),
+      });
     }
   };
 
   return (
     <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100 rounded-[50px] p-6">
+      {/* Welcome text */}
+      <section className="text-center py-4">
+        <h1 className="mt-4 text-xl">{t("welcome")}</h1>
+      </section>
+
       <section className="product-details">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT IMAGE SECTION */}
-
             <div className="product__details__pic">
               <div className="mb-4">
                 <img
@@ -105,7 +144,7 @@ const ProductDetails = () => {
                 />
               </div>
 
-              {product.image_gal && product.image_gal.length > 0 && (
+              {product.image_gal?.length > 0 && (
                 <div className="flex gap-2 overflow-x-auto">
                   {product.image_gal.map((gal, index) => (
                     <img
@@ -120,22 +159,16 @@ const ProductDetails = () => {
             </div>
 
             {/* RIGHT DETAILS SECTION */}
-
             <div className="product__details__text space-y-4">
               <h3 className="text-2xl font-bold">{product.title}</h3>
 
               <div className="flex items-center gap-1 text-yellow-500">
                 <i className="fa fa-star"></i>
-
                 <i className="fa fa-star"></i>
-
                 <i className="fa fa-star"></i>
-
                 <i className="fa fa-star"></i>
-
                 <i className="fa fa-star-half-o"></i>
-
-                <span className="ml-2 text-gray-600">(18 reviews)</span>
+                <span className="ml-2 text-gray-600">(18 {t("reviews")})</span>
               </div>
 
               <div className="text-2xl font-semibold text-green-600">
@@ -147,85 +180,114 @@ const ProductDetails = () => {
                 )}
               </div>
 
-              <p className="text-gray-700">{product.short_description}</p>
+              <form onSubmit={handleAddToCart}>
+                {/* Sizes */}
+                {sizes.length > 0 && (
+                  <div className="mb-2">
+                    <b>{t("sizes")}: </b>
+                    <div className="flex gap-2 mt-2">
+                      {sizes.map((size, idx) => (
+                        <label key={idx} className="cursor-pointer">
+                          <input
+                            type="radio"
+                            name="size"
+                            value={size}
+                            checked={selectedSize === size}
+                            onChange={(e) => setSelectedSize(e.target.value)}
+                            className="hidden"
+                          />
+                          <span
+                            className={`badge mx-1 cursor-pointer ${
+                              selectedSize === size
+                                ? "badge-success text-white"
+                                : "badge-info text-white"
+                            }`}
+                          >
+                            {size}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-              {/* Sizes */}
+                {/* Colors */}
+                {colors.length > 0 && (
+                  <div className="mb-2">
+                    <b>{t("colors")}: </b>
+                    <div className="flex gap-2 mt-2">
+                      {colors.map((color, idx) => (
+                        <label key={idx} className="cursor-pointer">
+                          <input
+                            type="radio"
+                            name="color"
+                            value={color}
+                            checked={selectedColor === color}
+                            onChange={(e) => setSelectedColor(e.target.value)}
+                            className="hidden"
+                          />
+                          <span
+                            className={`badge mx-1 cursor-pointer ${
+                              selectedColor === color
+                                ? "badge-success text-white"
+                                : "badge-info text-white"
+                            }`}
+                          >
+                            {color}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-              {sizes.length > 0 && (
-                <div>
-                  <b>Sizes: </b>
+                {/* Quantity + Buttons */}
+                <div className="mt-4">
+                  <div>
+                    <label className="block mb-1 text-sm font-medium">
+                      {t("quantity")}
+                    </label>
+                    <input
+                      type="number"
+                      name="qty"
+                      value={qty}
+                      min="1"
+                      onChange={(e) => setQty(e.target.value)}
+                      className="input input-bordered w-24"
+                    />
+                  </div>
 
-                  {sizes.map((size, idx) => (
-                    <span
-                      key={idx}
-                      className="badge badge-info mx-1 text-white"
+                  <div className="flex gap-4 mt-4">
+                    <button
+                      type="submit"
+                      className="btn bn:sm lg:btn-md bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
                     >
-                      {size}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Colors */}
-
-              {colors.length > 0 && (
-                <div>
-                  <b>Colors: </b>
-
-                  {colors.map((color, idx) => (
-                    <span
-                      key={idx}
-                      className="badge badge-secondary mx-1 text-white"
+                      <FaShoppingCart /> {t("addToCart")}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleAddToWishlist}
+                      className="btn btn-outline flex items-center gap-2"
                     >
-                      {color}
-                    </span>
-                  ))}
+                      <FaHeart /> {t("wishlist")}
+                    </button>
+                  </div>
                 </div>
-              )}
-
-              <form onSubmit={handleAddToCart} className="flex items-end gap-4">
-                <div>
-                  <label className="block mb-1 text-sm font-medium">
-                    Quantity
-                  </label>
-
-                  <input
-                    type="number"
-                    name="qty"
-                    value={qty}
-                    min="1"
-                    onChange={(e) => setQty(e.target.value)}
-                    className="input input-bordered w-24"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn bg-green-600 hover:bg-green-700 text-white"
-                >
-                  🛒 Add to Cart
-                </button>
               </form>
-
-              <button className="btn btn-outline mt-2 flex items-center">
-                <span className="icon_heart_alt mr-2"></span> Wishlist
-              </button>
 
               <ul className="text-gray-700 space-y-1">
                 <li>
-                  <b>Availability:</b>{" "}
-                  {product.status === 1 ? "In Stock" : "Out Of Stock"}
+                  <b>{t("availability")}:</b>{" "}
+                  {product.status === 1 ? t("inStock") : t("outOfStock")}
                 </li>
-
                 <li>
-                  <b>Category:</b> {product.category?.name || "N/A"}
+                  <b>{t("category")}:</b> {product.category?.name || "N/A"}
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* DESCRIPTION / INFO / REVIEWS */}
-
+          {/* Tabs */}
           <div className="mt-10">
             <div role="tablist" className="tabs tabs-bordered">
               <input
@@ -233,13 +295,11 @@ const ProductDetails = () => {
                 name="tab"
                 role="tab"
                 className="tab"
-                aria-label="Description"
+                aria-label={t("description")}
                 defaultChecked
               />
-
               <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">Product Description</h6>
-
+                <h6 className="font-semibold mb-2">{t("productDescription")}</h6>
                 <p>{product.description}</p>
               </div>
 
@@ -248,23 +308,19 @@ const ProductDetails = () => {
                 name="tab"
                 role="tab"
                 className="tab"
-                aria-label="Additional Information"
+                aria-label={t("info")}
               />
-
               <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">Product Information</h6>
-
+                <h6 className="font-semibold mb-2">{t("productInfo")}</h6>
                 <ul className="list-disc pl-6 text-gray-700">
                   <li>
-                    <b>Category:</b> {product.category?.name || "N/A"}
+                    <b>{t("category")}:</b> {product.category?.name || "N/A"}
                   </li>
-
                   <li>
-                    <b>Weight:</b> 0.5 kg
+                    <b>{t("weight")}:</b> 0.5 kg
                   </li>
-
                   <li>
-                    <b>Shipping:</b> 1 Day shipping (Free pickup today)
+                    <b>{t("shipping")}:</b> 1 {t("dayShipping")}
                   </li>
                 </ul>
               </div>
@@ -274,13 +330,11 @@ const ProductDetails = () => {
                 name="tab"
                 role="tab"
                 className="tab"
-                aria-label="Reviews"
+                aria-label={t("reviews")}
               />
-
               <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">Customer Reviews</h6>
-
-                <p>No reviews yet. Be the first to review this product!</p>
+                <h6 className="font-semibold mb-2">{t("customerReviews")}</h6>
+                <p>{t("noReviews")}</p>
               </div>
             </div>
           </div>

@@ -3,11 +3,12 @@ import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { FaHeart, FaShoppingBag } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 
 const Header = () => {
   const { user, logout } = useAuth();
 
-    const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
@@ -24,7 +25,6 @@ const Header = () => {
 
     fetchCart();
   }, [axiosSecure]);
-
 
   const handleLogout = () => {
     logout()
@@ -184,6 +184,8 @@ const Header = () => {
             </li>
           </ul>
         </div>
+        <LanguageSwitcher />
+
         {user ? (
           <>
             {" "}
