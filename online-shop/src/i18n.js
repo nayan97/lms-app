@@ -9,19 +9,26 @@ i18n
     resources: {
       en: {
         translation: {
+          Wallet: "Wallet",
+          My: "My ",
+          Network: "Network",
+      Profile: "Profile",
+          Home: "Home",
+          OurProjects: "Our Projects",
+          LifeChange: "Life Change",
           Free: "Free ",
           Business: "Business ",
           plan: "plan",
           Banner: "Banner",
   DriveOffer: "Drive Offer",
   ResellingProduct: "Reselling Product",
-  AdsViewIncome: "Ads View Income",
+  AdsViewIncome: "Income from Ads View",
   MicroJob: "Micro Job",
   JobPost: "Job Post",
   TypingJob: "Typing Job",
   QuizJob: "Quiz Job",
-  WatchVideo: "Watch Video",
-  MarkSalary: "Mark Salary",
+  WatchVideo: "Income by watching Video",
+  MarkSalary: "Daily Mark Salary",
   DailyTargetBonus: "Daily Target Bonus",
   FreelancingCourse: "Freelancing Course",
           MobileRecharge: "Mobile Recharge",
@@ -135,8 +142,8 @@ i18n
   JobPost: "চাকরির পোস্ট",
   TypingJob: "টাইপিং জব",
   QuizJob: "কুইজ জব",
-  WatchVideo: "ভিডিও দেখুন",
-  MarkSalary: "বেতন চিহ্নিত করুন",
+  WatchVideo: "ভিডিও দেখে আয় করুন",
+  MarkSalary: " দৈনিক বেতন চিহ্নিত করুন",
   DailyTargetBonus: "দৈনিক লক্ষ্য বোনাস",
   FreelancingCourse: "ফ্রিল্যান্সিং কোর্স",
           Mobile:"মোবাইল",
@@ -246,10 +253,15 @@ i18n
           
       
       SelectThana: "থানা নির্বাচন করুন",
-      Projects: "আমাদের প্রকল্পসমূহ",
+      OurProjects: "আমাদের প্রকল্পসমূহ",
       Free: "ফ্রি",
       Ads:"বিজ্ঞাপন",
-
+      LifeChange:"লাইফ চেঞ্জ",
+      Home: "হোম",
+      Wallet: "ওয়ালেট",
+      My: "আমার ",
+      Network: "নেটওয়ার্ক",
+      Profile: "প্রোফাইল",
 
 
         },
