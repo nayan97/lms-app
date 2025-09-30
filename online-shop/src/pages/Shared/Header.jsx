@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import { IoCartOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
+import { BellIcon } from "lucide-react";
 
-const Header = () => {
+
+const Header = ({ showitem }) => {
   const { user, logout } = useAuth();
 
   const axiosSecure = useAxiosSecure();
   const [cartCount, setCartCount] = useState(0);
+  const [show, setShowitem] = useState(true);
+
+
+
+  useEffect(() => {
+    setShowitem(showitem);
+  }, [show]);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -74,99 +83,7 @@ const Header = () => {
   const Menulinks = (
     <>
       <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/shop"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          Shop
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/wishlist"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          Wishlist
-        </NavLink>
-      </li>
-    </>
-  );
-
-  return (
-    <div className="navbar shadow-sm">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm bg-base-100 dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            {Menulinks}
-          </ul>
-        </div>
-        <Link to="/">Home</Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
-      </div>
-      <div className="navbar-end space-x-2">
-        <div>
-          <ul className="flex items-center space-x-1">
-            <li>
-              <Link
-                to="/my-cart"
-                className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
-              >
-                <IoCartOutline className="text-2xl text-white" />
-                <span className="badge badge-sm bg-white absolute -top-1 -right-1">
-                  {cartCount ?? 0} {/* ✅ always show, fallback to 0 */}
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/wishlist"
-                className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
-              >
-                <FaDownLong className="text-2xl text-white" />
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <LanguageSwitcher />
-
-        {user ? (
+         {user ? (
           <>
             {" "}
             <div className="dropdown dropdown-end">
@@ -211,6 +128,118 @@ const Header = () => {
             </NavLink>
           </>
         )}
+      </li>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/shop"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          Shop
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          Wishlist
+        </NavLink>
+      </li>
+    </>
+  );
+
+  return (
+    <div className="navbar">
+      <div className="navbar-start">
+        <div className="dropdown">
+          <div tabIndex={0} role="button" className="btn btn-ghost text-white lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {" "}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />{" "}
+            </svg>
+          </div>
+          <ul
+            tabIndex={0}
+            className="menu menu-sm bg-base-100 dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow"
+          >
+            {Menulinks}
+          </ul>
+        </div>
+        <Link className="text-white" to="/">Life Change</Link>
+      </div>
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
+      </div>
+      <div className="navbar-end space-x-2">
+        
+
+        <LanguageSwitcher />
+        <div>
+          <ul className="flex items-end space-x-1">
+            <div className="relative">
+          <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
+            <BellIcon className="w-5 h-5" />
+          </button>
+          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+            1
+          </span>
+        </div>
+            {showitem && (
+            <li>
+              
+        <li>
+          <Link
+            to="/my-cart"
+            className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
+          >
+            <IoCartOutline className="text-2xl text-white" />
+            <span className="badge badge-sm bg-white absolute -top-1 -right-1">
+              {cartCount ?? 0}
+            </span>
+          </Link>
+        </li>
+     
+            </li>
+             )}
+             {showitem && (
+            <li>
+              <Link
+                to="/wishlist"
+                className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
+              >
+                <FaDownLong className="text-2xl text-white" />
+              </Link>
+            </li>
+            )}
+          </ul>
+        </div>
+    
+       
       </div>
     </div>
   );

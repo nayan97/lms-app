@@ -9,6 +9,22 @@ i18n
     resources: {
       en: {
         translation: {
+          Free: "Free ",
+          Business: "Business ",
+          plan: "plan",
+          Banner: "Banner",
+  DriveOffer: "Drive Offer",
+  ResellingProduct: "Reselling Product",
+  AdsViewIncome: "Ads View Income",
+  MicroJob: "Micro Job",
+  JobPost: "Job Post",
+  TypingJob: "Typing Job",
+  QuizJob: "Quiz Job",
+  WatchVideo: "Watch Video",
+  MarkSalary: "Mark Salary",
+  DailyTargetBonus: "Daily Target Bonus",
+  FreelancingCourse: "Freelancing Course",
+          MobileRecharge: "Mobile Recharge",
           welcome: "Welcome to our website",
           login: "Login",
           logout: "Logout",
@@ -111,6 +127,23 @@ i18n
       },
       bn: {
         translation: {
+          Business: "ব্যবসায় ",
+          DriveOffer: "ড্রাইভ অফার",
+          ResellingProduct: "পণ্য পুনঃবিক্রয়",
+  AdsViewIncome: "বিজ্ঞাপন থেকে আয়",
+  MicroJob: "মাইক্রো জব",
+  JobPost: "চাকরির পোস্ট",
+  TypingJob: "টাইপিং জব",
+  QuizJob: "কুইজ জব",
+  WatchVideo: "ভিডিও দেখুন",
+  MarkSalary: "বেতন চিহ্নিত করুন",
+  DailyTargetBonus: "দৈনিক লক্ষ্য বোনাস",
+  FreelancingCourse: "ফ্রিল্যান্সিং কোর্স",
+          Mobile:"মোবাইল",
+          Recharge: "রিচার্জ",
+          MobileRecharge: "মোবাইল রিচার্জ",
+          plan: "পরিকল্পনা",
+          Banner: "ব্যানার",
           welcome: "আমাদের ওয়েবসাইটে স্বাগতম",
           login: "লগইন",
           logout: "লগআউট",
@@ -209,7 +242,13 @@ i18n
           instructionsPlaceholder: "যেকোনো অতিরিক্ত নির্দেশনা লিখুন",
 
            thana: "থানা নির্বাচন করুন",
-          thanaPlaceholder: "থানা নির্বাচন করুন"
+          thanaPlaceholder: "থানা নির্বাচন করুন",
+          
+      
+      SelectThana: "থানা নির্বাচন করুন",
+      Projects: "আমাদের প্রকল্পসমূহ",
+      Free: "ফ্রি",
+      Ads:"বিজ্ঞাপন",
 
 
 

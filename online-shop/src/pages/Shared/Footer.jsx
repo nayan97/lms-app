@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#ff9100] mt-10">
+    <footer>
       <div className="mx-auto">
         
         {/* Equivalent to row text-center */}
@@ -29,6 +29,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
     </footer>
   );
 };
