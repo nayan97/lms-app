@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../hooks/useAuth";
-import { FaHeart, FaShoppingBag } from "react-icons/fa";
+import { IoCartOutline } from "react-icons/io5";
+import { FaDownLong } from "react-icons/fa6";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 
@@ -60,22 +61,12 @@ const Header = () => {
       </li>
       <li>
         <NavLink
-          to="/about-us"
+          to="/wishlist"
           className={({ isActive }) =>
             isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
-          About Us
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/all-trips"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
-          }
-        >
-          Trips
+          Wishlist
         </NavLink>
       </li>
     </>
@@ -104,22 +95,12 @@ const Header = () => {
       </li>
       <li>
         <NavLink
-          to="/about-us"
+          to="/wishlist"
           className={({ isActive }) =>
             isActive ? "text-gray-900 font-bold my-2" : "my-2"
           }
         >
-          About Us
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/all-trips"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          Trips
+          Wishlist
         </NavLink>
       </li>
     </>
@@ -159,31 +140,30 @@ const Header = () => {
         <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
       </div>
       <div className="navbar-end space-x-2">
-        <div className="">
-          <ul className="flex space-x-4 items-center">
+        <div>
+          <ul className="flex items-center space-x-1">
             <li>
               <Link
-                to="/wishlist"
-                className="relative btn btn-ghost btn-circle"
+                to="/my-cart"
+                className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
               >
-                <FaHeart className="text-xl" />
-                <span className="badge badge-sm badge-primary absolute -top-2 -right-2">
-                  0
+                <IoCartOutline className="text-2xl text-white" />
+                <span className="badge badge-sm bg-white absolute -top-1 -right-1">
+                  {cartCount ?? 0} {/* ✅ always show, fallback to 0 */}
                 </span>
               </Link>
             </li>
             <li>
-              <Link to="/my-cart" className="relative btn btn-ghost btn-circle">
-                <FaShoppingBag className="text-xl" />
-                {cartCount > 0 && (
-                  <span className="badge badge-sm badge-primary absolute -top-2 -right-2">
-                    {cartCount}
-                  </span>
-                )}
+              <Link
+                to="/wishlist"
+                className="relative w-10 h-10 flex items-center justify-center rounded-full shadow-lg bg-amber-400"
+              >
+                <FaDownLong className="text-2xl text-white" />
               </Link>
             </li>
           </ul>
         </div>
+
         <LanguageSwitcher />
 
         {user ? (

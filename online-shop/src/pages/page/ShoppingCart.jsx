@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 const ShoppingCart = () => {
   const axios = useAxiosSecure();
@@ -107,9 +108,9 @@ const ShoppingCart = () => {
   }
 
   return (
-    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-3">
+    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
       {/* Welcome Section */}
-      <section className="text-center py-4">
+      <section className="text-center">
         <h1 className="mt-4 text-xl">{t("welcome")}</h1>
       </section>
 
@@ -173,9 +174,9 @@ const ShoppingCart = () => {
                           <td>
                             <button
                               onClick={() => handleRemove(item.id)}
-                              className="btn btn-sm btn-error text-white"
+                              className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                             >
-                              ✕
+                              <FaTrash />
                             </button>
                           </td>
                         </tr>

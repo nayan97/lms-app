@@ -3,21 +3,22 @@ import { Link } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 const Wishlist = () => {
   const axios = useAxiosSecure();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { t} = useTranslation();
-
-
+  const { t } = useTranslation();
 
   // ✅ Fetch wishlist data
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const response = await axios.get("/wishlist", { withCredentials: true });
+        const response = await axios.get("/wishlist", {
+          withCredentials: true,
+        });
 
         if (response.data.status && Array.isArray(response.data.wishlist)) {
           setWishlistItems(response.data.wishlist);
@@ -34,32 +35,6 @@ const Wishlist = () => {
 
     fetchWishlist();
   }, [axios, t]);
-
-  const handleQtyChange = async (id, newQty) => {
-    if (newQty < 1) return;
-
-    try {
-      await axios.put(`/cart/${id}`, { product_qty: newQty });
-      setWishlistItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, product_qty: newQty } : item
-        )
-      );
-      Swal.fire({
-        icon: "success",
-        title: t("qtyUpdated"),
-        text: t("productQtyUpdated"),
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: t("error"),
-        text: t("updateFailed"),
-      });
-    }
-  };
 
   if (loading) {
     return (
@@ -78,12 +53,10 @@ const Wishlist = () => {
   }
 
   return (
-    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] p-6">
+    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
       {/* Breadcrumb Section */}
-      <section className="flex justify-between items-center py-6">
-        <h2 className="text-2xl font-bold">{t("myWishlist")}</h2>
-
-  
+      <section className="flex justify-between items-center py-3">
+        <h2 className="text-2xl font-bold text-center">{t("myWishlist")}</h2>
       </section>
 
       {/* Wishlist Section */}
@@ -98,19 +71,14 @@ const Wishlist = () => {
                     <tr>
                       <th>Id</th>
                       <th>{t("products")}</th>
-                      <th>{t("size")}</th>
-                      <th>{t("color")}</th>
-                      <th>{t("qty")}</th>
-                      <th>{t("total")}</th>
+                      <th className="hidden sm:table-cell">{t("size")}</th>
+                      <th className="hidden sm:table-cell">{t("color")}</th>
+                      <th>{t("price")}</th>
                       <th>{t("action")}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {wishlistItems.map((item) => {
-                      const price = Number(item.price) || 0;
-                      const qty = Number(item.product_qty) || 0;
-                      const total = price * qty;
-
                       return (
                         <tr key={item.id}>
                           <td className="font-medium">{item.id}</td>
@@ -124,29 +92,36 @@ const Wishlist = () => {
                               {item.product_title}
                             </h5>
                           </td>
-                          <td>{item.size || "-"}</td>
-                          <td>{item.color || "-"}</td>
-                          <td>
-                            <input
-                              type="number"
-                              value={qty}
-                              min="1"
-                              className="input input-bordered w-20"
-                              onChange={(e) =>
-                                handleQtyChange(item.id, Number(e.target.value))
-                              }
-                            />
+                          <td className="hidden sm:table-cell">
+                            {item.size || "-"}
                           </td>
-                          <td className="font-medium">${total}</td>
+                          <td className="hidden sm:table-cell">
+                            {item.color || "-"}
+                          </td>
+
+                          <td className="font-medium">${item.price}</td>
                           <td>
-                            <button
-                              onClick={() =>
-                                console.log("remove from wishlist", item.id)
-                              }
-                              className="btn btn-sm btn-error text-white"
-                            >
-                              ✕
-                            </button>
+                            <div className="flex items-center gap-3">
+                              {/* Edit Button */}
+                              <button
+                                onClick={() =>
+                                  console.log("edit wishlist", item.id)
+                                }
+                                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                              >
+                                <FaEdit />
+                              </button>
+
+                              {/* Delete Button */}
+                              <button
+                                onClick={() =>
+                                  console.log("remove from wishlist", item.id)
+                                }
+                                className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       );
@@ -167,9 +142,7 @@ const Wishlist = () => {
             </>
           ) : (
             <div className="text-center py-12">
-              <h1 className="text-2xl font-bold mb-4">
-                {t("wishlistEmpty")}
-              </h1>
+              <h1 className="text-2xl font-bold mb-4">{t("wishlistEmpty")}</h1>
               <Link
                 to="/shop"
                 className="btn bg-white shadow rounded-xl text-gray-800"

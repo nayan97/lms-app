@@ -88,6 +88,23 @@ i18n
           orderFailed: "Failed to place order",
           somethingWrong: "Something went wrong!",
           priceExceed: "Reseller price cannot exceed Max Price",
+     
+          customerNamePlaceholder: "Enter customer name",
+
+          phonePlaceholder: "Enter phone number",
+
+          districtPlaceholder: "Select a district",
+
+          subdistrictPlaceholder: "Select a subdistrict",
+
+          addressPlaceholder: "Enter delivery address",
+
+          instructionsPlaceholder: "Write any additional instructions",
+          thana: "Select a Thana",
+          thanaPlaceholder: "Select a Thana"
+
+  // extra as per your given format
+
 
         
         },
@@ -177,7 +194,25 @@ i18n
           orderFailed: "অর্ডার সম্পন্ন করতে ব্যর্থ",
           somethingWrong: "কিছু ভুল হয়েছে!",
           priceExceed: "রিসেলার মূল্য সর্বোচ্চ মূল্যের বেশি হতে পারবে না",
-          Dhaka: "ঢাকা"
+          Dhaka: "ঢাকা",
+                
+          customerNamePlaceholder: "গ্রাহকের নাম লিখুন",
+
+          phonePlaceholder: "ফোন নম্বর লিখুন",
+
+          districtPlaceholder: "একটি জেলা নির্বাচন করুন",
+
+          subdistrictPlaceholder: "একটি উপজেলা নির্বাচন করুন",
+
+          addressPlaceholder: "ডেলিভারি ঠিকানা লিখুন",
+        
+          instructionsPlaceholder: "যেকোনো অতিরিক্ত নির্দেশনা লিখুন",
+
+           thana: "থানা নির্বাচন করুন",
+          thanaPlaceholder: "থানা নির্বাচন করুন"
+
+
+
         },
       },
     },

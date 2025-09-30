@@ -47,8 +47,8 @@ const Checkout = () => {
   }, [axiosSecure]);
 
   // ✅ Prices
-  const adminPrice = carts?.product?.source_price || 0;
-  const maxPrice = carts?.product?.max_price || 0;
+  const adminPrice = carts[0]?.product?.source_price || 0;
+  const maxPrice = carts[0]?.product?.max_price || 0;
 
   const resellerProfit = formData.reseller_sell_price
     ? parseFloat(formData.reseller_sell_price) - adminPrice
@@ -119,17 +119,23 @@ const Checkout = () => {
       const res = await axiosSecure.post("/checkout-data", payload);
       if (res.data.success) {
         Swal.fire({
-          icon: "success",
-          title: t("success"),
-          text: res.data.message || t("orderSuccess"),
-          confirmButtonColor: "#16a34a",
-        });
-      } else {
-        Swal.fire({
           icon: "error",
           title: t("oops"),
           text: res.data.message || t("orderFailed"),
           confirmButtonColor: "#dc2626",
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: t("success"),
+          text: res.data.message || t("orderSuccess"),
+          showConfirmButton: true,
+          confirmButtonText: t("Back To Shop"), // ✅ custom button text
+          confirmButtonColor: "#16a34a",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/shop"; // ✅ redirect
+          }
         });
       }
     } catch (err) {
@@ -147,9 +153,11 @@ const Checkout = () => {
   }
 
   return (
-    <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-[30px] p-6">
+    <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-[60px] px-6 pt-2 pb-6">
       <div className="container mx-auto">
-        <h4 className="text-2xl font-semibold mb-4">{t("checkout")}</h4>
+        <h4 className="text-2xl font-semibold mb-4 text-center pt-2">
+          {t("checkout")}
+        </h4>
 
         <form
           onSubmit={handleSubmit}
@@ -205,7 +213,7 @@ const Checkout = () => {
                     <input
                       type="number"
                       placeholder={t("resellerSellPrice")}
-                      className="input input-bordered w-full"
+                      className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                       value={formData.reseller_sell_price || ""}
                       onChange={(e) => {
                         const value = parseFloat(e.target.value) || 0;
@@ -269,9 +277,10 @@ const Checkout = () => {
                 <input
                   type="text"
                   name="customer_name"
-                  className="input input-bordered w-full"
+                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                   value={formData.customer_name}
                   onChange={handleChange}
+                  placeholder={t("customerNamePlaceholder")}
                 />
               </div>
 
@@ -280,30 +289,30 @@ const Checkout = () => {
                 <input
                   type="text"
                   name="customer_number"
-                  className="input input-bordered w-full"
+                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                   value={formData.customer_number}
                   onChange={handleChange}
+                  placeholder={t("phonePlaceholder")}
                 />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
+                  <label className="label">{t("district")}</label>
                   <select
                     name="district_id"
-                    className="select select-bordered w-full"
+                    className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                     value={formData.district_id}
                     onChange={(e) => {
                       handleChange(e);
                       setDistrictId(e.target.value);
                     }}
                   >
-                    <option value="">{t("district")}</option>
+                    <option value="">{t("districtPlaceholder")}</option>
                     {districts.map((district) => {
-                      // 👇 pick column name dynamically: name_en, name_bn
                       const lang = i18n.language; // "en" or "bn"
                       const label =
                         lang === "bn" ? district.bn_name : district.name;
-
                       return (
                         <option key={district.id} value={district.id}>
                           {label}
@@ -312,20 +321,20 @@ const Checkout = () => {
                     })}
                   </select>
                 </div>
+
                 <div>
-                  <label className="label">{t("subdistrict")}</label>
+                  <label className="label">{t("thana")}</label>
                   <select
                     name="upazila_id"
-                    className="select select-bordered w-full"
+                    className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                     value={formData.upazila_id}
                     onChange={handleChange}
                     disabled={!districtId}
                   >
-                    <option value="">{t("subdistrict")}</option>
+                    <option value="">{t("thanaPlaceholder")}</option>
                     {subdistricts.map((sub) => {
                       const lang = i18n.language; // "en" or "bn"
                       const label = lang === "bn" ? sub.bn_name : sub.name;
-
                       return (
                         <option key={sub.id} value={sub.id}>
                           {label}
@@ -341,9 +350,10 @@ const Checkout = () => {
                 <input
                   type="text"
                   name="delivery_address"
-                  className="input input-bordered w-full"
+                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                   value={formData.delivery_address}
                   onChange={handleChange}
+                  placeholder={t("addressPlaceholder")}
                 />
               </div>
 
@@ -351,16 +361,17 @@ const Checkout = () => {
                 <label className="label">{t("instructions")}</label>
                 <textarea
                   name="additional_instruction"
-                  className="textarea textarea-bordered w-full"
+                  className="textarea border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                   value={formData.additional_instruction}
                   onChange={handleChange}
+                  placeholder={t("instructionsPlaceholder")}
                 ></textarea>
               </div>
             </div>
           </div>
 
           {/* Right Column */}
-          <div className="bg-white shadow-lg rounded-xl p-4 space-y-4">
+          <div className="bg-white shadow-lg rounded-xl p-4  pb-4 space-y-4">
             <h4 className="text-xl font-semibold">{t("orderSummary")}</h4>
 
             <div className="flex justify-between">
@@ -384,13 +395,16 @@ const Checkout = () => {
                   value="Cash On"
                   checked={formData.paymethod === "Cash On"}
                   onChange={handleChange}
-                  className="radio radio-primary"
+                  className="radio bg-[#ff9100]"
                 />
                 <span className="label-text ml-2">{t("cashOnDelivery")}</span>
               </label>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full">
+            <button
+              type="submit"
+              className="btn bg-[#ff9100] w-full rounded-2xl"
+            >
               {t("placeOrder")}
             </button>
           </div>

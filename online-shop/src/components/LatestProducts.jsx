@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useUserAxios from "../hooks/useUserAxios";
 import { Link } from "react-router";
-import { useTranslation } from "react-i18next";
+
 const LatestProducts = () => {
-    const { t } = useTranslation();
+
   const axios = useUserAxios();
 
   const [latestProducts, setLatestProducts] = useState([]);
+   const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,15 +20,21 @@ const LatestProducts = () => {
   
       } catch (err) {
         console.error("Error fetching shop data", err);
+      } finally {
+        setLoading(false); // ⬅️ stop loading after fetch
       }
+
     };
     fetchData();
   }, []);
+   if (loading) {
+    return <></>
+  }
   return (
     <div>
       <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100 rounded-b-[50px]">
         <div className="px-4">
-                <h1 className="mt-4 text-xl">{t("welcome")}</h1>
+              
           <h4 className="mb-4 text-lg font-semibold">Latest Products</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             {latestProducts.map((product) => (

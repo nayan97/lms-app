@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import { FaShoppingCart, FaHeart, FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+
+
 import useUserAxios from "../../hooks/useUserAxios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
@@ -125,9 +127,9 @@ const ProductDetails = () => {
   };
 
   return (
-    <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100 rounded-[50px] p-6">
+    <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100 rounded-[60px] px-6 py-2">
       {/* Welcome text */}
-      <section className="text-center py-4">
+      <section className="text-center">
         <h1 className="mt-4 text-xl">{t("welcome")}</h1>
       </section>
 
@@ -163,10 +165,11 @@ const ProductDetails = () => {
               <h3 className="text-2xl font-bold">{product.title}</h3>
 
               <div className="flex items-center gap-1 text-yellow-500">
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
+                <FaStar size={20} color="gold" />
+                <FaStar size={20} color="gold" />
+                <FaStar size={20} color="gold" />
+                <FaStarHalfAlt size={20} color="gold" />
+                <FaRegStar size={20} color="gold" />
                 <i className="fa fa-star-half-o"></i>
                 <span className="ml-2 text-gray-600">(18 {t("reviews")})</span>
               </div>
@@ -299,7 +302,9 @@ const ProductDetails = () => {
                 defaultChecked
               />
               <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">{t("productDescription")}</h6>
+                <h6 className="font-semibold mb-2">
+                  {t("productDescription")}
+                </h6>
                 <p>{product.description}</p>
               </div>
 
