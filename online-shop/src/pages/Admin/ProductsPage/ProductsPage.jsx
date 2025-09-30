@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useForm } from "react-hook-form";
+import Select from "react-select";
+import Swal from "sweetalert2";
 
 const ProductsPage = () => {
   const axiosSecure = useAxiosSecure();
@@ -20,6 +22,7 @@ const ProductsPage = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     watch,
     formState: { errors },
   } = useForm();
@@ -66,60 +69,73 @@ const ProductsPage = () => {
       console.error("Error fetching categories", err);
     }
   };
+  useEffect(() => {
+    axiosSecure
+      .get("/admin/sizes")
+      .then((res) => {
+        const sizesArray = res.data?.data ?? [];
+        const activeSizes = sizesArray.filter((s) => s.status === 1);
+        setSizes(activeSizes);
+      })
+      .catch((err) => console.error("Error fetching sizes:", err));
+  }, []);
 
-  const fetchSizes = async () => {
-    try {
-      const res = await axiosSecure.get("/admin/sizes");
-      const data = res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-      setSizes(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error fetching sizes", err);
-    }
-  };
+  useEffect(() => {
+    axiosSecure
+      .get("/admin/colors")
+      .then((res) => {
+        const colorArray = res.data?.data ?? [];
+        const activeColors = colorArray.filter((s) => s.status === 1);
+        setColors(activeColors);
+      })
+      .catch((err) => console.error("Error fetching Colors:", err));
+  }, []);
 
-  const fetchColors = async () => {
-    try {
-      const res = await axiosSecure.get("/admin/colors");
-      const data = res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-      setColors(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error fetching colors", err);
-    }
-  };
+  // const fetchColors = async () => {
+  //   try {
+  //     const res = await axiosSecure.get("/admin/colors");
+  //     const data = res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
+  //     setColors(Array.isArray(data) ? data : []);
+  //   } catch (err) {
+  //     console.error("Error fetching colors", err);
+  //   }
+  // };
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-    fetchSizes();
-    fetchColors();
   }, []);
+
+
+    const handleRemoveImage = (urlToRemove) => {
+    setImageUrls((prev) => prev.filter((url) => url !== urlToRemove));
+  };
 
   // ✅ Submit handler
   const onSubmit = async (data) => {
+    const payload = {
+      title: data.title,
+      category_id: data.category_id,
+      description: data.description || "",
+      price: data.price,
+      source_price: data.source_price || null,
+      source_url: data.source_url || null,
+      cross_price: data.cross_price || null,
+      profit: data.profit || null,
+      max_price: data.max_price || null,
+      status: data.status,
+      is_featured: data.is_featured,
+      sizeIds: Array.isArray(data.sizeIds) ? data.sizeIds : [],
+      colorIds: Array.isArray(data.colorIds) ? data.colorIds : [],
+      image: mainImagePreview || null, // URL or Base64 string
+      image_gallery: galleryPreviews.length ? galleryPreviews : [],
+    };
+    console.log(payload);
+
     try {
-      const formData = new FormData();
+      await axiosSecure.post("/admin/products", payload);
 
-      // Append text fields
-      Object.keys(data).forEach((key) => {
-        if (key !== "image" && key !== "image_gallery") {
-          formData.append(key, data[key]);
-        }
-      });
-
-      // Append files
-      if (data.image && data.image[0]) {
-        formData.append("image", data.image[0]);
-      }
-
-      if (data.image_gallery && data.image_gallery.length > 0) {
-        Array.from(data.image_gallery).forEach((file) => {
-          formData.append("image_gallery[]", file);
-        });
-      }
-
-      await axiosSecure.post("/admin/products", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      Swal.fire("Success!", "Product added successfully.", "success");
 
       fetchProducts();
       setShowCreateModal(false);
@@ -128,6 +144,7 @@ const ProductsPage = () => {
       reset();
     } catch (err) {
       console.error("Error creating product", err);
+      Swal.fire("Error!", "Failed to create product.", "error");
     }
   };
 
@@ -181,7 +198,9 @@ const ProductsPage = () => {
                   className="w-full border rounded p-2"
                 />
                 {errors.title && (
-                  <span className="text-red-500 text-sm">Title is required</span>
+                  <span className="text-red-500 text-sm">
+                    Title is required
+                  </span>
                 )}
 
                 <select
@@ -205,26 +224,48 @@ const ProductsPage = () => {
                 {/* Sizes */}
                 <div>
                   <label className="block text-sm mb-1">Sizes</label>
-                  <select {...register("sizes[]")} multiple className="w-full border rounded p-2">
-                    {sizes.map((s) => (
-                      <option key={s.id} value={s.name}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    isMulti
+                    options={sizes.map((size) => ({
+                      value: size.id,
+                      label: size.name,
+                    }))}
+                    onChange={(selectedOptions) =>
+                      setValue(
+                        "sizeIds",
+                        selectedOptions.map((opt) => opt.value)
+                      )
+                    }
+                  />
                 </div>
+
+                <input
+                  type="hidden"
+                  {...register("sizeIds", { required: true })}
+                />
 
                 {/* Colors */}
                 <div>
                   <label className="block text-sm mb-1">Colors</label>
-                  <select {...register("colors[]")} multiple className="w-full border rounded p-2">
-                    {colors.map((c) => (
-                      <option key={c.id} value={c.name}>
-                        {c.name}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    isMulti
+                    options={colors.map((color) => ({
+                      value: color.id,
+                      label: color.name,
+                    }))}
+                    onChange={(selectedOptions) =>
+                      setValue(
+                        "colorIds",
+                        selectedOptions.map((opt) => opt.value)
+                      )
+                    }
+                  />
                 </div>
+
+                <input
+                  type="hidden"
+                  {...register("colorIds", { required: true })}
+                />
 
                 <input
                   {...register("price", { required: true })}
@@ -233,18 +274,53 @@ const ProductsPage = () => {
                   placeholder="Price"
                   className="w-full border rounded p-2"
                 />
-                <input {...register("source_price")} type="number" step="0.01" placeholder="Source Price" className="w-full border rounded p-2" />
-                <input {...register("source_url")} type="url" placeholder="Source URL" className="w-full border rounded p-2" />
-                <input {...register("cross_price")} type="number" step="0.01" placeholder="Cross Price" className="w-full border rounded p-2" />
-                <input {...register("profit")} type="number" step="0.01" placeholder="Profit" className="w-full border rounded p-2" />
-                <input {...register("max_price")} type="number" step="0.01" placeholder="Max Price" className="w-full border rounded p-2" />
+                <input
+                  {...register("source_price")}
+                  type="number"
+                  step="0.01"
+                  placeholder="Source Price"
+                  className="w-full border rounded p-2"
+                />
+                <input
+                  {...register("source_url")}
+                  type="url"
+                  placeholder="Source URL"
+                  className="w-full border rounded p-2"
+                />
+                <input
+                  {...register("cross_price")}
+                  type="number"
+                  step="0.01"
+                  placeholder="Cross Price"
+                  className="w-full border rounded p-2"
+                />
+                <input
+                  {...register("profit")}
+                  type="number"
+                  step="0.01"
+                  placeholder="Profit"
+                  className="w-full border rounded p-2"
+                />
+                <input
+                  {...register("max_price")}
+                  type="number"
+                  step="0.01"
+                  placeholder="Max Price"
+                  className="w-full border rounded p-2"
+                />
 
-                <select {...register("status")} className="w-full border rounded p-2">
+                <select
+                  {...register("status")}
+                  className="w-full border rounded p-2"
+                >
                   <option value="1">Active</option>
                   <option value="0">Inactive</option>
                 </select>
 
-                <select {...register("is_featured")} className="w-full border rounded p-2">
+                <select
+                  {...register("is_featured")}
+                  className="w-full border rounded p-2"
+                >
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
@@ -270,28 +346,39 @@ const ProductsPage = () => {
                 </div>
 
                 {/* ✅ Gallery with multiple previews */}
-                <div className="md:col-span-2">
-                  <label className="block text-sm mb-1">Image Gallery</label>
-                  <input
-                    {...register("image_gallery")}
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    className="w-full border rounded p-2"
-                  />
-                  {galleryPreviews.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {galleryPreviews.map((src, idx) => (
+                {/* ✅ Images */}
+                <div>
+                  <p className="font-medium mb-2">Current Images:</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {imageUrls.map((url, idx) => (
+                      <div key={idx} className="relative">
                         <img
-                          key={idx}
-                          src={src}
-                          alt={`Preview ${idx}`}
-                          className="w-24 h-24 object-cover rounded border"
+                          src={url}
+                          alt={`uploaded-${idx}`}
+                          className="rounded shadow"
                         />
-                      ))}
-                    </div>
-                  )}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(url)}
+                          className="absolute top-1 right-1 btn btn-xs btn-error"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="file-input file-input-bordered w-full"
+                />
+                {uploading && (
+                  <p className="text-blue-500 text-sm">Uploading images...</p>
+                )}
 
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <button

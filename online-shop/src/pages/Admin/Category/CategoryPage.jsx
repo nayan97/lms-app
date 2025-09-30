@@ -20,6 +20,8 @@ const fetchCategories = async () => {
   setLoading(true);
   try {
     const res = await axiosSecure.get("/admin/categories");
+    console.log(res);
+    
 
     // Normalize response: if paginated, use res.data.data; otherwise use res.data
     const cats = Array.isArray(res.data) ? res.data : res.data.data;
@@ -138,7 +140,7 @@ const fetchCategories = async () => {
                     <td className="px-4 py-2 flex items-center gap-2">
                       {category.image && (
                         <img
-                          src={`/storage/${category.image}`}
+                          src={category.image_url}
                           alt={category.name}
                           className="w-10 h-10 object-cover rounded"
                         />
