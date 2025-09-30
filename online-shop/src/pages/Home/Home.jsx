@@ -11,10 +11,10 @@ const Home = () => {
       {/* Our projects */}
       <LifeGoodHome></LifeGoodHome>
       {/* Popular Products */}
-         <PopularProducts></PopularProducts>
+         {/* <PopularProducts></PopularProducts> */}
 
       {/* Latest Products */}
-      <LatestProducts></LatestProducts>
+      {/* <LatestProducts></LatestProducts> */}
     </div>
   );
 };

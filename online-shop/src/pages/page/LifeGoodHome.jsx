@@ -1,112 +1,64 @@
 import React from "react";
 import { BellIcon, HomeIcon, WalletIcon, UsersIcon, UserIcon, ShoppingBagIcon } from "lucide-react";
+import { Link } from 'react-router';
+import { useTranslation } from "react-i18next";
 
 const projects1 = [
-  { name: "Mobile Recharge", icon: "💳" },
-  { name: "Drive Offer", icon: "🎁" },
-  { name: "Reselling", icon: "🛒" },
-  { name: "Ads View", icon: "🖼️" },
-  { name: "Micro Job", icon: "📄" },
-  { name: "Job Post", icon: "➕" },
-  
-];
-
-const projects2 = [
-  { name: "Quiz Job", icon: "❓" },
-  { name: "Typing Job", icon: "⌨️" },
-  { name: "Welcome Offer", icon: "🎉" },
-  { name: "Digital Service", icon: "💻" },
-  { name: "Rank", icon: "📊" },
-  { name: "Cross Line", icon: "➗" },
-  { name: "E-commerce", icon: "🛍️" },
-  { name: "Domain Hosting", icon: "🌐" },
-  { name: "Apply Vendor", icon: "🏪" },
-  { name: "User Fund", icon: "💰" },
-  { name: "Free Omra Hajj", icon: "🕋" },
+  { name: "MobileRecharge", icon: "💳", isActive: false, link: "/mobile-recharge" },
+  { name: "DriveOffer", icon: "🎁", isActive:false },
+  { name: "ResellingProduct", icon: "🛒", isActive:false },
+  { name: "AdsViewIncome", icon: "🖼️", isActive:false },
+  { name: "MicroJob", icon: "📄", isActive:false },
+  { name: "JobPost", icon: "➕", isActive:false },
+  { name: "TypingJob", icon: "⌨️",  isActive: true },
+  { name: "QuizJob", icon: "❓" , isActive: true},
+  { name: "WatchVideo", icon: "🎥" , isActive:true, link:"comingsoon"},
+  { name: "MarkSalary", icon: "🗄️", isActive:true },
+  { name: "DailyTargetBonus", icon: "$", isActive:true },
+  { name: "FreelancingCourse", icon: "💻", isActive:true },
 ];
 
 export default function LifeGoodHome() {
+  const { t } = useTranslation();
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* Header */}
-      <header className="bg-yellow-500 text-white p-4 flex justify-between items-center">
-        <h1 className="text-lg font-bold">Life Good</h1>
-        <div className="relative">
-          <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
-            <BellIcon className="w-5 h-5" />
-          </button>
-          <span className="absolute top-0 right-0 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-            1
-          </span>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col rounded-[50px] bg-gray-50">
 
       {/* Banner */}
-      <div className="p-4">
+      <div className="px-4 pt-4">
         <div className="w-full h-32 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold">
-          Business Plan Banner
+          {t("Business")} {t("plan")} {t("Banner")}
         </div>
       </div>
 
       {/* Projects */}
       <div className="px-4">
-        <h2 className="text-lg font-semibold mb-3">Our Projects</h2>
-        <div className="grid grid-cols-3 gap-4">
+        <h2 className="text-lg font-semibold mb-3">{t("Projects")}</h2>
+        <div className="grid grid-cols-3 gap-2">
           {projects1.map((p, i) => (
-            <button
+            <Link
               key={i}
-              className="btn w-full h-full flex flex-col items-center justify-center bg-white shadow rounded-xl py-6"
+              to={p.isActive ? p.link : "#"}
+              className={`
+                btn w-full h-full flex flex-col items-center justify-center
+                bg-white shadow rounded-xl py-6
+                ${!p.isActive ? "opacity-50 cursor-not-allowed pointer-events-none" : "hover:shadow-lg"}
+              `}
             >
               <span className="text-3xl">{p.icon}</span>
-              <span className="text-sm mt-2">{p.name}</span>
-            </button>
+              <span className="text-xs mt-2">{t(p.name)}</span>
+            </Link>
           ))}
         </div>
       </div>
 
       {/* Free Ads Banner */}
-      <div className="px-4 mt-6">
-        <div className="w-full py-4 bg-yellow-400 text-white font-bold rounded-xl text-center shadow">
-          FREE ADS MARKETING
-        </div>
-      </div>
-      {/* After ads banner */}
-      <div className="px-4">
-        <div className="grid  grid-cols-3 gap-4">
-          {projects2.map((p, i) => (
-            <button
-              key={i}
-              className="btn w-full h-full flex flex-col items-center justify-center bg-white shadow rounded-xl py-6"
-            >
-              <span className="text-3xl">{p.icon}</span>
-              <span className="text-sm mt-2">{p.name}</span>
-            </button>
-          ))}
+      <div className="px-4 pb-20 mt-6">
+        <div className="w-full py-4 bg-white text-green-400 font-bold rounded-xl text-center shadow">
+          {t("Free")} {t("Ads")} {t("Banner")}
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <nav className="btm-nav flex  btm-nav-sm bg-white shadow-lg mt-auto">
-        <button className="text-yellow-500">
-          <HomeIcon className="w-6 h-6" />
-          <span className="btm-nav-label">Home</span>
-        </button>
-        <button>
-          <WalletIcon className="w-6 h-6" />
-          <span className="btm-nav-label">Wallet</span>
-        </button>
-        <button className="bg-yellow-500 text-white rounded-full p-3 -mt-6 shadow-lg">
-          <ShoppingBagIcon className="w-6 h-6" />
-        </button>
-        <button>
-          <UsersIcon className="w-6 h-6" />
-          <span className="btm-nav-label">My Network</span>
-        </button>
-        <button>
-          <UserIcon className="w-6 h-6" />
-          <span className="btm-nav-label">Profile</span>
-        </button>
-      </nav>
     </div>
   );
 }
