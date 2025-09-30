@@ -383,23 +383,10 @@ const Checkout = () => {
               <span>{total}৳</span>
             </div>
 
-            {/* <div className="form-control">
-              <label className="label cursor-pointer">
-                <input
-                  type="radio"
-                  name="paymethod"
-                  value="Cash On"
-                  checked={formData.paymethod === "Cash On"}
-                  onChange={handleChange}
-                  className="radio bg-[#ff9100]"
-                />
-                <span className="label-text ml-2">{t("cashOnDelivery")}</span>
-              </label>
-            </div> */}
 
             <button
               type="submit"
-              className="btn bg-[#ff9100] w-full rounded-2xl"
+              className="btn mb-20 text-white bg-[#ff9100] w-full rounded-2xl"
             >
               {t("placeOrder")}
             </button>
