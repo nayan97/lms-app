@@ -54,10 +54,9 @@ const Checkout = () => {
     ? parseFloat(formData.reseller_sell_price) - adminPrice
     : 0;
 
-  const deliveryCharge = 0;
+  
   const total =
-    (parseFloat(formData.reseller_sell_price) || 0) * formData.quantity +
-    deliveryCharge;
+    (parseFloat(formData.reseller_sell_price) || 0) * formData.quantity;
 
   // ✅ Fetch districts
   useEffect(() => {
@@ -378,16 +377,13 @@ const Checkout = () => {
               <span>{t("resellerProfit")}</span>
               <span>{resellerProfit}৳</span>
             </div>
-            <div className="flex justify-between">
-              <span>{t("deliveryCharge")}</span>
-              <span>{deliveryCharge}৳</span>
-            </div>
+            
             <div className="flex justify-between font-bold text-lg">
               <span>{t("total")}</span>
               <span>{total}৳</span>
             </div>
 
-            <div className="form-control">
+            {/* <div className="form-control">
               <label className="label cursor-pointer">
                 <input
                   type="radio"
@@ -399,7 +395,7 @@ const Checkout = () => {
                 />
                 <span className="label-text ml-2">{t("cashOnDelivery")}</span>
               </label>
-            </div>
+            </div> */}
 
             <button
               type="submit"

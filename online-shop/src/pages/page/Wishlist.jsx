@@ -52,6 +52,10 @@ const Wishlist = () => {
     );
   }
 
+  const handleEdit = (itemId) => {
+    axios.post(`/wishlist/move-to-cart/${itemId}`, {}, { withCredentials: true })
+  }
+
   return (
     <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
       {/* Breadcrumb Section */}
@@ -105,7 +109,7 @@ const Wishlist = () => {
                               {/* Edit Button */}
                               <button
                                 onClick={() =>
-                                  console.log("edit wishlist", item.id)
+                                  handleEdit(item.id)
                                 }
                                 className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                               >
