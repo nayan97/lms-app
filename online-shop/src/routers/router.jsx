@@ -17,6 +17,7 @@ import ProductDetails from "../pages/page/ProductDetails";
 import ShoppingCart from "../pages/page/ShoppingCart";
 import Checkout from "../pages/page/Checkout";
 import Wishlist from "../pages/page/Wishlist";
+import ComingSoon from "../pages/page/ComingSoon";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: "/shop/:id",
         Component: ProductDetails,
+      },
+      {
+        path: "comingsoon",
+        Component: ComingSoon
       },
       {
         path: "my-cart",

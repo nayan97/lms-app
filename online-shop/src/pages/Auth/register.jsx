@@ -28,7 +28,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/register", {
+      const response = await axios.post("http://192.168.110.207:8000/api/register", {
         name: data.name,
         email: data.email,
         password: data.password,
