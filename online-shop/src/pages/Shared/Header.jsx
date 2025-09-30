@@ -6,9 +6,11 @@ import { FaDownLong } from "react-icons/fa6";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { BellIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 
 const Header = ({ showitem }) => {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
 
   const axiosSecure = useAxiosSecure();
@@ -190,7 +192,7 @@ const Header = ({ showitem }) => {
             {Menulinks}
           </ul>
         </div>
-        <Link className="text-white" to="/">Life Change</Link>
+        <Link className="text-white" to="/">{t("LifeChange")}</Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{Navlinks}</ul>

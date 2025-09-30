@@ -10,12 +10,12 @@ const projects1 = [
   { name: "AdsViewIncome", icon: "🖼️", isActive:false },
   { name: "MicroJob", icon: "📄", isActive:false },
   { name: "JobPost", icon: "➕", isActive:false },
-  { name: "TypingJob", icon: "⌨️",  isActive: true },
-  { name: "QuizJob", icon: "❓" , isActive: true},
+  { name: "TypingJob", icon: "⌨️",  isActive: true ,link:"comingsoon"},
+  { name: "QuizJob", icon: "❓" , isActive: true,link:"comingsoon"},
   { name: "WatchVideo", icon: "🎥" , isActive:true, link:"comingsoon"},
-  { name: "MarkSalary", icon: "🗄️", isActive:true },
-  { name: "DailyTargetBonus", icon: "$", isActive:true },
-  { name: "FreelancingCourse", icon: "💻", isActive:true },
+  { name: "MarkSalary", icon: "🗄️", isActive:true,link:"comingsoon" },
+  { name: "DailyTargetBonus", icon: "$", isActive:true,link:"comingsoon" },
+  { name: "FreelancingCourse", icon: "💻", isActive:true,link:"comingsoon" },
 ];
 
 export default function LifeGoodHome() {
@@ -33,7 +33,7 @@ export default function LifeGoodHome() {
 
       {/* Projects */}
       <div className="px-4">
-        <h2 className="text-lg font-semibold mb-3">{t("Projects")}</h2>
+        <h2 className="text-lg font-semibold my-3">{t("OurProjects")}</h2>
         <div className="grid grid-cols-3 gap-2">
           {projects1.map((p, i) => (
             <Link
@@ -45,7 +45,7 @@ export default function LifeGoodHome() {
                 ${!p.isActive ? "opacity-50 cursor-not-allowed pointer-events-none" : "hover:shadow-lg"}
               `}
             >
-              <span className="text-3xl">{p.icon}</span>
+              <span className="text-2xl">{p.icon}</span>
               <span className="text-xs mt-2">{t(p.name)}</span>
             </Link>
           ))}
@@ -54,7 +54,7 @@ export default function LifeGoodHome() {
 
       {/* Free Ads Banner */}
       <div className="px-4 pb-20 mt-6">
-        <div className="w-full py-4 bg-white text-green-400 font-bold rounded-xl text-center shadow">
+        <div className="w-full py-4 mb-4 bg-white text-green-400 font-bold rounded-xl text-center shadow">
           {t("Free")} {t("Ads")} {t("Banner")}
         </div>
       </div>
