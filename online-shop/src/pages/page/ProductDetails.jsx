@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { FaShoppingCart, FaHeart, FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-
+import {
+  FaShoppingCart,
+  FaHeart,
+  FaStar,
+  FaStarHalfAlt,
+  FaRegStar,
+} from "react-icons/fa";
 
 import useUserAxios from "../../hooks/useUserAxios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -101,6 +106,56 @@ const ProductDetails = () => {
     }
   };
 
+  const handleBuy = async (e) => {
+    e.preventDefault();
+
+    if (!selectedSize) {
+      Swal.fire({
+        icon: "warning",
+        title: t("selectSize"),
+      });
+      return;
+    }
+    if (!selectedColor) {
+      Swal.fire({
+        icon: "warning",
+        title: t("selectColor"),
+      });
+      return;
+    }
+
+    try {
+      const res = await axiosSecure.post(`/cart/${id}`, {
+        qty: Number(qty),
+        size: selectedSize,
+        color: selectedColor,
+      });
+
+      if (res.data.success) {
+        // Swal.fire({
+        //   icon: "success",
+        //   title: t("addedToCart"),
+        //   text: res.data.message || t("cartSuccess"),
+        //   timer: 1500,
+        //   showConfirmButton: false,
+        // });
+        setQty(1);
+        navigate("/checkout");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: t("error"),
+          text: res.data.message || t("cartFailed"),
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: t("error"),
+        text: error.response?.data?.message || t("cartFailed"),
+      });
+    }
+  };
   // ✅ Add to wishlist
   const handleAddToWishlist = async () => {
     const wishlistData = {
@@ -274,7 +329,15 @@ const ProductDetails = () => {
                     >
                       <FaHeart /> {t("wishlist")}
                     </button>
+                   
                   </div>
+                   <button
+                      type="button"
+                      onClick={handleBuy}
+                      className="btn btn-outline bg-yellow-400 border-none text-white w-full my-4 flex items-center gap-2"
+                    >
+                      {t("Buy Now")}
+                    </button>
                 </div>
               </form>
 

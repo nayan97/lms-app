@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
 import Swal from "sweetalert2";
+import { useDropzone } from "react-dropzone";
 
 const ProductsPage = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,39 +15,57 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(true);
 
   // ✅ Previews
-  const [mainImagePreview, setMainImagePreview] = useState(null);
-  const [galleryPreviews, setGalleryPreviews] = useState([]);
+  // const [mainImagePreview, setMainImagePreview] = useState(null);
+  const [galleryFiles, setGalleryFiles] = useState([]); // store File objects
+  const [galleryPreviews, setGalleryPreviews] = useState([]); // preview URLs
 
-  // ✅ react-hook-form
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    watch,
+
     formState: { errors },
   } = useForm();
 
-  // Watch file inputs for previews
-  const watchMainImage = watch("image");
-  const watchGallery = watch("image_gallery");
+  // Watch main image
+  // const watchMainImage = watch("image");
+  // useEffect(() => {
+  //   if (watchMainImage && watchMainImage[0]) {
+  //     setMainImagePreview(URL.createObjectURL(watchMainImage[0]));
+  //   }
+  // }, [watchMainImage]);
 
+  // ✅ React Dropzone for gallery
+  const onDrop = useCallback((acceptedFiles) => {
+    setGalleryFiles((prev) => [...prev, ...acceptedFiles]);
+    const newPreviews = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+      })
+    );
+    setGalleryPreviews((prev) => [...prev, ...newPreviews]);
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragReject,
+  } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: true,
+  });
+
+  // Cleanup previews on unmount
   useEffect(() => {
-    if (watchMainImage && watchMainImage[0]) {
-      setMainImagePreview(URL.createObjectURL(watchMainImage[0]));
-    }
-  }, [watchMainImage]);
+    return () => {
+      galleryPreviews.forEach((file) => URL.revokeObjectURL(file.preview));
+    };
+  }, [galleryPreviews]);
 
-  useEffect(() => {
-    if (watchGallery && watchGallery.length > 0) {
-      const previews = Array.from(watchGallery).map((file) =>
-        URL.createObjectURL(file)
-      );
-      setGalleryPreviews(previews);
-    }
-  }, [watchGallery]);
-
-  // Load data
+  // ✅ Load data
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -55,109 +74,104 @@ const ProductsPage = () => {
       setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Fetch products error:", error);
-      setProducts([]);
     }
     setLoading(false);
   };
 
-  const fetchCategories = async () => {
-    try {
-      const res = await axiosSecure.get("/admin/categories");
-      const data = res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-      setCategories(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Error fetching categories", err);
-    }
-  };
-  useEffect(() => {
-    axiosSecure
-      .get("/admin/sizes")
-      .then((res) => {
-        const sizesArray = res.data?.data ?? [];
-        const activeSizes = sizesArray.filter((s) => s.status === 1);
-        setSizes(activeSizes);
-      })
-      .catch((err) => console.error("Error fetching sizes:", err));
-  }, []);
+const fetchCategories = async () => {
+  try {
+    const res = await axiosSecure.get("/admin/categories");
+
+    // console.log("Full Response:", res.data);
+
+    setCategories(res.data ?? []); // set directly because response is already an array
+  } catch (err) {
+    console.error("Error fetching categories:", err);
+  }
+};
+
+
 
   useEffect(() => {
-    axiosSecure
-      .get("/admin/colors")
-      .then((res) => {
-        const colorArray = res.data?.data ?? [];
-        const activeColors = colorArray.filter((s) => s.status === 1);
-        setColors(activeColors);
-      })
-      .catch((err) => console.error("Error fetching Colors:", err));
-  }, []);
-
-  // const fetchColors = async () => {
-  //   try {
-  //     const res = await axiosSecure.get("/admin/colors");
-  //     const data = res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-  //     setColors(Array.isArray(data) ? data : []);
-  //   } catch (err) {
-  //     console.error("Error fetching colors", err);
-  //   }
-  // };
-
-  useEffect(() => {
+    axiosSecure.get("/admin/sizes").then((res) => {
+      const active = res.data?.data?.filter((s) => s.status === 1) || [];
+      setSizes(active);
+    });
+    axiosSecure.get("/admin/colors").then((res) => {
+      const active = res.data?.data?.filter((c) => c.status === 1) || [];
+      setColors(active);
+    });
     fetchProducts();
     fetchCategories();
   }, []);
 
-
-    const handleRemoveImage = (urlToRemove) => {
-    setImageUrls((prev) => prev.filter((url) => url !== urlToRemove));
-  };
-
   // ✅ Submit handler
-  const onSubmit = async (data) => {
-    const payload = {
-      title: data.title,
-      category_id: data.category_id,
-      description: data.description || "",
-      price: data.price,
-      source_price: data.source_price || null,
-      source_url: data.source_url || null,
-      cross_price: data.cross_price || null,
-      profit: data.profit || null,
-      max_price: data.max_price || null,
-      status: data.status,
-      is_featured: data.is_featured,
-      sizeIds: Array.isArray(data.sizeIds) ? data.sizeIds : [],
-      colorIds: Array.isArray(data.colorIds) ? data.colorIds : [],
-      image: mainImagePreview || null, // URL or Base64 string
-      image_gallery: galleryPreviews.length ? galleryPreviews : [],
-    };
-    console.log(payload);
+const onSubmit = async (data) => {
+  try {
+    const formData = new FormData();
 
-    try {
-      await axiosSecure.post("/admin/products", payload);
+    // Required fields
+    formData.append("title", data.title);
+    formData.append("category_id", data.category_id);
+    formData.append("description", data.description || "");
+    formData.append("status", data.status);
+    formData.append("is_featured", data.is_featured);
 
-      Swal.fire("Success!", "Product added successfully.", "success");
+    // Numeric fields → integers
+    formData.append("price", parseInt(data.price, 10));
+    if (data.source_price) formData.append("source_price", parseInt(data.source_price, 10));
+    if (data.cross_price) formData.append("cross_price", parseInt(data.cross_price, 10));
+    if (data.max_price) formData.append("max_price", parseInt(data.max_price, 10));
+    if (data.profit) formData.append("profit", parseInt(data.profit, 10));
 
-      fetchProducts();
-      setShowCreateModal(false);
-      setMainImagePreview(null);
-      setGalleryPreviews([]);
-      reset();
-    } catch (err) {
-      console.error("Error creating product", err);
-      Swal.fire("Error!", "Failed to create product.", "error");
-    }
+    // Optional URL
+    if (data.source_url) formData.append("source_url", data.source_url);
+
+    // Sizes & Colors
+    if (data.sizeIds) data.sizeIds.forEach((id) => formData.append("sizeIds[]", id));
+    if (data.colorIds) data.colorIds.forEach((id) => formData.append("colorIds[]", id));
+
+    // Main image
+ if (data.image && data.image[0]) {
+  const file = data.image[0];
+  const reader = new FileReader();
+  
+  reader.onloadend = () => {
+    const base64String = reader.result; // this is a string now
+    formData.append("image", base64String);
   };
+  
+  reader.readAsDataURL(file);
+}
+//     // Gallery images (Laravel expects image_gallery[])
+    galleryFiles.forEach((file) => formData.append("image_gal[]", file));
 
-  // ✅ Delete product
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
-    try {
-      await axiosSecure.delete(`/admin/products/${id}`);
-      fetchProducts();
-    } catch (err) {
-      console.error("Error deleting product", err);
+    // Debug
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
     }
-  };
+
+    await axiosSecure.post("/admin/products", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    Swal.fire("Success!", "Product added successfully.", "success");
+
+    // Reset
+    fetchProducts();
+    setShowCreateModal(false);
+    // setMainImagePreview(null);
+    setGalleryFiles([]);
+    setGalleryPreviews([]);
+    reset();
+  } catch (err) {
+    console.error("Error creating product", err.response?.data || err);
+    Swal.fire("Error!", "Failed to create product.", "error");
+  }
+};
+
+
+
 
   return (
     <div className="lg:p-6 w-full">
@@ -172,19 +186,15 @@ const ProductsPage = () => {
         </button>
       </div>
 
-      {/* Table (same as before)... */}
-
-      {/* ✅ Modal */}
+      {/* Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white rounded-lg shadow max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            {/* Header */}
             <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
               <h3 className="text-lg font-bold">Add New Product</h3>
               <button onClick={() => setShowCreateModal(false)}>✖</button>
             </div>
 
-            {/* Body */}
             <div className="p-4">
               <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -197,12 +207,6 @@ const ProductsPage = () => {
                   placeholder="Title"
                   className="w-full border rounded p-2"
                 />
-                {errors.title && (
-                  <span className="text-red-500 text-sm">
-                    Title is required
-                  </span>
-                )}
-
                 <select
                   {...register("category_id", { required: true })}
                   className="w-full border rounded p-2"
@@ -222,51 +226,33 @@ const ProductsPage = () => {
                 ></textarea>
 
                 {/* Sizes */}
-                <div>
-                  <label className="block text-sm mb-1">Sizes</label>
-                  <Select
-                    isMulti
-                    options={sizes.map((size) => ({
-                      value: size.id,
-                      label: size.name,
-                    }))}
-                    onChange={(selectedOptions) =>
-                      setValue(
-                        "sizeIds",
-                        selectedOptions.map((opt) => opt.value)
-                      )
-                    }
-                  />
-                </div>
-
-                <input
-                  type="hidden"
-                  {...register("sizeIds", { required: true })}
+                <Select
+                  isMulti
+                  options={sizes.map((s) => ({
+                    value: s.id,
+                    label: s.name,
+                  }))}
+                  onChange={(opts) =>
+                    setValue("sizeIds", opts.map((o) => o.value))
+                  }
                 />
+                <input type="hidden" {...register("sizeIds")} />
 
                 {/* Colors */}
-                <div>
-                  <label className="block text-sm mb-1">Colors</label>
-                  <Select
-                    isMulti
-                    options={colors.map((color) => ({
-                      value: color.id,
-                      label: color.name,
-                    }))}
-                    onChange={(selectedOptions) =>
-                      setValue(
-                        "colorIds",
-                        selectedOptions.map((opt) => opt.value)
-                      )
-                    }
-                  />
-                </div>
-
-                <input
-                  type="hidden"
-                  {...register("colorIds", { required: true })}
+                <Select
+                  isMulti
+                  options={colors.map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  }))}
+                  onChange={(opts) =>
+                    setValue("colorIds", opts.map((o) => o.value))
+                  }
                 />
+                <input type="hidden" {...register("colorIds")} />
 
+         
+                {/* Pricing fields */}
                 <input
                   {...register("price", { required: true })}
                   type="number"
@@ -277,7 +263,6 @@ const ProductsPage = () => {
                 <input
                   {...register("source_price")}
                   type="number"
-                  step="0.01"
                   placeholder="Source Price"
                   className="w-full border rounded p-2"
                 />
@@ -290,26 +275,23 @@ const ProductsPage = () => {
                 <input
                   {...register("cross_price")}
                   type="number"
-                  step="0.01"
                   placeholder="Cross Price"
                   className="w-full border rounded p-2"
                 />
                 <input
                   {...register("profit")}
                   type="number"
-                  step="0.01"
                   placeholder="Profit"
                   className="w-full border rounded p-2"
                 />
                 <input
                   {...register("max_price")}
                   type="number"
-                  step="0.01"
                   placeholder="Max Price"
                   className="w-full border rounded p-2"
                 />
 
-                <select
+                        <select
                   {...register("status")}
                   className="w-full border rounded p-2"
                 >
@@ -325,60 +307,57 @@ const ProductsPage = () => {
                   <option value="no">No</option>
                 </select>
 
-                {/* ✅ Main image with preview */}
+                {/* ✅ Main image */}
+
+
+                {/* ✅ Gallery using Dropzone */}
                 <div className="md:col-span-2">
-                  <label className="block text-sm mb-1">Main Image</label>
-                  <input
-                    {...register("image", { required: true })}
-                    type="file"
-                    accept="image/*"
-                    className="w-full border rounded p-2"
-                  />
-                  {mainImagePreview && (
-                    <div className="mt-2">
-                      <img
-                        src={mainImagePreview}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded border"
-                      />
+                  <label className="block text-sm mb-1">Gallery Images</label>
+                  <div
+                    {...getRootProps()}
+                    className={`border-2 border-dashed rounded p-6 text-center cursor-pointer ${
+                      isDragActive ? "border-blue-500" : "border-gray-400"
+                    }`}
+                  >
+                    <input {...getInputProps()} />
+                    {isDragActive ? (
+                      <p>Drop files here ...</p>
+                    ) : isDragReject ? (
+                      <p className="text-red-500">File type not accepted</p>
+                    ) : (
+                      <p>Drag & drop images, or click to select</p>
+                    )}
+                  </div>
+
+                  {galleryPreviews.length > 0 && (
+                    <div className="grid grid-cols-4 gap-2 mt-3">
+                      {galleryPreviews.map((file, i) => (
+                        <div key={i} className="relative">
+                          <img
+                            src={file.preview}
+                            alt={`preview-${i}`}
+                            className="w-24 h-24 object-cover rounded border"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              // remove image
+                              setGalleryFiles((prev) =>
+                                prev.filter((_, idx) => idx !== i)
+                              );
+                              setGalleryPreviews((prev) =>
+                                prev.filter((_, idx) => idx !== i)
+                              );
+                            }}
+                            className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded px-1"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
-
-                {/* ✅ Gallery with multiple previews */}
-                {/* ✅ Images */}
-                <div>
-                  <p className="font-medium mb-2">Current Images:</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {imageUrls.map((url, idx) => (
-                      <div key={idx} className="relative">
-                        <img
-                          src={url}
-                          alt={`uploaded-${idx}`}
-                          className="rounded shadow"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(url)}
-                          className="absolute top-1 right-1 btn btn-xs btn-error"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="file-input file-input-bordered w-full"
-                />
-                {uploading && (
-                  <p className="text-blue-500 text-sm">Uploading images...</p>
-                )}
 
                 <div className="md:col-span-2 flex justify-end mt-4">
                   <button
