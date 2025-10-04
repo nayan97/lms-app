@@ -28,7 +28,7 @@ const PopularProducts = () => {
 
         {/* 👇 Skeleton loader while loading */}
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pb-6">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 pb-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
@@ -50,7 +50,7 @@ const PopularProducts = () => {
           </div>
         ) : (
           // 👇 Show real products after loading
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {popularProducts.map((product) => (
               <Link
                 to={`/shop/${product.id}`}

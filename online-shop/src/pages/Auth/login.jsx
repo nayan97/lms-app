@@ -65,7 +65,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center py-10 px-4">
+  <div className="min-h-screen">
+      <div className="flex justify-center py-10 px-4">
       <div className="card bg-base-100 w-full max-w-sm shadow-2xl p-6">
         <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -140,6 +141,7 @@ const Login = () => {
         </form>
       </div>
     </div>
+  </div>
   );
 };
 

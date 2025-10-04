@@ -7,13 +7,15 @@ import { useDropzone } from "react-dropzone";
 
 const ProductsPage = () => {
   const axiosSecure = useAxiosSecure();
-  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
+  const [products, setProducts] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const [editProduct, setEditProduct] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
   // ✅ Previews
   const [mainImagePreview, setMainImagePreview] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]); // store File objects
@@ -37,7 +39,6 @@ const ProductsPage = () => {
       setMainImagePreview(URL.createObjectURL(watchMainImage[0]));
     }
   }, [watchMainImage]);
-
 
   // ✅ React Dropzone for gallery
   const onDrop = useCallback((acceptedFiles) => {
@@ -69,12 +70,14 @@ const ProductsPage = () => {
     setLoading(true);
     try {
       const res = await axiosSecure.get("/admin/products");
-      const data = res.data?.data?.data ?? res.data?.data ?? [];
-      setProducts(Array.isArray(data) ? data : []);
+      const data = Array.isArray(res.data) ? res.data : res.data.data;
+      console.log("Fetched products:", data.products);
+      setProducts(data || []);
     } catch (error) {
       console.error("Fetch products error:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const fetchCategories = async () => {
@@ -138,7 +141,7 @@ const ProductsPage = () => {
         formData.append("image", data.image[0]);
       }
 
-    // Gallery images (Laravel expects image_gal[])
+      // Gallery images (Laravel expects image_gal[])
       galleryFiles.forEach((file) => formData.append("image_gal[]", file));
 
       // Debug
@@ -164,6 +167,74 @@ const ProductsPage = () => {
       Swal.fire("Error!", "Failed to create product.", "error");
     }
   };
+  // ✅ onUpdate handler
+const handleUpdate = async (id, e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  try {
+    await axiosSecure.post(`/admin/products/${id}?_method=PUT`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: "Updated!",
+      text: "Product updated successfully.",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
+    setEditProduct(null);
+    fetchProducts();
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Update Failed",
+      text: "Something went wrong!",
+    });
+  }
+};
+
+
+
+  const handleDelete = async (id) => {
+    // Show SweetAlert confirmation
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/admin/products/${id}`);
+        fetchCategories();
+
+        // Show success alert
+        Swal.fire({
+          title: "Deleted!",
+          text: "The product has been deleted.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        console.error(error);
+
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while deleting.",
+          icon: "error",
+        });
+      }
+    }
+  };
 
   return (
     <div className="lg:p-6 w-full">
@@ -176,6 +247,58 @@ const ProductsPage = () => {
         >
           + Add Product
         </button>
+      </div>
+      {/* ✅ Product Table */}
+      <div className="overflow-x-auto">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <table className="table w-full border">
+            <thead>
+              <tr className="bg-gray-100">
+                <th>Sn</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Featured</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.products.map((p, index) => (
+                <tr key={p.id}>
+                  <td>{index + 1}</td>
+                  <td>{p.title}</td>
+                  <td>${p.price}</td>
+
+                  <td>{p.status === 1 ? "Active" : "Inactive"}</td>
+                  <td>{p.is_featured === "yes" ? "Yes" : "No"}</td>
+                  <td className="px-4 py-2 flex space-x-2 justify-center">
+                    <button
+                      onClick={() => handleUpdate(p)}
+                      className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
+                    >
+                      ✏
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
+                    >
+                      🗑
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {products.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="text-center py-4">
+                    No products found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Modal */}
@@ -193,119 +316,174 @@ const ProductsPage = () => {
                 encType="multipart/form-data"
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
               >
-                <input
-                  {...register("title", { required: true })}
-                  type="text"
-                  placeholder="Title"
-                  className="w-full border rounded p-2"
-                />
-                <select
-                  {...register("category_id", { required: true })}
-                  className="w-full border rounded p-2"
-                >
-                  <option value="">Select Category</option>
-                  {categories.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
+                {/* Title */}
+                <div>
+                  <label className="block text-sm mb-1">Title</label>
+                  <input
+                    {...register("title", { required: true })}
+                    type="text"
+                    placeholder="Title"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
 
-                <textarea
-                  {...register("description")}
-                  placeholder="Description"
-                  className="w-full border rounded p-2 md:col-span-2"
-                ></textarea>
+                {/* Category */}
+                <div>
+                  <label className="block text-sm mb-1">Category</label>
+                  <select
+                    {...register("category_id", { required: true })}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Description */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm mb-1">Description</label>
+                  <textarea
+                    {...register("description")}
+                    placeholder="Description"
+                    className="w-full border rounded p-2"
+                  ></textarea>
+                </div>
 
                 {/* Sizes */}
-                <Select
-                  isMulti
-                  options={sizes.map((s) => ({
-                    value: s.id,
-                    label: s.name,
-                  }))}
-                  onChange={(opts) =>
-                    setValue(
-                      "sizeIds",
-                      opts.map((o) => o.value)
-                    )
-                  }
-                />
-                <input type="hidden" {...register("sizeIds")} />
+                <div>
+                  <label className="block text-sm mb-1">Sizes</label>
+                  <Select
+                    isMulti
+                    options={sizes.map((s) => ({
+                      value: s.id,
+                      label: s.name,
+                    }))}
+                    onChange={(opts) =>
+                      setValue(
+                        "sizeIds",
+                        opts.map((o) => o.value)
+                      )
+                    }
+                  />
+                  <input type="hidden" {...register("sizeIds")} />
+                </div>
 
                 {/* Colors */}
-                <Select
-                  isMulti
-                  options={colors.map((c) => ({
-                    value: c.id,
-                    label: c.name,
-                  }))}
-                  onChange={(opts) =>
-                    setValue(
-                      "colorIds",
-                      opts.map((o) => o.value)
-                    )
-                  }
-                />
-                <input type="hidden" {...register("colorIds")} />
+                <div>
+                  <label className="block text-sm mb-1">Colors</label>
+                  <Select
+                    isMulti
+                    options={colors.map((c) => ({
+                      value: c.id,
+                      label: c.name,
+                    }))}
+                    onChange={(opts) =>
+                      setValue(
+                        "colorIds",
+                        opts.map((o) => o.value)
+                      )
+                    }
+                  />
+                  <input type="hidden" {...register("colorIds")} />
+                </div>
 
-                {/* Pricing fields */}
-                <input
-                  {...register("price", { required: true })}
-                  type="number"
-                  step="0.01"
-                  placeholder="Price"
-                  className="w-full border rounded p-2"
-                />
-                <input
-                  {...register("source_price")}
-                  type="number"
-                  placeholder="Source Price"
-                  className="w-full border rounded p-2"
-                />
-                <input
-                  {...register("source_url")}
-                  type="url"
-                  placeholder="Source URL"
-                  className="w-full border rounded p-2"
-                />
-                <input
-                  {...register("cross_price")}
-                  type="number"
-                  placeholder="Cross Price"
-                  className="w-full border rounded p-2"
-                />
-                <input
-                  {...register("profit")}
-                  type="number"
-                  placeholder="Profit"
-                  className="w-full border rounded p-2"
-                />
-                <input
-                  {...register("max_price")}
-                  type="number"
-                  placeholder="Max Price"
-                  className="w-full border rounded p-2"
-                />
+                {/* Price */}
+                <div>
+                  <label className="block text-sm mb-1">Price</label>
+                  <input
+                    {...register("price", { required: true })}
+                    type="number"
+                    step="0.01"
+                    placeholder="Price"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
 
-                <select
-                  {...register("status")}
-                  className="w-full border rounded p-2"
-                >
-                  <option value="1">Active</option>
-                  <option value="0">Inactive</option>
-                </select>
+                {/* Source Price */}
+                <div>
+                  <label className="block text-sm mb-1">Source Price</label>
+                  <input
+                    {...register("source_price")}
+                    type="number"
+                    placeholder="Source Price"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
 
-                <select
-                  {...register("is_featured")}
-                  className="w-full border rounded p-2"
-                >
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
+                {/* Source URL */}
+                <div>
+                  <label className="block text-sm mb-1">Source URL</label>
+                  <input
+                    {...register("source_url")}
+                    type="url"
+                    placeholder="Source URL"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Cross Price */}
+                <div>
+                  <label className="block text-sm mb-1">Cross Price</label>
+                  <input
+                    {...register("cross_price")}
+                    type="number"
+                    placeholder="Cross Price"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Profit */}
+                <div>
+                  <label className="block text-sm mb-1">Profit</label>
+                  <input
+                    {...register("profit")}
+                    type="number"
+                    placeholder="Profit"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Max Price */}
+                <div>
+                  <label className="block text-sm mb-1">Max Price</label>
+                  <input
+                    {...register("max_price")}
+                    type="number"
+                    placeholder="Max Price"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-sm mb-1">Status</label>
+                  <select
+                    {...register("status")}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                </div>
+
+                {/* Featured */}
+                <div>
+                  <label className="block text-sm mb-1">Featured</label>
+                  <select
+                    {...register("is_featured")}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
 
                 {/* ✅ Main image */}
-                     <div className="md:col-span-2">
+                <div className="md:col-span-2">
                   <label className="block text-sm mb-1">Main Image</label>
                   <input
                     {...register("image", { required: true })}
@@ -321,6 +499,7 @@ const ProductsPage = () => {
                     />
                   )}
                 </div>
+
                 {/* ✅ Gallery using Dropzone */}
                 <div className="md:col-span-2">
                   <label className="block text-sm mb-1">Gallery Images</label>
@@ -352,7 +531,6 @@ const ProductsPage = () => {
                           <button
                             type="button"
                             onClick={() => {
-                              // remove image
                               setGalleryFiles((prev) =>
                                 prev.filter((_, idx) => idx !== i)
                               );
@@ -376,6 +554,228 @@ const ProductsPage = () => {
                     className="px-6 py-2 bg-blue-600 text-white rounded"
                   >
                     Save
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-lg shadow max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
+              <h3 className="text-lg font-bold">Edit Product</h3>
+              <button onClick={() => setEditProduct(null)}>✖</button>
+            </div>
+
+            <div className="p-4">
+          <form onSubmit={(e) => handleUpdate(editProduct.id, e)}
+                encType="multipart/form-data"
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
+                {/* Title */}
+                <div>
+                  <label className="block text-sm mb-1">Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    defaultValue={editProduct.title}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm mb-1">Category</label>
+                  <select
+                    name="category_id"
+                    defaultValue={editProduct.category_id}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Description */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm mb-1">Description</label>
+                  <textarea
+                    name="description"
+                    defaultValue={editProduct.description}
+                    className="w-full border rounded p-2"
+                  ></textarea>
+                </div>
+
+                {/* Price */}
+                <div>
+                  <label className="block text-sm mb-1">Price</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="price"
+                    defaultValue={editProduct.price}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Cross Price */}
+                <div>
+                  <label className="block text-sm mb-1">Cross Price</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="cross_price"
+                    defaultValue={editProduct.cross_price}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Source Price */}
+                <div>
+                  <label className="block text-sm mb-1">Source Price</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="source_price"
+                    defaultValue={editProduct.source_price}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Source URL */}
+                <div>
+                  <label className="block text-sm mb-1">Source URL</label>
+                  <input
+                    type="url"
+                    name="source_url"
+                    defaultValue={editProduct.source_url}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Profit */}
+                <div>
+                  <label className="block text-sm mb-1">Profit</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="profit"
+                    defaultValue={editProduct.profit}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Max Price */}
+                <div>
+                  <label className="block text-sm mb-1">Max Price</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="max_price"
+                    defaultValue={editProduct.max_price}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-sm mb-1">Status</label>
+                  <select
+                    name="status"
+                    defaultValue={editProduct.status}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                  </select>
+                </div>
+
+                {/* Featured */}
+                <div>
+                  <label className="block text-sm mb-1">Featured</label>
+                  <select
+                    name="is_featured"
+                    defaultValue={editProduct.is_featured}
+                    className="w-full border rounded p-2"
+                  >
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+
+                {/* Existing Main Image */}
+                {editProduct.image && (
+                  <div className="md:col-span-2">
+                    <label className="block text-sm mb-1">
+                      Current Main Image
+                    </label>
+                    <img
+                      src={`/storage/${editProduct.image}`}
+                      alt={editProduct.title}
+                      className="w-24 h-24 rounded border mb-2"
+                    />
+                  </div>
+                )}
+
+                {/* New Main Image */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm mb-1">
+                    Change Main Image
+                  </label>
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                {/* Gallery (if you have gallery images) */}
+                {editProduct.image_gal && editProduct.image_gal.length > 0 && (
+                  <div className="md:col-span-2">
+                    <label className="block text-sm mb-1">
+                      Current Gallery
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {editProduct.image_gal.map((img, i) => (
+                        <img
+                          key={i}
+                          src={`/storage/${img}`}
+                          alt={`Gallery ${i}`}
+                          className="w-20 h-20 object-cover rounded border"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload New Gallery */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm mb-1">
+                    Add New Gallery Images
+                  </label>
+                  <input
+                    type="file"
+                    name="image_gal[]"
+                    multiple
+                    accept="image/*"
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+
+                <div className="md:col-span-2 flex justify-end mt-4">
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-blue-600 text-white rounded"
+                  >
+                    Update
                   </button>
                 </div>
               </form>
