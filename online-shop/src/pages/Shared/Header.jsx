@@ -57,7 +57,7 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
-          Home
+          {t("Home")}
         </NavLink>
       </li>
       <li>
@@ -67,7 +67,7 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
-          Shop
+         {t("Shop")} 
         </NavLink>
       </li>
       <li>
@@ -77,7 +77,47 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
           }
         >
-          Wishlist
+          {t("Wishlist")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
+          }
+        >
+         {t("OrderHistory")} 
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
+          }
+        >
+          {t("Transaction History")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
+          }
+        >
+          {t("AddBalance")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2 text-white"
+          }
+        >
+         {t("Withdrawl")}
         </NavLink>
       </li>
     </>
@@ -138,7 +178,7 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2"
           }
         >
-          Home
+          {t("Home")}
         </NavLink>
       </li>
       <li>
@@ -148,7 +188,7 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2"
           }
         >
-          Shop
+          {t("Shop")}
         </NavLink>
       </li>
       <li>
@@ -158,7 +198,47 @@ const Header = ({ showitem }) => {
             isActive ? "text-gray-900 font-bold my-2" : "my-2"
           }
         >
-          Wishlist
+          {t("Wishlist")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/order-history"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          {t("OrderHistory")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/transaction-history"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          {t("TransactionHistory")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/add-balance"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          {t("AddBalance")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/withdrawl"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold my-2" : "my-2"
+          }
+        >
+          {t("Withdrawl")}
         </NavLink>
       </li>
     </>

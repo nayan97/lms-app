@@ -51,14 +51,12 @@ const Login = () => {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!res.ok) throw new Error("Request failed");
-      Swal.fire("Success!", "Password reset link sent to your email.", "success");
+      await axios.post("http://192.168.110.207:8000/api/forgot-password", { email });
+      Swal.fire(
+        "Success!",
+        "Password reset link sent to your email.",
+        "success"
+      );
     } catch (error) {
       Swal.fire("Error", error.message || "Something went wrong.", "error");
     }
