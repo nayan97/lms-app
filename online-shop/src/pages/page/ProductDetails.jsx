@@ -182,9 +182,9 @@ const ProductDetails = () => {
   };
 
   return (
-    <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100 rounded-[60px] px-6 py-2">
+    <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100  rounded-[60px] px-6 py-2">
       {/* Welcome text */}
-      <section className="text-center">
+      <section className="text-center pb-4">
         <h1 className="mt-4 text-xl">{t("welcome")}</h1>
       </section>
 
@@ -219,7 +219,7 @@ const ProductDetails = () => {
             <div className="product__details__text space-y-4">
               <h3 className="text-2xl font-bold">{product.title}</h3>
 
-              <div className="flex items-center gap-1 text-yellow-500">
+              {/* <div className="flex items-center gap-1 text-yellow-500">
                 <FaStar size={20} color="gold" />
                 <FaStar size={20} color="gold" />
                 <FaStar size={20} color="gold" />
@@ -227,7 +227,7 @@ const ProductDetails = () => {
                 <FaRegStar size={20} color="gold" />
                 <i className="fa fa-star-half-o"></i>
                 <span className="ml-2 text-gray-600">(18 {t("reviews")})</span>
-              </div>
+              </div> */}
 
               <div className="text-2xl font-semibold text-green-600">
                 ${product.price}
@@ -301,7 +301,7 @@ const ProductDetails = () => {
 
                 {/* Quantity + Buttons */}
                 <div className="mt-4">
-                  <div>
+                  {/* <div>
                     <label className="block mb-1 text-sm font-medium">
                       {t("quantity")}
                     </label>
@@ -313,7 +313,7 @@ const ProductDetails = () => {
                       onChange={(e) => setQty(e.target.value)}
                       className="input input-bordered w-24"
                     />
-                  </div>
+                  </div> */}
 
                   <div className="flex gap-4 mt-4">
                     <button
@@ -334,7 +334,7 @@ const ProductDetails = () => {
                    <button
                       type="button"
                       onClick={handleBuy}
-                      className="btn btn-outline bg-yellow-400 border-none text-white w-full my-4 flex items-center gap-2"
+                      className="btn btn-outline bg-yellow-400 border-none text-white w-1/2 my-4 flex items-center gap-2"
                     >
                       {t("Buy Now")}
                     </button>
@@ -393,13 +393,13 @@ const ProductDetails = () => {
                 </ul>
               </div>
 
-              <input
+              {/* <input
                 type="radio"
                 name="tab"
                 role="tab"
                 className="tab"
                 aria-label={t("reviews")}
-              />
+              /> */}
               <div role="tabpanel" className="tab-content p-4">
                 <h6 className="font-semibold mb-2">{t("customerReviews")}</h6>
                 <p>{t("noReviews")}</p>
