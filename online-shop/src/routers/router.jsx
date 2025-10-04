@@ -18,6 +18,10 @@ import ShoppingCart from "../pages/page/ShoppingCart";
 import Checkout from "../pages/page/Checkout";
 import Wishlist from "../pages/page/Wishlist";
 import ComingSoon from "../pages/page/ComingSoon";
+import OrderHistory from "../pages/page/OrderHistory";
+import Withdrawl from "../pages/page/Withdrawl";
+import AddBalance from "../pages/page/AddBalance";
+import TransactionHistory from './../pages/page/TransactionHistory';
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +66,38 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Wishlist />
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "order-history",
+        element: (
+          <PrivateRoute>
+           <OrderHistory></OrderHistory>
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "transaction-history",
+        element: (
+          <PrivateRoute>
+           <TransactionHistory></TransactionHistory>
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "add-balance",
+        element: (
+          <PrivateRoute>
+           <AddBalance></AddBalance>
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "withdrawl",
+        element: (
+          <PrivateRoute>
+           <Withdrawl></Withdrawl>
           </PrivateRoute>
         ),
       },
