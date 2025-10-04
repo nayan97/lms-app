@@ -12,6 +12,7 @@ const LatestProducts = () => {
       try {
         const { data } = await axios.get("/home");
         setLatestProducts(data.latestpros || []);
+
       } catch (err) {
         console.error("Error fetching shop data", err);
       } finally {
@@ -20,6 +21,9 @@ const LatestProducts = () => {
     };
     fetchData();
   }, []);
+
+  console.log(latestProducts);
+  
 
   return (
     <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100 rounded-b-[50px]">
