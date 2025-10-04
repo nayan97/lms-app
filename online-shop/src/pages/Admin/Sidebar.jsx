@@ -47,7 +47,6 @@ const Sidebar = ({ isOpen }) => {
               <FileText className="w-5 h-5" />
               {isOpen && <span>Category</span>}
             </NavLink>
-
             <NavLink to="/dashboard/add-size" className={linkClasses}>
               <Boxes className="w-5 h-5" />
               {isOpen && <span>Add Size</span>}
@@ -56,32 +55,13 @@ const Sidebar = ({ isOpen }) => {
               <Boxes className="w-5 h-5" />
               {isOpen && <span>Add Color</span>}
             </NavLink>
-            <NavLink to="/dashboard/add-product-detail" className={linkClasses}>
-              <Boxes className="w-5 h-5" />
-              {isOpen && <span>Add Product Detail</span>}
-            </NavLink>
             <NavLink to="/dashboard/add-product" className={linkClasses}>
               <Boxes className="w-5 h-5" />
               {isOpen && <span>Add Product</span>}
             </NavLink>
-            <NavLink to="/dashboard/make-admin" className={linkClasses}>
-              <UserCog className="w-5 h-5" />
-              {isOpen && <span>Manage Users</span>}
-            </NavLink>
+            
 
-            <NavLink to="/dashboard/add-tour" className={linkClasses}>
-              <PackagePlus className="w-5 h-5" />
-              {isOpen && <span>Add Tour Plan</span>}
-            </NavLink>
-            <NavLink to="/dashboard/manage-tour" className={linkClasses}>
-              <PackageSearch className="w-5 h-5" />
-              {isOpen && <span>Manage Tour Plan</span>}
-            </NavLink>
-
-            <NavLink to="/dashboard/pending_guides" className={linkClasses}>
-              <ShieldCheck className="w-5 h-5" />
-              {isOpen && <span>Manage Candidates</span>}
-            </NavLink>
+           
           </>
         )}
 

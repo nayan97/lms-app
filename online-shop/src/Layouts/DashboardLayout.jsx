@@ -3,6 +3,7 @@ import Sidebar from "../pages/Admin/Sidebar";
 import Navbar from "../pages/Admin/Navbar";
 import { Outlet } from "react-router";
 import Footer from "../pages/Shared/Footer";
+import Footer_Nav from "../pages/Shared/Footer_Nav";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -22,7 +23,7 @@ const DashboardLayout = () => {
         </div>
 
         <div className="max-w-4xl lg:max-w-7xl mx-auto mb-[-25px]">
-          <Footer></Footer>
+          <Footer_Nav></Footer_Nav>
         </div>
       </div>
     </>

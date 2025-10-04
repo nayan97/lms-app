@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaShoppingCart,
-  FaHeart,
-  FaStar,
-  FaStarHalfAlt,
-  FaRegStar,
-} from "react-icons/fa";
-
+import { ShoppingCart, Store, Info } from "lucide-react";
+import productImg from "../../assets/offer.png"; // replace with your image path
+import { useLocation, useNavigate } from "react-router";
+import Swal from "sweetalert2";
+import { useParams } from "react-router";
 import useUserAxios from "../../hooks/useUserAxios";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useNavigate, useParams } from "react-router";
-import Spinner from "../../components/Spinner";
-import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import Spinner from "../../components/Spinner";
 
-const ProductDetails = () => {
-  const { id } = useParams();
+export default function ProductPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const page = location.pathname;
+  console.log(page);
+   const { id } = useParams();
   const axios = useUserAxios();
   const axiosSecure = useAxiosSecure();
   const { t } = useTranslation();
 
   const [product, setProduct] = useState(null);
+  console.log(product);
   const [sizes, setSizes] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [colors, setColors] = useState([]);
@@ -35,6 +34,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`/product/${id}`);
+        
         setProduct(data.data.product);
         setSizes(data.data.sizes || []);
         setColors(data.data.colors || []);
@@ -181,27 +181,26 @@ const ProductDetails = () => {
     }
   };
 
+
   return (
-    <main className="shadow-sm mx-auto max-w-[1280px] bg-gray-100  rounded-[60px] px-6 py-2">
-      {/* Welcome text */}
-      <section className="text-center pb-4">
-        <h1 className="mt-4 text-xl">{t("welcome")}</h1>
-      </section>
+    <div className="min-h-screen  flex flex-col bg-gray-100">
+      {/* Header */}
+      <div className="bg-yellow-400 p-4 flex items-center justify-between">
+        <button onClick={() => navigate(-1)} className="text-white text-xl">←</button>
+        <h1 className="text-white font-semibold text-sm truncate w-2/3">
+            {product.title}
+        </h1>
+        <div className="flex space-x-3 text-white">
+          <button>🛒</button>
+          <button>↗</button>
+        </div>
+      </div>
 
-      <section className="product-details">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* LEFT IMAGE SECTION */}
-            <div className="product__details__pic">
-              <div className="mb-4">
-                <img
-                  className="rounded-lg w-full object-cover"
-                  src={product.image_url}
-                  alt={product.title}
-                />
-              </div>
-
-              {product.image_gal?.length > 0 && (
+      {/* Product Image */}
+      <div className="bg-white p-4">
+        <img src={product.image_url} alt="Product" className="w-full rounded-xl" />
+      </div>
+       {product.image_gal?.length > 0 && (
                 <div className="flex gap-2 overflow-x-auto">
                   {product.image_gal.map((gal, index) => (
                     <img
@@ -213,203 +212,101 @@ const ProductDetails = () => {
                   ))}
                 </div>
               )}
+
+      {/* Product Info */}
+      <div className="p-4 mt-2 rounded-xl shadow">
+        <h2 className="text-lg font-semibold">
+            {product.title}
+        </h2>
+        <p className="text-green-500 font-medium">Stock: instock</p>
+        <div className="mt-2 space-y-1">
+            <div className="flex bg-white rounded-2xl p-2 justify-center">
+                <p className="font-semibold text-center ">
+                  Admin Price: <span className="text-red-500">৳999</span>
+            </p>
             </div>
-
-            {/* RIGHT DETAILS SECTION */}
-            <div className="product__details__text space-y-4">
-              <h3 className="text-2xl font-bold">{product.title}</h3>
-
-              {/* <div className="flex items-center gap-1 text-yellow-500">
-                <FaStar size={20} color="gold" />
-                <FaStar size={20} color="gold" />
-                <FaStar size={20} color="gold" />
-                <FaStarHalfAlt size={20} color="gold" />
-                <FaRegStar size={20} color="gold" />
-                <i className="fa fa-star-half-o"></i>
-                <span className="ml-2 text-gray-600">(18 {t("reviews")})</span>
-              </div> */}
-
-              <div className="text-2xl font-semibold text-green-600">
-                ${product.price}
-                {product.cross_price && (
-                  <span className="ml-2 text-gray-400 line-through">
-                    ${product.cross_price}
-                  </span>
-                )}
-              </div>
-
-              <form onSubmit={handleAddToCart}>
-                {/* Sizes */}
-                {sizes.length > 0 && (
-                  <div className="mb-2">
-                    <b>{t("sizes")}: </b>
-                    <div className="flex gap-2 mt-2">
-                      {sizes.map((size, idx) => (
-                        <label key={idx} className="cursor-pointer">
-                          <input
-                            type="radio"
-                            name="size"
-                            value={size}
-                            checked={selectedSize === size}
-                            onChange={(e) => setSelectedSize(e.target.value)}
-                            className="hidden"
-                          />
-                          <span
-                            className={`badge mx-1 cursor-pointer ${
-                              selectedSize === size
-                                ? "badge-success text-white"
-                                : "badge-info text-white"
-                            }`}
-                          >
-                            {size}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Colors */}
-                {colors.length > 0 && (
-                  <div className="mb-2">
-                    <b>{t("colors")}: </b>
-                    <div className="flex gap-2 mt-2">
-                      {colors.map((color, idx) => (
-                        <label key={idx} className="cursor-pointer">
-                          <input
-                            type="radio"
-                            name="color"
-                            value={color}
-                            checked={selectedColor === color}
-                            onChange={(e) => setSelectedColor(e.target.value)}
-                            className="hidden"
-                          />
-                          <span
-                            className={`badge mx-1 cursor-pointer ${
-                              selectedColor === color
-                                ? "badge-success text-white"
-                                : "badge-info text-white"
-                            }`}
-                          >
-                            {color}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Quantity + Buttons */}
-                <div className="mt-4">
-                  {/* <div>
-                    <label className="block mb-1 text-sm font-medium">
-                      {t("quantity")}
-                    </label>
-                    <input
-                      type="number"
-                      name="qty"
-                      value={qty}
-                      min="1"
-                      onChange={(e) => setQty(e.target.value)}
-                      className="input input-bordered w-24"
-                    />
-                  </div> */}
-
-                  <div className="flex gap-4 mt-4">
-                    <button
-                      type="submit"
-                      className="btn bn:sm lg:btn-md bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
-                    >
-                      <FaShoppingCart /> {t("addToCart")}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleAddToWishlist}
-                      className="btn btn-outline flex items-center gap-2"
-                    >
-                      <FaHeart /> {t("wishlist")}
-                    </button>
-                   
-                  </div>
-                   <button
-                      type="button"
-                      onClick={handleBuy}
-                      className="btn btn-outline bg-yellow-400 border-none text-white w-1/2 my-4 flex items-center gap-2"
-                    >
-                      {t("Buy Now")}
-                    </button>
-                </div>
-              </form>
-
-              <ul className="text-gray-700 space-y-1">
-                <li>
-                  <b>{t("availability")}:</b>{" "}
-                  {product.status === 1 ? t("inStock") : t("outOfStock")}
-                </li>
-                <li>
-                  <b>{t("category")}:</b> {product.category?.name || "N/A"}
-                </li>
-              </ul>
+            <div className="flex bg-white rounded-2xl p-2 justify-center">
+                <p className="font-semibold text-center">
+            Reseller Price: <span className="text-green-600">৳1400</span>
+          </p>
             </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="mt-10">
-            <div role="tablist" className="tabs tabs-bordered">
-              <input
-                type="radio"
-                name="tab"
-                role="tab"
-                className="tab"
-                aria-label={t("description")}
-                defaultChecked
-              />
-              <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">
-                  {t("productDescription")}
-                </h6>
-                <p>{product.description}</p>
-              </div>
-
-              <input
-                type="radio"
-                name="tab"
-                role="tab"
-                className="tab"
-                aria-label={t("info")}
-              />
-              <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">{t("productInfo")}</h6>
-                <ul className="list-disc pl-6 text-gray-700">
-                  <li>
-                    <b>{t("category")}:</b> {product.category?.name || "N/A"}
-                  </li>
-                  <li>
-                    <b>{t("weight")}:</b> 0.5 kg
-                  </li>
-                  <li>
-                    <b>{t("shipping")}:</b> 1 {t("dayShipping")}
-                  </li>
-                </ul>
-              </div>
-
-              {/* <input
-                type="radio"
-                name="tab"
-                role="tab"
-                className="tab"
-                aria-label={t("reviews")}
-              /> */}
-              <div role="tabpanel" className="tab-content p-4">
-                <h6 className="font-semibold mb-2">{t("customerReviews")}</h6>
-                <p>{t("noReviews")}</p>
-              </div>
-            </div>
-          </div>
+          
+         
         </div>
-      </section>
-    </main>
-  );
-};
 
-export default ProductDetails;
+        
+
+      {/* Size Selector */}
+      <div className="p-4 mt-2 bg-white shadow rounded-xl">
+        <h3 className="font-semibold text-lg mb-2">Select Size</h3>
+        <div className="flex gap-2">
+          {sizes.map((size) => (
+            <button
+              key={size}
+              onClick={() => setSelectedSize(size)}
+              className={`px-4 py-2 rounded-lg border ${
+                selectedSize === size
+                  ? "bg-yellow-400 text-white border-yellow-500"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {size}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Color Selector */}
+      <div className="p-4 mt-2 bg-white shadow rounded-xl">
+        <h3 className="font-semibold text-lg mb-2">Select Color</h3>
+        <div className="flex gap-2">
+          {colors.map((color) => (
+            <button
+              key={color}
+              onClick={() => setSelectedColor(color)}
+              className={`px-4 py-2 rounded-lg border ${
+                selectedColor === color
+                  ? "bg-yellow-400 text-white border-yellow-500"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {color}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Seller */}
+        <div className="flex items-center justify-between mt-3 bg-gray-100 rounded-lg p-2">
+          <div className="flex items-center space-x-2">
+            <Store className="w-5 h-5 text-yellow-500" />
+            <span className="font-medium">Sunlight Enterpris</span>
+          </div>
+          <button className="bg-yellow-400 text-white px-3 py-1 rounded-lg">
+            Store
+          </button>
+        </div>
+      </div>
+
+      {/* Product Details */}
+      <div className="p-4 mt-2 mb-20 bg-white shadow rounded-xl">
+        <h3 className="flex items-center font-semibold text-lg mb-2">
+          <Info className="w-5 h-5 mr-2" /> Product Details
+        </h3>
+        <p>
+            {product.description || "No description available."}
+        </p>
+      </div>
+
+      {/* Footer */}
+      <div className="fixed w-full gap-2 mb-2 bottom-0 flex px-2">
+        <button onClick={handleAddToCart} className="w-full rounded-xl bg-yellow-400 text-white py-3 font-semibold flex items-center justify-center">
+          <ShoppingCart className="w-5 h-5 mr-2" /> Add to Cart
+        </button>
+        <button onClick={handleBuy} className="w-full rounded-xl bg-orange-500 text-white py-3 font-semibold">
+          Order Now
+        </button>
+      </div>
+    </div>
+  );
+}

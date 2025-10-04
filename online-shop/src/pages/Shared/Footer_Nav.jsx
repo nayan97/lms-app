@@ -11,6 +11,7 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import logo from "../../../public/logo.png";
 const Footer_Nav = () => {
+    
   const { t } = useTranslation();
   return (
     <div className="fixed left-1/2 -translate-x-1/2 max-w-7xl h-[70px] text-gray-600 bottom-0  bg-white w-full p-2 border-t-2 border-gray-100 drop-shadow-2xl z-50">
