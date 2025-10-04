@@ -10,6 +10,11 @@ i18n
       en: {
 
         translation: {
+          Logout: "Log out",
+          Menu: "Menu",
+          Youwillreceive: "You will be received",
+          EnterAmount: "Enter Amount",
+          EnterPaymentNumber: "Enter Payment Number",
           IncomeBalance: "Income Balance",
           VoucherWallet: "Voucher Wallet",
           IncomeWallet: "Income Wallet",
@@ -156,6 +161,11 @@ i18n
       },
       bn: {
         translation: {
+          Logout: "লগ আউট",
+          Menu: "মেনু",
+          Youwillreceive: "আপনি পাবেন",
+          EnterAmount: "পরিমাণ লিখুন",
+          EnterPaymentNumber: "পেমেন্ট নম্বর লিখুন",
           IncomeBalance: "আয় ব্যালেন্স",
           VoucherWallet: "ভাউচার ওয়ালেট",
           IncomeWallet: "আয় ওয়ালেট",

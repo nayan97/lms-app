@@ -104,7 +104,7 @@ const Withdrawl = () => {
           </label>
           <input
             type="tel"
-            placeholder="Enter Payment Number"
+            placeholder={t("EnterPaymentNumber")}
             className="input input-bordered w-full rounded-lg h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
             value={paymentNumber}
             onChange={(e) => setPaymentNumber(e.target.value)}
@@ -118,14 +118,14 @@ const Withdrawl = () => {
           </label>
           <input
             type="number"
-            placeholder="Enter Amount"
+            placeholder={t("EnterAmount")}
             className="input input-bordered w-full rounded-lg h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
           {/* Received Amount Calculation Display */}
           <p className="text-sm mt-2 text-gray-600">
-            You will be received <span className="font-bold text-lg text-red-500">{receivedAmount.toFixed(2)}</span> Tk
+            {t("Youwillreceive")} <span className="font-bold text-lg text-red-500">{receivedAmount.toFixed(2)}</span> Tk
           </p>
         </div>
 

@@ -46,7 +46,7 @@ export default function OrderHistory() {
   const tabs = ["Pending", "Processing", "Delivered", "Cancelled"];
 
   return (
-    <div className="min-h-screen rounded-[50px] bg-gray-50 p-4">
+    <div className="min-h-screen rounded-t-[50px] bg-gray-50 p-4">
       {/* Header */}
       <div className="bg-[#ff9100] p-4 rounded-lg mb-4">
         <h1 className="text-xl font-bold text-white">{t("OrderHistory")}</h1>
