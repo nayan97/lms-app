@@ -12,7 +12,6 @@ const Wishlist = () => {
   const [error, setError] = useState(null);
   const { t } = useTranslation();
 
-  // ✅ Fetch wishlist data
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
@@ -36,10 +35,56 @@ const Wishlist = () => {
     fetchWishlist();
   }, [axios, t]);
 
+  // ✅ Skeleton loader while fetching
   if (loading) {
     return (
-      <main className="flex items-center justify-center h-screen">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-6">
+        <section className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-300 rounded w-1/3 mx-auto"></div>
+
+          <div className="overflow-x-auto mt-6">
+            <table className="table w-full bg-white rounded-xl shadow">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="h-4"></th>
+                  <th className="h-4"></th>
+                  <th className="hidden sm:table-cell h-4"></th>
+                  <th className="hidden sm:table-cell h-4"></th>
+                  <th className="h-4"></th>
+                  <th className="h-4"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...Array(6)].map((_, i) => (
+                  <tr key={i} className="animate-pulse">
+                    <td>
+                      <div className="h-4 bg-gray-200 rounded w-8"></div>
+                    </td>
+                    <td className="flex items-center gap-3">
+                      <div className="w-14 h-14 bg-gray-200 rounded"></div>
+                      <div className="w-32 h-4 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="hidden sm:table-cell">
+                      <div className="w-16 h-4 bg-gray-200 rounded"></div>
+                    </td>
+                    <td className="hidden sm:table-cell">
+                      <div className="w-16 h-4 bg-gray-200 rounded"></div>
+                    </td>
+                    <td>
+                      <div className="w-12 h-4 bg-gray-200 rounded"></div>
+                    </td>
+                    <td>
+                      <div className="flex gap-2">
+                        <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
+                        <div className="w-8 h-8 bg-gray-200 rounded-lg"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     );
   }
@@ -53,22 +98,19 @@ const Wishlist = () => {
   }
 
   const handleEdit = (itemId) => {
-    axios.post(`/wishlist/move-to-cart/${itemId}`, {}, { withCredentials: true })
-  }
+    axios.post(`/wishlist/move-to-cart/${itemId}`, {}, { withCredentials: true });
+  };
 
   return (
     <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
-      {/* Breadcrumb Section */}
-      <section className="flex justify-between items-center py-3">
+      <section className="flex justify-center items-center py-3">
         <h2 className="text-2xl font-bold text-center">{t("myWishlist")}</h2>
       </section>
 
-      {/* Wishlist Section */}
       <section className="wishlist">
         <div className="container mx-auto">
           {wishlistItems.length > 0 ? (
             <>
-              {/* Wishlist Table */}
               <div className="overflow-x-auto">
                 <table className="table w-full bg-white rounded-xl shadow">
                   <thead className="bg-gray-200 text-gray-700">
@@ -82,59 +124,43 @@ const Wishlist = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {wishlistItems.map((item) => {
-                      return (
-                        <tr key={item.id}>
-                          <td className="font-medium">{item.id}</td>
-                          <td className="flex items-center gap-2">
-                            <img
-                              src={item.image_url}
-                              alt={item.product_title}
-                              className="w-14 h-14 object-cover rounded"
-                            />
-                            <h5 className="font-semibold">
-                              {item.product_title}
-                            </h5>
-                          </td>
-                          <td className="hidden sm:table-cell">
-                            {item.size || "-"}
-                          </td>
-                          <td className="hidden sm:table-cell">
-                            {item.color || "-"}
-                          </td>
+                    {wishlistItems.map((item) => (
+                      <tr key={item.id}>
+                        <td className="font-medium">{item.id}</td>
+                        <td className="flex items-center gap-2">
+                          <img
+                            src={item.image_url}
+                            alt={item.product_title}
+                            className="w-14 h-14 object-cover rounded"
+                          />
+                          <h5 className="font-semibold">{item.product_title}</h5>
+                        </td>
+                        <td className="hidden sm:table-cell">{item.size || "-"}</td>
+                        <td className="hidden sm:table-cell">{item.color || "-"}</td>
+                        <td className="font-medium">${item.price}</td>
+                        <td>
+                          <div className="flex items-center gap-3">
+                            <button
+                              onClick={() => handleEdit(item.id)}
+                              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            >
+                              <FaEdit />
+                            </button>
 
-                          <td className="font-medium">${item.price}</td>
-                          <td>
-                            <div className="flex items-center gap-3">
-                              {/* Edit Button */}
-                              <button
-                                onClick={() =>
-                                  handleEdit(item.id)
-                                }
-                                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                              >
-                                <FaEdit />
-                              </button>
-
-                              {/* Delete Button */}
-                              <button
-                                onClick={() =>
-                                  console.log("remove from wishlist", item.id)
-                                }
-                                className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-                              >
-                                <FaTrash />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            <button
+                              onClick={() => console.log("remove from wishlist", item.id)}
+                              className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                            >
+                              <FaTrash />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
 
-              {/* Buttons */}
               <div className="flex justify-between mt-6">
                 <Link
                   to="/shop"
