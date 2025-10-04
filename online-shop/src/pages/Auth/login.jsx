@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import useUserAxios from "../../hooks/useUserAxios";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const {
@@ -13,40 +13,28 @@ const Login = () => {
     formState: { errors },
     getValues,
   } = useForm();
+
+  const { login } = useAuth(); // ✅ from AuthProvider
   const location = useLocation();
   const navigate = useNavigate();
-  const axios = useUserAxios();
   const from = location.state?.from || "/";
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // ✅ Handle Login
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("/login", {
-        email: data.email,
-        password: data.password,
-      });
+      const user = await login(data.email, data.password); // 👈 uses context
 
-      if (response.data.status === 200) {
-        const { token, user } = response.data;
+      toast.success("Logged in successfully!");
 
-        // Save token + user
-        localStorage.setItem("auth_token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // Set global Authorization header
-        // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        toast.success("Logged in successfully!");
-
-        // Redirect by role
-        if (user.role === "admin") {
-          navigate("/dashboard", { replace: true });
-        } else {
-          navigate(from, { replace: true });
-        }
+      // ✅ Role-based redirect (optional)
+      if (user.role === "admin") {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate(from, { replace: true });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Wrong email or password");
@@ -55,6 +43,7 @@ const Login = () => {
     }
   };
 
+  // ✅ Forgot Password
   const handleForgotPassword = async () => {
     const email = getValues("email");
     if (!email) {
@@ -69,11 +58,7 @@ const Login = () => {
         "success"
       );
     } catch (error) {
-      Swal.fire(
-        "Error",
-        error.response?.data?.message || "Something went wrong.",
-        "error"
-      );
+      Swal.fire("Error", error.message || "Something went wrong.", "error");
     }
   };
 
@@ -94,9 +79,7 @@ const Login = () => {
               placeholder="Email"
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.email.message}
-              </p>
+              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
             )}
           </div>
 
@@ -121,9 +104,7 @@ const Login = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1 text-sm text-red-500">
-                {errors.password.message}
-              </p>
+              <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
 
