@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import useAuth from "../hooks/useAuth";
-import useUserAxios from "../hooks/useUserAxios"; // axios instance
+// import useUserAxios from "../hooks/useUserAxios"; // axios instance
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const useUserRole = () => {
   const { user, loading: authLoading } = useAuth();
-  const axios = useUserAxios();
+  const axios = useAxiosSecure();
 
   const [role, setRole] = useState("guest"); // guest by default
   const [isLoading, setIsLoading] = useState(false);

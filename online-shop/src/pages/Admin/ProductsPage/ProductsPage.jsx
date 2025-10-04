@@ -15,7 +15,7 @@ const ProductsPage = () => {
   const [loading, setLoading] = useState(true);
 
   // ✅ Previews
-  // const [mainImagePreview, setMainImagePreview] = useState(null);
+  const [mainImagePreview, setMainImagePreview] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]); // store File objects
   const [galleryPreviews, setGalleryPreviews] = useState([]); // preview URLs
 
@@ -23,18 +23,21 @@ const ProductsPage = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     setValue,
 
     formState: { errors },
   } = useForm();
 
   // Watch main image
-  // const watchMainImage = watch("image");
-  // useEffect(() => {
-  //   if (watchMainImage && watchMainImage[0]) {
-  //     setMainImagePreview(URL.createObjectURL(watchMainImage[0]));
-  //   }
-  // }, [watchMainImage]);
+  const watchMainImage = watch("image");
+
+  useEffect(() => {
+    if (watchMainImage && watchMainImage[0]) {
+      setMainImagePreview(URL.createObjectURL(watchMainImage[0]));
+    }
+  }, [watchMainImage]);
+
 
   // ✅ React Dropzone for gallery
   const onDrop = useCallback((acceptedFiles) => {
@@ -47,16 +50,12 @@ const ProductsPage = () => {
     setGalleryPreviews((prev) => [...prev, ...newPreviews]);
   }, []);
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragReject,
-  } = useDropzone({
-    onDrop,
-    accept: { "image/*": [] },
-    multiple: true,
-  });
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      onDrop,
+      accept: { "image/*": [] },
+      multiple: true,
+    });
 
   // Cleanup previews on unmount
   useEffect(() => {
@@ -78,19 +77,17 @@ const ProductsPage = () => {
     setLoading(false);
   };
 
-const fetchCategories = async () => {
-  try {
-    const res = await axiosSecure.get("/admin/categories");
+  const fetchCategories = async () => {
+    try {
+      const res = await axiosSecure.get("/admin/categories");
 
-    // console.log("Full Response:", res.data);
+      // console.log("Full Response:", res.data);
 
-    setCategories(res.data ?? []); // set directly because response is already an array
-  } catch (err) {
-    console.error("Error fetching categories:", err);
-  }
-};
-
-
+      setCategories(res.data ?? []); // set directly because response is already an array
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
 
   useEffect(() => {
     axiosSecure.get("/admin/sizes").then((res) => {
@@ -106,72 +103,67 @@ const fetchCategories = async () => {
   }, []);
 
   // ✅ Submit handler
-const onSubmit = async (data) => {
-  try {
-    const formData = new FormData();
+  const onSubmit = async (data) => {
+    try {
+      const formData = new FormData();
 
-    // Required fields
-    formData.append("title", data.title);
-    formData.append("category_id", data.category_id);
-    formData.append("description", data.description || "");
-    formData.append("status", data.status);
-    formData.append("is_featured", data.is_featured);
+      // Required fields
+      formData.append("title", data.title);
+      formData.append("category_id", data.category_id);
+      formData.append("description", data.description || "");
+      formData.append("status", data.status);
+      formData.append("is_featured", data.is_featured);
 
-    // Numeric fields → integers
-    formData.append("price", parseInt(data.price, 10));
-    if (data.source_price) formData.append("source_price", parseInt(data.source_price, 10));
-    if (data.cross_price) formData.append("cross_price", parseInt(data.cross_price, 10));
-    if (data.max_price) formData.append("max_price", parseInt(data.max_price, 10));
-    if (data.profit) formData.append("profit", parseInt(data.profit, 10));
+      // Numeric fields → integers
+      formData.append("price", parseInt(data.price, 10));
+      if (data.source_price)
+        formData.append("source_price", parseInt(data.source_price, 10));
+      if (data.cross_price)
+        formData.append("cross_price", parseInt(data.cross_price, 10));
+      if (data.max_price)
+        formData.append("max_price", parseInt(data.max_price, 10));
+      if (data.profit) formData.append("profit", parseInt(data.profit, 10));
 
-    // Optional URL
-    if (data.source_url) formData.append("source_url", data.source_url);
+      // Optional URL
+      if (data.source_url) formData.append("source_url", data.source_url);
 
-    // Sizes & Colors
-    if (data.sizeIds) data.sizeIds.forEach((id) => formData.append("sizeIds[]", id));
-    if (data.colorIds) data.colorIds.forEach((id) => formData.append("colorIds[]", id));
+      // Sizes & Colors
+      if (data.sizeIds)
+        data.sizeIds.forEach((id) => formData.append("sizeIds[]", id));
+      if (data.colorIds)
+        data.colorIds.forEach((id) => formData.append("colorIds[]", id));
 
-    // Main image
- if (data.image && data.image[0]) {
-  const file = data.image[0];
-  const reader = new FileReader();
-  
-  reader.onloadend = () => {
-    const base64String = reader.result; // this is a string now
-    formData.append("image", base64String);
-  };
-  
-  reader.readAsDataURL(file);
-}
-//     // Gallery images (Laravel expects image_gallery[])
-    galleryFiles.forEach((file) => formData.append("image_gal[]", file));
+      // Main image
+      if (data.image && data.image[0]) {
+        formData.append("image", data.image[0]);
+      }
 
-    // Debug
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+    // Gallery images (Laravel expects image_gal[])
+      galleryFiles.forEach((file) => formData.append("image_gal[]", file));
+
+      // Debug
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
+
+      await axiosSecure.post("/admin/products", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      Swal.fire("Success!", "Product added successfully.", "success");
+
+      // Reset
+      fetchProducts();
+      setShowCreateModal(false);
+      setMainImagePreview(null);
+      setGalleryFiles([]);
+      setGalleryPreviews([]);
+      reset();
+    } catch (err) {
+      console.error("Error creating product", err.response?.data || err);
+      Swal.fire("Error!", "Failed to create product.", "error");
     }
-
-    await axiosSecure.post("/admin/products", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    Swal.fire("Success!", "Product added successfully.", "success");
-
-    // Reset
-    fetchProducts();
-    setShowCreateModal(false);
-    // setMainImagePreview(null);
-    setGalleryFiles([]);
-    setGalleryPreviews([]);
-    reset();
-  } catch (err) {
-    console.error("Error creating product", err.response?.data || err);
-    Swal.fire("Error!", "Failed to create product.", "error");
-  }
-};
-
-
-
+  };
 
   return (
     <div className="lg:p-6 w-full">
@@ -233,7 +225,10 @@ const onSubmit = async (data) => {
                     label: s.name,
                   }))}
                   onChange={(opts) =>
-                    setValue("sizeIds", opts.map((o) => o.value))
+                    setValue(
+                      "sizeIds",
+                      opts.map((o) => o.value)
+                    )
                   }
                 />
                 <input type="hidden" {...register("sizeIds")} />
@@ -246,12 +241,14 @@ const onSubmit = async (data) => {
                     label: c.name,
                   }))}
                   onChange={(opts) =>
-                    setValue("colorIds", opts.map((o) => o.value))
+                    setValue(
+                      "colorIds",
+                      opts.map((o) => o.value)
+                    )
                   }
                 />
                 <input type="hidden" {...register("colorIds")} />
 
-         
                 {/* Pricing fields */}
                 <input
                   {...register("price", { required: true })}
@@ -291,7 +288,7 @@ const onSubmit = async (data) => {
                   className="w-full border rounded p-2"
                 />
 
-                        <select
+                <select
                   {...register("status")}
                   className="w-full border rounded p-2"
                 >
@@ -308,8 +305,22 @@ const onSubmit = async (data) => {
                 </select>
 
                 {/* ✅ Main image */}
-
-
+                     <div className="md:col-span-2">
+                  <label className="block text-sm mb-1">Main Image</label>
+                  <input
+                    {...register("image", { required: true })}
+                    type="file"
+                    accept="image/*"
+                    className="w-full border rounded p-2"
+                  />
+                  {mainImagePreview && (
+                    <img
+                      src={mainImagePreview}
+                      alt="Preview"
+                      className="mt-2 w-32 h-32 object-cover rounded border"
+                    />
+                  )}
+                </div>
                 {/* ✅ Gallery using Dropzone */}
                 <div className="md:col-span-2">
                   <label className="block text-sm mb-1">Gallery Images</label>

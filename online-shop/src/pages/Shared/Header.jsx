@@ -113,9 +113,9 @@ const Header = ({ showitem }) => {
                 </li>
                 <li>
                   {" "}
-                  <a href="/login" className="" onClick={handleLogout}>
+                  <button className="" onClick={handleLogout}>
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>

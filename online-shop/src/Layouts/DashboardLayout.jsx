@@ -6,7 +6,7 @@ import Footer from "../pages/Shared/Footer";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  console.log("Sidebar Open:", sidebarOpen);
+  // console.log("Sidebar Open:", sidebarOpen);
 
   return (
     <>

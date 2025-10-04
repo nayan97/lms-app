@@ -41,30 +41,29 @@ const Sidebar = ({ isOpen }) => {
           {isOpen && <span>Dashboard</span>}
         </NavLink>
 
-        <NavLink to="/dashboard/add-category" className={linkClasses}>
-          <FileText className="w-5 h-5" />
-          {isOpen && <span>Category</span>}
-        </NavLink>
-
-        <NavLink to="/dashboard/add-size" className={linkClasses}>
-          <Boxes className="w-5 h-5" />
-          {isOpen && <span>Add Size</span>}
-        </NavLink>
-        <NavLink to="/dashboard/add-color" className={linkClasses}>
-          <Boxes className="w-5 h-5" />
-          {isOpen && <span>Add Color</span>}
-        </NavLink>
-              <NavLink to="/dashboard/add-product-detail" className={linkClasses}>
-          <Boxes className="w-5 h-5" />
-          {isOpen && <span>Add Product Detail</span>}
-        </NavLink>
-             <NavLink to="/dashboard/add-product" className={linkClasses}>
-          <Boxes className="w-5 h-5" />
-          {isOpen && <span>Add Product</span>}
-        </NavLink>
-
         {!isLoading && role === "admin" && (
           <>
+            <NavLink to="/dashboard/add-category" className={linkClasses}>
+              <FileText className="w-5 h-5" />
+              {isOpen && <span>Category</span>}
+            </NavLink>
+
+            <NavLink to="/dashboard/add-size" className={linkClasses}>
+              <Boxes className="w-5 h-5" />
+              {isOpen && <span>Add Size</span>}
+            </NavLink>
+            <NavLink to="/dashboard/add-color" className={linkClasses}>
+              <Boxes className="w-5 h-5" />
+              {isOpen && <span>Add Color</span>}
+            </NavLink>
+            <NavLink to="/dashboard/add-product-detail" className={linkClasses}>
+              <Boxes className="w-5 h-5" />
+              {isOpen && <span>Add Product Detail</span>}
+            </NavLink>
+            <NavLink to="/dashboard/add-product" className={linkClasses}>
+              <Boxes className="w-5 h-5" />
+              {isOpen && <span>Add Product</span>}
+            </NavLink>
             <NavLink to="/dashboard/make-admin" className={linkClasses}>
               <UserCog className="w-5 h-5" />
               {isOpen && <span>Manage Users</span>}

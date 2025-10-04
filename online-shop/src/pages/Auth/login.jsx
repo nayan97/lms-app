@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import useUserAxios from "../../hooks/useUserAxios";
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
   const location = useLocation();
   const navigate = useNavigate();
+  const axios = useUserAxios();
   const from = location.state?.from || "/";
 
   const [loading, setLoading] = useState(false);
@@ -18,7 +24,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post("http://192.168.42.224:8000/api/login", {
+      const response = await axios.post("/login", {
         email: data.email,
         password: data.password,
       });
@@ -31,7 +37,7 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(user));
 
         // Set global Authorization header
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        // axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         toast.success("Logged in successfully!");
 
@@ -57,7 +63,11 @@ const Login = () => {
 
     try {
       await axios.post("http://127.0.0.1:8000/api/forgot-password", { email });
-      Swal.fire("Success!", "Password reset link sent to your email.", "success");
+      Swal.fire(
+        "Success!",
+        "Password reset link sent to your email.",
+        "success"
+      );
     } catch (error) {
       Swal.fire(
         "Error",
@@ -74,19 +84,27 @@ const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Email */}
           <div className="mb-4">
-            <label className="block text-sm font-medium">Email <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium">
+              Email <span className="text-red-500">*</span>
+            </label>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
               className="w-full rounded-md border py-2 px-3 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
               placeholder="Email"
             />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           {/* Password */}
           <div className="mb-4">
-            <label className="block text-sm font-medium">Password <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-medium">
+              Password <span className="text-red-500">*</span>
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
@@ -102,12 +120,20 @@ const Login = () => {
                 {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
             </div>
-            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           {/* Forgot Password */}
           <div className="mb-4 text-right">
-            <button type="button" onClick={handleForgotPassword} className="text-green-400 hover:underline text-sm">
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-green-400 hover:underline text-sm"
+            >
               Forgot password?
             </button>
           </div>
@@ -124,9 +150,9 @@ const Login = () => {
           {/* Register Link */}
           <p className="mt-4 text-center text-sm">
             Don’t have an account?{" "}
-            <a href="/register" className="text-green-400 hover:underline">
+            <Link to="/register" className="text-green-400 hover:underline">
               Register here
-            </a>
+            </Link>
           </p>
         </form>
       </div>

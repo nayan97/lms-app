@@ -31,33 +31,56 @@ export default function AuthProvider({ children }) {
   }, [axiosSecure]);
 
   // ✅ Login
+  // const login = async (email, password) => {
+  //   try {
+  //     const { data } = await axiosSecure.post("/login", { email, password });
+
+  //     // Save token & user
+  //     localStorage.setItem("auth_token", data.token);
+  //     localStorage.setItem("user", JSON.stringify(data.user));
+
+  //     setUser(data.user);
+  //   } catch (err) {
+  //     console.error("Login failed", err);
+  //     throw err;
+  //   }
+  // };
+
   const login = async (email, password) => {
-    try {
-      const { data } = await axiosSecure.post("/login", { email, password });
+  try {
+    const { data } = await axiosSecure.post("/login", { email, password });
 
-      // Save token & user
-      localStorage.setItem("auth_token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+    // Save token & user
+    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
 
-      setUser(data.user);
-    } catch (err) {
-      console.error("Login failed", err);
-      throw err;
-    }
-  };
+    setUser(data.user); // updates context
 
-  // ✅ Logout
-  const logout = async () => {
-    try {
-      await axiosSecure.post("/logout");
-    } catch (err) {
-      console.error("Logout failed", err);
-    } finally {
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("user");
-      setUser(null);
-    }
-  };
+    return data.user; // ✅ return user so caller can decide navigation
+  } catch (err) {
+    console.error("Login failed", err);
+    throw err;
+  }
+};
+
+
+const logout = async () => {
+  try {
+    console.log("Sending logout request...");
+    const res = await axiosSecure.post("/logout");
+    console.log("Backend response:", res.data);
+
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
+    setUser(null);
+
+    return Promise.resolve("Logged out successfully");
+  } catch (err) {
+    console.error("Logout failed:", err.response ? err.response.data : err);
+    return Promise.reject(err);
+  }
+};
+
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
