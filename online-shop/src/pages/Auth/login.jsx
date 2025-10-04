@@ -62,7 +62,7 @@ const Login = () => {
     }
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/forgot-password", { email });
+      await axios.post("http://192.168.110.207:8000/api/forgot-password", { email });
       Swal.fire(
         "Success!",
         "Password reset link sent to your email.",
