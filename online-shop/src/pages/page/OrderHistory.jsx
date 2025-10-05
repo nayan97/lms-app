@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 const orders = [
   {
@@ -46,14 +47,31 @@ export default function OrderHistory() {
   const tabs = ["Pending", "Processing", "Delivered", "Cancelled"];
 
   return (
-    <div className="min-h-screen rounded-t-[50px] bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 ">
+
       {/* Header */}
-      <div className="bg-[#ff9100] p-4 rounded-lg mb-4">
-        <h1 className="text-xl font-bold text-white">{t("OrderHistory")}</h1>
+      
+      <div className=" mb-4">
+         <div className="bg-[#ff9100] h-20">
+        <div className="flex items-center gap-4">
+          <Link
+          to={"/"}
+          className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+        >
+          ← 
+        </Link>
+        <h1 className="text-white  font-bold"> {t("OrderHistory")}
+</h1>
+
+        </div>
+        
+       
+      </div>
+        
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-4 justify-around">
+      <div className="flex gap-2 mb-4 rounded-t-[50px] justify-around">
         {tabs.map((tab) => (
           <button
             key={tab}

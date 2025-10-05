@@ -38,10 +38,18 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
 
   const [cartCount, setCartCount] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(product?.image_gal[0]);
+ const [selectedImage, setSelectedImage] = useState(null);
 
-
-
+// When product is loaded, set first gallery image or fallback to main image
+useEffect(() => {
+  if (product) {
+    if (product.image_gal?.length > 0) {
+      setSelectedImage(product.image_gal[0]);
+    } else {
+      setSelectedImage(product.image_url);
+    }
+  }
+}, [product]); // <-- watch 'product'
 
   useEffect(() => {
     if (!id) return;
@@ -53,6 +61,7 @@ export default function ProductPage() {
         setProduct(data.data.product);
         setSizes(data.data.sizes || []);
         setColors(data.data.colors || []);
+        setSelectedImage(data?.product?.image_gal[0]);
       } catch (error) {
         console.error("Failed to load product:", error);
       } finally {
@@ -78,6 +87,9 @@ export default function ProductPage() {
     fetchCart();
   }, [axiosSecure]);
 
+
+
+ 
   if (loading) return <Spinner />;
   if (!product)
     return (
@@ -270,6 +282,8 @@ export default function ProductPage() {
     alert("Product details copied!");
   };
 
+
+
   return (
     <div className="min-h-screen rounded-t-[50px] flex flex-col bg-[#ff9100]">
       {/* Header */}
@@ -312,38 +326,39 @@ export default function ProductPage() {
         </div>
       </div>
       <div>
-      {/* Main Image */}
-      <div className="bg-white rounded-t-[50px] p-4">
-        <img
-          src={selectedImage}
-          alt="Product"
-          className="w-full rounded-xl transition-all duration-300"
-        />
-      </div>
+        {/* Main Image */}
+        <div className="bg-white rounded-t-[50px] p-4">
+          <img
+            src={
+              selectedImage}
+            alt="Product"
+            className="w-full rounded-xl transition-all duration-300"
+          />
+        </div>
 
-      {/* Image Gallery Thumbnails */}
-     
-    </div>
-     
+        {/* Image Gallery Thumbnails */}
+      </div>
 
       <div className="bg-gray-100">
         {/* Product Image */}
 
-         {product.image_gal?.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto mt-3 pb-2">
-          {product.image_gal.map((gal, index) => (
-            <img
-              key={index}
-              src={gal}
-              alt={product.title}
-              onClick={() => setSelectedImage(gal)}
-              className={`w-24 h-24 rounded-lg cursor-pointer object-cover transition-transform hover:scale-105 border-2 ${
-                selectedImage === gal ? "border-yellow-500" : "border-transparent"
-              }`}
-            />
-          ))}
-        </div>
-      )}
+        {product.image_gal?.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto mt-3 pb-2">
+            {product.image_gal.map((gal, index) => (
+              <img
+                key={index}
+                src={gal}
+                alt={product.title}
+                onClick={() => setSelectedImage(gal)}
+                className={`w-24 h-24 rounded-lg cursor-pointer object-cover transition-transform hover:scale-105 border-2 ${
+                  selectedImage === gal
+                    ? "border-yellow-500"
+                    : "border-transparent"
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Product Info */}
         <div className="p-4 mt-2 rounded-xl shadow">
@@ -449,7 +464,7 @@ export default function ProductPage() {
       </div>
 
       {/* Footer */}
-      <div className="fixed w-full gap-2 mb-2 bottom-0 flex px-2">
+      <div className="fixed left-1/2 -translate-x-1/2 w-full gap-2 mb-2 bottom-0 flex px-2">
         <button
           onClick={handleAddToCart}
           className="w-full rounded-xl bg-yellow-400 text-white py-3 font-semibold flex items-center justify-center"

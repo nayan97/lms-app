@@ -10,6 +10,7 @@ i18n
       en: {
 
         translation: {
+          mycart:"Cart",
           SeeAllProducts:"See All Products",
           Logout: "Log out",
           Menu: "Menu",
@@ -177,6 +178,7 @@ Delete: "Delete"
       },
       bn: {
         translation: {
+          mycart:"কার্ট",
           SeeAllProducts : "সকল পণ্য দেখুন",
           Logout: "লগ আউট",
 Menu: "মেনু",

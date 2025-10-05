@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
@@ -11,6 +11,11 @@ const ShoppingCart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const page = location.pathname;
+
+
 
   // Fetch cart data
   useEffect(() => {
@@ -73,7 +78,7 @@ const ShoppingCart = () => {
   // ✅ Remove item
   const handleRemove = async (id) => {
     try {
-      await axios.delete(`/cart/${id}`);
+      await axios.delete(`/removecart/${id}`);
       setCartItems((prev) => prev.filter((item) => item.id !== id));
       Swal.fire({
         icon: "success",
@@ -108,7 +113,25 @@ const ShoppingCart = () => {
   }
 
   return (
-    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
+    <div>
+      <div className="bg-[#ff9100] h-20">
+        <div className="flex items-center gap-4">
+          <Link
+          to={"/shop"}
+          className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+        >
+          ← 
+        </Link>
+        <h1 className="text-white  font-bold"> {t("mycart")}
+</h1>
+
+        </div>
+        
+       
+      </div>
+       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
+      {/* navbar */}
+      
       {/* Welcome Section */}
       <section className="text-center">
         <h1 className="mt-4 text-xl">{t("welcome")}</h1>
@@ -234,6 +257,9 @@ const ShoppingCart = () => {
         </div>
       </section>
     </main>
+
+    </div>
+   
   );
 };
 
