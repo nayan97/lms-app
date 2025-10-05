@@ -82,7 +82,7 @@ const ProductModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6">
       <div className="bg-white rounded-lg shadow max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
@@ -220,7 +220,7 @@ const ProductModal = ({
               <div className="md:col-span-2">
                 <label className="block text-sm mb-1">Current Main Image</label>
                 <img
-                  src={mainImagePreview}
+                  src={ mainImagePreview}
                   alt="Main"
                   className="w-24 h-24 object-cover rounded border mb-2"
                 />
@@ -244,7 +244,7 @@ const ProductModal = ({
                   {galleryPreviews.map((src, i) => (
                     <div key={i} className="relative">
                       <img
-                        src={src}
+                        src={`http://192.168.110.207:8000/storage/${src}`}
                         alt={`Gallery ${i}`}
                         className="w-20 h-20 object-cover rounded border"
                       />

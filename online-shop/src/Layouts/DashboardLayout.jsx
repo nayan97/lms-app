@@ -6,27 +6,29 @@ import Footer from "../pages/Shared/Footer";
 import Footer_Nav from "../pages/Shared/Footer_Nav";
 
 const DashboardLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  // console.log("Sidebar Open:", sidebarOpen);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // closed by default for mobile
 
   return (
-    <>
-      <div className="">
-        <div className="flex h-screen max-w-7xl mx-auto bg-amber-50 border border-blue-950">
-          <Sidebar isOpen={sidebarOpen} />
-          <div className="flex-1 flex flex-col">
-            <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-            <main className="p-4 flex-1 overflow-y-auto">
-              <Outlet></Outlet>
-            </main>
-          </div>
-        </div>
+    <div className="min-h-screen flex flex-col bg-amber-50 border border-blue-950">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full relative">
+        {/* Sidebar */}
+        <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
 
-        <div className="max-w-4xl lg:max-w-7xl mx-auto mb-[-25px]">
-          <Footer_Nav></Footer_Nav>
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+          <main className="p-4 flex-1 overflow-y-auto">
+            <Outlet />
+          </main>
         </div>
       </div>
-    </>
+
+      {/* Footer Navigation */}
+      <div className="max-w-4xl lg:max-w-7xl mx-auto w-full mt-auto">
+        <Footer_Nav />
+      </div>
+    </div>
   );
 };
 

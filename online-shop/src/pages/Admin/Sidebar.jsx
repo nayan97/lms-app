@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router";
 import {
   LayoutDashboard,
@@ -7,88 +7,186 @@ import {
   Boxes,
   ShoppingCart,
   Briefcase,
-  UserCog,
   PackagePlus,
   ShieldCheck,
   PackageSearch,
+  UserCog,
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
-// import logo from "../../assets/logo/logo.jpeg";
+import logo from "../../../public/logo.png";
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const { role, isLoading } = useUserRole();
+  const menuRef = useRef(null);
 
-  const linkClasses = "flex items-center gap-3 p-2 rounded hover:bg-base-300";
+  // 🔹 Handle outside click + resize
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setIsOpen]);
+
+  // 🔹 Close on link click (for mobile)
+  const handleLinkClick = () => {
+    if (window.innerWidth < 1024) {
+      setIsOpen(false);
+    }
+  };
+
+  const linkClasses =
+    "flex items-center gap-3 p-2 rounded hover:bg-base-300 transition duration-200";
 
   return (
-    <aside
-      className={`bg-base-100 h-full p-4 transition-all duration-300 ${
-        isOpen ? "w-40 lg:w-64" : "w-16"
-      } overflow-hidden`}
-    >
-      <div className="space-y-2">
-        <div className="p-1 mt-[-15px] ml-[-15px]">
-          <NavLink to="/" className="flex justify-start p-2 ml-[-8]">
-            <span className="flex items-start gap-2">
-              <img src="" alt="Logo" className="ml-2 h-12 w-12 rounded-full" />
-              <span className="pt-4 pl-2">Go Bangla</span>
-            </span>
+    <>
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden"
+          onClick={() => setIsOpen(false)}
+        ></div>
+      )}
+
+      {/* Sidebar */}
+      <aside
+        ref={menuRef}
+        className={`fixed top-0 left-0 h-full bg-base-100 z-50 transform transition-transform duration-300
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        w-64 lg:w-64 lg:translate-x-0 shadow-lg`}
+      >
+        <div className="p-4 space-y-2">
+          {/* Logo */}
+          <div className="flex items-center gap-2 p-2 mb-4 border-b pb-3">
+         <img src={logo} className="w-15 h-15" />
+            <span className="text-lg font-semibold">Life Change</span>
+          </div>
+
+          {/* Common */}
+          <NavLink to="/dashboard" onClick={handleLinkClick} className={linkClasses}>
+            <LayoutDashboard className="w-5 h-5" />
+            <span>Dashboard</span>
           </NavLink>
-        </div>
 
-        <NavLink to="/dashboard" className={linkClasses}>
-          <LayoutDashboard className="w-5 h-5" />
-          {isOpen && <span>Dashboard</span>}
-        </NavLink>
+          {/* ADMIN LINKS */}
+          {!isLoading && role === "admin" && (
+            <>
+              <NavLink
+                to="/dashboard/add-category"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <FileText className="w-5 h-5" />
+                <span>Category</span>
+              </NavLink>
 
-        {!isLoading && role === "admin" && (
-          <>
-            <NavLink to="/dashboard/add-category" className={linkClasses}>
-              <FileText className="w-5 h-5" />
-              {isOpen && <span>Category</span>}
-            </NavLink>
-            <NavLink to="/dashboard/add-size" className={linkClasses}>
-              <Boxes className="w-5 h-5" />
-              {isOpen && <span>Add Size</span>}
-            </NavLink>
-            <NavLink to="/dashboard/add-color" className={linkClasses}>
-              <Boxes className="w-5 h-5" />
-              {isOpen && <span>Add Color</span>}
-            </NavLink>
-            <NavLink to="/dashboard/add-product" className={linkClasses}>
-              <Boxes className="w-5 h-5" />
-              {isOpen && <span>Add Product</span>}
-            </NavLink>
-            
+              <NavLink
+                to="/dashboard/add-size"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <Boxes className="w-5 h-5" />
+                <span>Add Size</span>
+              </NavLink>
 
-           
-          </>
-        )}
+              <NavLink
+                to="/dashboard/add-color"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <Boxes className="w-5 h-5" />
+                <span>Add Color</span>
+              </NavLink>
 
-        {!isLoading && role === "user" && (
-          <>
-            <NavLink to="/dashboard/join_as_guide" className={linkClasses}>
-              <Briefcase className="w-5 h-5" />
-              {isOpen && <span>Join As Guide</span>}
-            </NavLink>
+              <NavLink
+                to="/dashboard/add-product"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <PackagePlus className="w-5 h-5" />
+                <span>Add Product</span>
+              </NavLink>
 
-            <NavLink to="/dashboard/my-bookings" className={linkClasses}>
-              <ShoppingCart className="w-5 h-5" />
-              {isOpen && <span>My Bookings</span>}
-            </NavLink>
-          </>
-        )}
+              <NavLink
+                to="/dashboard/products"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <PackageSearch className="w-5 h-5" />
+                <span>All Products</span>
+              </NavLink>
 
-        {!isLoading && role === "guide" && (
-          <>
-            <NavLink to="/dashboard/assigned-tours" className={linkClasses}>
+              <NavLink
+                to="/dashboard/manage-users"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <UserCog className="w-5 h-5" />
+                <span>Manage Users</span>
+              </NavLink>
+
+              <NavLink
+                to="/dashboard/orders"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <ShieldCheck className="w-5 h-5" />
+                <span>Orders</span>
+              </NavLink>
+            </>
+          )}
+
+          {/* USER LINKS */}
+          {!isLoading && role === "user" && (
+            <>
+              <NavLink
+                to="/dashboard/join_as_guide"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <Briefcase className="w-5 h-5" />
+                <span>Join As Guide</span>
+              </NavLink>
+
+              <NavLink
+                to="/dashboard/my-bookings"
+                onClick={handleLinkClick}
+                className={linkClasses}
+              >
+                <ShoppingCart className="w-5 h-5" />
+                <span>My Bookings</span>
+              </NavLink>
+            </>
+          )}
+
+          {/* GUIDE LINKS */}
+          {!isLoading && role === "guide" && (
+            <NavLink
+              to="/dashboard/assigned-tours"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
               <ShoppingBag className="w-5 h-5" />
-              {isOpen && <span>My Assigned Tours</span>}
+              <span>My Assigned Tours</span>
             </NavLink>
-          </>
-        )}
-      </div>
-    </aside>
+          )}
+        </div>
+      </aside>
+    </>
   );
 };
 

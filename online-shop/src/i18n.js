@@ -151,7 +151,25 @@ i18n
 
           instructionsPlaceholder: "Write any additional instructions",
           thana: "Select a Thana",
-          thanaPlaceholder: "Select a Thana"
+          thanaPlaceholder: "Select a Thana",
+          Logout: "Log out",
+Menu: "Menu",
+Youwillreceive: "You will be received",
+Products: "Products",
+AddNewProduct: "Add New Product",
+Checkout: "Checkout",
+Image: "Image",
+Title: "Title",
+Price: "Price",
+Featured: "Featured",
+Actions: "Actions",
+Loading: "Loading...",
+NoProductsFound: "No products found.",
+Yes: "Yes",
+No: "No",
+Edit: "Edit",
+Delete: "Delete"
+
 
   // extra as per your given format
 
@@ -161,6 +179,24 @@ i18n
       },
       bn: {
         translation: {
+          Logout: "লগ আউট",
+Menu: "মেনু",
+Youwillreceive: "আপনি পাবেন",
+Products: "পণ্যসমূহ",
+AddNewProduct: "নতুন পণ্য যোগ করুন",
+Checkout: "চেকআউট",
+Image: "ছবি",
+Title: "শিরোনাম",
+Price: "মূল্য",
+Featured: "বৈশিষ্ট্যযুক্ত",
+Actions: "অ্যাকশন",
+Loading: "লোড হচ্ছে...",
+NoProductsFound: "কোনো পণ্য পাওয়া যায়নি।",
+Yes: "হ্যাঁ",
+No: "না",
+Edit: "সম্পাদনা করুন",
+Delete: "মুছে ফেলুন",
+
           Logout: "লগ আউট",
           Menu: "মেনু",
           Youwillreceive: "আপনি পাবেন",

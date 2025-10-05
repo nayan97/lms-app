@@ -5,7 +5,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { IoCartOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
-import { ArrowBigDownDash, BellIcon } from "lucide-react";
+import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const Header = ({ showitem }) => {
@@ -23,15 +23,29 @@ const Header = ({ showitem }) => {
   const [show, setShowItem] = useState(showitem);
 
   // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpenMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setOpenMenu(false);
+    }
+  };
+
+  const handleResize = () => {
+    if (window.innerWidth >= 1024) {
+      setOpenMenu(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  window.addEventListener("resize", handleResize);
+
+  // Cleanup
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
+
 
   // Update showitem prop
   useEffect(() => {
@@ -58,7 +72,14 @@ const Header = ({ showitem }) => {
       .then(() => console.log("Logout successful"))
       .catch((err) => console.log(err));
   };
+  const referCode = "45425486";
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(referCode);
+    console.log("Copied code!");
+    // Optional: nice feedback
+    alert("Refer code copied!");
+  };
   const Navlinks = (
     <>
       <li>
@@ -145,7 +166,7 @@ const Header = ({ showitem }) => {
   );
 
   return (
-    <div className="navbar bg-[#ff9100] px-4 lg:px-8 py-2 ">
+    <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger icon for mobile */}
@@ -179,61 +200,61 @@ const Header = ({ showitem }) => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
       </div>
-     
 
       {/* Mobile Menu */}
-      {openMenu && (
-        <ul
-          ref={menuRef}
-          className="menu menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 p-4 shadow overflow-y-auto transform transition-transform duration-300"
-        >
-         <div>
-           <div className="flex justify-between items-center mb-4">
-             {/* User Profile Header (Yellow background) */}
-        <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
-          <div className="flex flex-col items-start gap-1 ">
-            {/* Profile Image (Placeholder) */}
-            <div className="avatar mr-3">
-              <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
-                {/* Note: Use fallbacks for images */}
-                <img src="" alt="User Profile" onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/100x100/aaaaaa/ffffff?text=User" }} />
+      {/* Mobile Menu + Overlay */}
+{openMenu && (
+  <>
+    {/* Overlay */}
+    <div
+      onClick={() => setOpenMenu(false)}
+      className="fixed inset-0 bg-black/50 z-40"
+    ></div>
+
+    {/* Sidebar Menu */}
+    <ul
+      ref={menuRef}
+      className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
+                 shadow overflow-y-auto transform transition-transform duration-300"
+    >
+      <div>
+        <div className="flex justify-between items-center ">
+          <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
+            <div className="flex flex-col items-start gap-4 ">
+              <div className="avatar mr-3">
+                <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
+                  <img
+                    src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                    alt="User Profile"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
+                    }}
+                  />
+                </div>
               </div>
-            </div>
-            
-            {/* User Name */}
-            <div>
-              <p className="text-l font-bold leading-none">Md. ÃL~Ãmĩn</p>
-              <div className="flex items-center mt-1 text-sm font-medium">
-                <span>Refer Code: 45425486</span>
-                {/* Copy Icon */}
-                <svg onClick={() => console.log('Copied code!')} className="h-4 w-4 ml-2 cursor-pointer text-yellow-100 hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5v2m0 7h.01M18 5v2m0 7h.01M16 5H8" /></svg>
+
+              <div>
+                <p className="text-lg font-bold leading-none">Md. ÃL~Ãmĩn</p>
+                <div className="flex items-center text-white">
+                  <span>Refer Code: {referCode}</span>
+                  <Copy
+                    onClick={handleCopy}
+                    className="size-4 ml-2 cursor-pointer text-white transition"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-          </div>
-         </div>
-          {Navlinks}
-          {/* {user ? (
-            <li>
-              
-            </li>
-          ) : (
-            <>
-              <li>
-                <NavLink to="/login" className="btn w-full my-2">
-                  {t("Login")}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/register" className="btn btn-success w-full my-2 ">
-                  {t("Register")}
-                </NavLink>
-              </li>
-            </>
-          )} */}
-        </ul>
-      )}
+      </div>
+
+      {Navlinks}
+    </ul>
+  </>
+)}
+
 
       {/* Navbar End */}
       <div className="navbar-end flex items-center space-x-2">
@@ -272,7 +293,7 @@ const Header = ({ showitem }) => {
         )}
 
         {/* Arrow icon for specific pages */}
-        {( page.startsWith("/shop/")) && (
+        {page.startsWith("/shop/") && (
           <div className="bg-white rounded-full p-1 text-yellow-500">
             <ArrowBigDownDash />
           </div>

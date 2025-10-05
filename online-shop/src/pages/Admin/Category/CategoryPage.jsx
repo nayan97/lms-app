@@ -112,7 +112,7 @@ const fetchCategories = async () => {
         <h2 className="text-xl font-bold mb-4">Categories</h2>
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg mb-2"
+          className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
         >
           + Add Category
         </button>

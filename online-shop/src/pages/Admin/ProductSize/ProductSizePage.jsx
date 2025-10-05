@@ -7,8 +7,7 @@ const ProductSizePage = () => {
   const [loading, setLoading] = useState(true);
 
   // Form state
- const [form, setForm] = useState({ id: null, name: "", status: "1" });
-
+  const [form, setForm] = useState({ id: null, name: "", status: "1" });
 
   // Modal state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -41,9 +40,9 @@ const ProductSizePage = () => {
   };
 
   // Reset form
-const resetForm = () => {
-  setForm({ id: null, name: "", status: "1" });
-};
+  const resetForm = () => {
+    setForm({ id: null, name: "", status: "1" });
+  };
 
   // Submit create/update
   const handleSubmit = async (e) => {
@@ -92,7 +91,7 @@ const resetForm = () => {
         <h2 className="text-xl font-bold mb-4">Product Sizes</h2>
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg mb-2"
+          className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
         >
           + Add Size
         </button>
@@ -158,7 +157,7 @@ const resetForm = () => {
                   className="w-full px-3 py-2 border rounded"
                 />
               </div>
-                            <div>
+              <div>
                 <label className="block text-sm font-medium">Status</label>
                 <select
                   name="status"
