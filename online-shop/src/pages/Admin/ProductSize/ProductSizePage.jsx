@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const ProductSizePage = () => {
+    const { t, i18n } = useTranslation();
   const axiosSecure = useAxiosSecure();
   const [sizes, setSizes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,58 +49,113 @@ const ProductSizePage = () => {
     setForm({ id: null, name: "", status: "1" });
   };
 
-  // Submit create/update
+  // ✅ Submit create/update
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       if (form.id) {
+        // ✅ Update using POST + _method=PUT
         await axiosSecure.post(`/admin/sizes/${form.id}?_method=PUT`, form, {
           headers: { "Content-Type": "application/json" },
         });
+
+        Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: "Size has been updated successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
       } else {
+        // ✅ Create new size
         await axiosSecure.post("/admin/sizes", form, {
           headers: { "Content-Type": "application/json" },
         });
+
+        Swal.fire({
+          icon: "success",
+          title: "Created!",
+          text: "Size has been added successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
       }
+
       fetchSizes();
       resetForm();
       setIsCreateOpen(false);
       setIsEditOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Error saving size");
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error.response?.data?.message || "Error saving size.",
+      });
     }
   };
 
-  // Edit
+  // ✏️ Edit
   const handleEdit = (size) => {
-    setForm({ id: size.id, name: size.name });
+    setForm({
+      id: size.id,
+      name: size.name,
+      status: size.status?.toString() || "1",
+    });
     setIsEditOpen(true);
   };
 
-  // Delete
+  // 🗑️ Delete
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this size?")) return;
-    try {
-      await axiosSecure.delete(`/admin/sizes/${id}`);
-      fetchSizes();
-    } catch (error) {
-      console.error(error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won’t be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/admin/sizes/${id}`);
+        fetchSizes();
+
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Size has been deleted successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Failed to delete size.",
+        });
+      }
     }
   };
 
   return (
     <div className="p-2 lg:p-6 max-w-[425px] md:max-w-5xl lg:max-w-7xl xl:max-w-[1600px] mx-auto min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold mb-4">Product Sizes</h2>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-bold mb-4">{t("ProductSizes")}</h2>
+      <div className="flex items-center space-x-2">
         <button
           onClick={() => setIsCreateOpen(true)}
           className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
         >
-          + Add Size
+          + {t("AddSize")}
         </button>
+
       </div>
+    </div>
 
       {/* Table */}
       <div className="bg-[#ddd] w-full shadow rounded-t-[50px] lg:rounded-2xl">
@@ -103,37 +163,87 @@ const ProductSizePage = () => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <table className="min-w-full overflow-auto rounded-2xl bg-white">
-              <thead className="bg-gray-100 rounded-2xl">
-                <tr>
-                  <th className="px-4 py-6">#</th>
-                  <th className="px-4 py-6 text-left">Name</th>
-                  <th className="px-4 py-6 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sizes.map((size, index) => (
-                  <tr key={size.id} className="border-b">
-                    <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2">{size.name}</td>
-                    <td className="px-4 py-2 flex space-x-2 justify-center">
-                      <button
-                        onClick={() => handleEdit(size)}
-                        className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
-                      >
-                        ✏
-                      </button>
-                      <button
-                        onClick={() => handleDelete(size.id)}
-                        className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
-                      >
-                        🗑
-                      </button>
-                    </td>
-                  </tr>
+            <>
+              {/* 🖥 TABLE VIEW (Desktop and Tablet) */}
+              <div className="hidden md:block">
+                <table className="min-w-full overflow-auto rounded-2xl bg-white">
+                  <thead className="bg-gray-100 rounded-2xl">
+                    <tr>
+                      <th className="px-4 py-6">#</th>
+                      <th className="px-4 py-6 text-left">Name</th>
+                      <th className="px-4 py-6 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sizes.map((size, index) => (
+                      <tr key={size.id} className="border-b">
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{size.name}</td>
+                        <td className="px-4 py-2 flex space-x-2 justify-center">
+                          <button
+                            onClick={() => handleEdit(size)}
+                            className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
+                          >
+                            ✏
+                          </button>
+                          <button
+                            onClick={() => handleDelete(size.id)}
+                            className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
+                          >
+                            🗑
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* 📱 CARD VIEW (Mobile) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                {sizes.map((size) => (
+                  <div
+                    key={size.id}
+                    className="card bg-white shadow-md border border-gray-200 rounded-2xl"
+                  >
+                    <div className="card-body p-4 text-center">
+                      <div className="flex justify-between">
+                        <h2 className="card-title text-lg font-semibold">
+                          Title: {size.name}
+                        </h2>
+                        <h4>
+                          Status:{" "}
+                          <span
+                            className={`badge ${
+                              size.status === 1
+                                ? "badge-success"
+                                : "badge-error"
+                            }`}
+                          >
+                            {" "}
+                            {size.status === 1 ? "Active" : "Inactive"}
+                          </span>
+                        </h4>
+                      </div>
+                      <div className="flex justify-end space-x-2 mt-3">
+                        <button
+                          onClick={() => handleEdit(size)}
+                          className="hover:text-yellow-600 text-yellow-600 border-none"
+                        >
+                          <FaEdit size={24} /> {/* 👈 Increased size */}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(size.id)}
+                          className="hover:text-red-700 text-red-600 border-none"
+                        >
+                          <MdDelete size={26} /> {/* 👈 Increased size */}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </>
           )}
         </div>
       </div>
