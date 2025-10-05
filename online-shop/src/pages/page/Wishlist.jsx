@@ -100,6 +100,40 @@ const Wishlist = () => {
   const handleEdit = (itemId) => {
     axios.post(`/wishlist/move-to-cart/${itemId}`, {}, { withCredentials: true });
   };
+  const handleDelete=(itemId)=>{
+    Swal.fire({
+    title: "Are you sure?",
+    text: "This item will be removed from your wishlist!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await axios.delete(`/wishlist/remove/${itemId}`);
+        if (res.status === 200) {
+          setWishlistItems((prev) => prev.filter((item) => item.id !== itemId)); // ✅ update UI instantly
+          Swal.fire({
+            title: "Deleted!",
+            text: "The item has been removed from your wishlist.",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to delete item. Please try again.",
+          icon: "error",
+        });
+      }
+    }
+  });
+  }
 
   return (
     <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
@@ -148,7 +182,7 @@ const Wishlist = () => {
                             </button>
 
                             <button
-                              onClick={() => console.log("remove from wishlist", item.id)}
+                              onClick={() => handleDelete(item.id)}
                               className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                             >
                               <FaTrash />

@@ -12,12 +12,13 @@ const Layout = () => {
         const page = location.pathname;
         console.log(page);
   return (
-    <div className="bg-[#ff9100]">
-       <div className="max-w-4xl lg:max-w-[1440px] mx-auto">
+     <div className="bg-[#ff9100]">
+      {page == "/"  && <div className="max-w-4xl lg:max-w-[1440px] mx-auto">
         <Header showitem={false}></Header>
+        </div>} 
       
-      </div>
-      <div className="max-w-[1440px] mx-auto mt-2">
+      
+      <div className="max-w-[1440px] mx-auto">
           <Outlet></Outlet>
       </div>
       <div>
