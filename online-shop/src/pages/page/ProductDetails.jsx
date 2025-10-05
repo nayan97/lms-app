@@ -436,7 +436,7 @@ useEffect(() => {
           )}
 
           {/* Seller */}
-          <div className="flex items-center justify-between mt-3 bg-gray-100 rounded-lg p-2">
+          {/* <div className="flex items-center justify-between mt-3 bg-gray-100 rounded-lg p-2">
             <div className="flex items-center space-x-2">
               <Store className="w-5 h-5 text-yellow-500" />
               <span className="font-medium">{product.source_url}</span>
@@ -444,7 +444,7 @@ useEffect(() => {
             <button className="bg-yellow-400 text-white px-3 py-1 rounded-lg">
               Store
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Product Details */}

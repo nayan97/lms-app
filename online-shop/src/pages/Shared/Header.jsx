@@ -262,10 +262,10 @@ useEffect(() => {
 
         {/* Notification bell */}
         <div className="relative">
-          <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
+          <button className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0">
             <BellIcon className="w-5 h-5" />
           </button>
-          <span className="absolute top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute text-white top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
             1
           </span>
         </div>
