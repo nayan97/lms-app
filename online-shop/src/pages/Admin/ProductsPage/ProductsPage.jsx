@@ -39,6 +39,7 @@ const ProductsPage = () => {
     try {
       const res = await axiosSecure.get("/admin/products");
       setProducts(res?.data?.data?.products ?? []);
+      console.log(res);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {

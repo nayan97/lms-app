@@ -9,7 +9,6 @@ const ProductModal = ({
   sizes = [],
   colors = [],
   onClose,
-
 }) => {
   const axiosSecure = useAxiosSecure();
 
@@ -29,10 +28,9 @@ const ProductModal = ({
     profit: "",
     source_url: "",
     status: 0,
-    is_featured: 0,
+    is_featured: "no",
   });
 
-  // Shared input style
   const inputClass =
     "w-full bg-gray-100 rounded-xl p-2 border border-transparent focus:border-[#ccc] outline-none transition-all duration-200";
 
@@ -49,8 +47,8 @@ const ProductModal = ({
         max_price: product.max_price || "",
         profit: product.profit || "",
         source_url: product.source_url || "",
-        status: product.status || 0,
-        is_featured: product.is_featured || 0,
+        status: product.status ?? 0,
+        is_featured: product.is_featured || "no",
       });
 
       setMainImagePreview(product.image ? `/storage/${product.image}` : null);
@@ -90,8 +88,8 @@ const ProductModal = ({
         max_price: "",
         profit: "",
         source_url: "",
-        status: [],
-        is_featured: [],
+        status: 0,
+        is_featured: "no",
       });
       setMainImagePreview(null);
       setGalleryPreviews([]);
@@ -123,25 +121,25 @@ const ProductModal = ({
     }));
   };
 
-  // ✅ Universal handleSubmit (works for both Create & Edit)
+  // ✅ Universal handleSubmit (Create + Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const submitData = new FormData();
 
-      // Basic fields
+      // Append all fields
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           submitData.append(key, value);
         }
       });
 
-      // Numeric fields
+      // Numeric fields ensure integer
       ["price", "source_price", "cross_price", "max_price", "profit"].forEach(
         (key) => {
           if (formData[key]) {
-            submitData.set(key, parseInt(formData[key], 10));
+            submitData.set(key, parseFloat(formData[key]));
           }
         }
       );
@@ -151,29 +149,20 @@ const ProductModal = ({
       colorSelection.forEach((c) => submitData.append("colorIds[]", c.value));
 
       // Main image
-      const mainFile = e.target.image.files[0];
+      const mainFile = e.target.image?.files?.[0];
       if (mainFile) submitData.append("image", mainFile);
 
       // Gallery images
       galleryFiles.forEach((file) => submitData.append("image_gal[]", file));
 
-      // Debug
-      for (let [k, v] of submitData.entries()) {
-        console.log(k, v);
-      }
-
-      // Request: POST or PUT
+      // ✅ Use POST + _method=PUT for updates
       const url = product.id
-        ? `/admin/products/${product.id}`
+        ? `/admin/products/${product.id}?_method=PUT`
         : `/admin/products`;
-      const method = product.id ? "put" : "post";
 
-     await axiosSecure[method](url, submitData, {
+      await axiosSecure.post(url, submitData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      
-
 
       Swal.fire(
         "Success!",
@@ -181,7 +170,6 @@ const ProductModal = ({
         "success"
       );
 
-      // fetchProducts();
       onClose();
     } catch (err) {
       console.error("Error saving product", err.response?.data || err);
@@ -201,115 +189,127 @@ const ProductModal = ({
           encType="multipart/form-data"
           className="space-y-4"
         >
-          <input
-            name="title"
-            placeholder="Title"
-            className={inputClass}
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-
-          <select
-            name="category_id"
-            className={inputClass}
-            value={formData.category_id}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-
-          <textarea
-            name="description"
-            placeholder="Description"
-            className={inputClass}
-            value={formData.description}
-            onChange={handleChange}
-          />
-
-          <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm mb-1">Title</label>
             <input
-              type="number"
-              name="price"
-              placeholder="Price"
+              name="title"
+              placeholder="Title"
               className={inputClass}
-              value={formData.price}
+              value={formData.title}
               onChange={handleChange}
               required
             />
-            <input
-              type="number"
-              name="source_price"
-              placeholder="Source Price"
+          </div>
+
+          <div>
+            <label className="block text-sm mb-1">Category</label>
+            <select
+              name="category_id"
               className={inputClass}
-              value={formData.source_price}
+              value={formData.category_id}
               onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="cross_price"
-              placeholder="Cross Price"
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm mb-1">Description</label>
+            <textarea
+              name="description"
+              placeholder="Description"
               className={inputClass}
-              value={formData.cross_price}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="max_price"
-              placeholder="Max Price"
-              className={inputClass}
-              value={formData.max_price}
-              onChange={handleChange}
-            />
-            <input
-              type="number"
-              name="profit"
-              placeholder="Profit"
-              className={inputClass}
-              value={formData.profit}
+              value={formData.description}
               onChange={handleChange}
             />
           </div>
 
-          <input
-            type="text"
-            name="source_url"
-            placeholder="Source URL"
-            className={inputClass}
-            value={formData.source_url}
-            onChange={handleChange}
-          />
-
-          <div className="flex items-center gap-3">
-            {/* <label className="font-medium">Active</label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className={inputClass}
-            >
-              <option value="1">Active</option>
-              <option value="0">Inactive</option>
-            </select> */}
-
-            {/* <label className="flex items-center gap-2">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm mb-1">Price</label>
               <input
-                type="checkbox"
-                name="is_featured"
-                checked={formData.is_featured === 1}
+                type="number"
+                name="price"
+                placeholder="Price"
+                className={inputClass}
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Source Price</label>
+              <input
+                type="number"
+                name="source_price"
+                placeholder="Source Price"
+                className={inputClass}
+                value={formData.source_price}
                 onChange={handleChange}
               />
-              Featured
-            </label> */}
-
-            {/* Featured */}
+            </div>
             <div>
+              <label className="block text-sm mb-1">Cross Price</label>
+              <input
+                type="number"
+                name="cross_price"
+                placeholder="Cross Price"
+                className={inputClass}
+                value={formData.cross_price}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label className="block text-sm mb-1">Max Price</label>
+              <input
+                type="number"
+                name="max_price"
+                placeholder="Max Price"
+                className={inputClass}
+                value={formData.max_price}
+                onChange={handleChange}
+              />
+            </div>
+        
+          </div>
+
+        
+
+          <div className="flex items-end gap-3">
+            <div className="flex-1">
+              <label className="block text-sm mb-1">Profit</label>
+              <input
+                type="number"
+                name="profit"
+                placeholder="Profit"
+                className={inputClass}
+                value={formData.profit}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label className="block text-sm mb-1">Source URL</label>
+              <input
+                type="text"
+                name="source_url"
+                placeholder="Source URL"
+                className={inputClass}
+                value={formData.source_url}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-end gap-3">
+            {/* Status */}
+            <div className="flex-1">
               <label className="block text-sm mb-1">Status</label>
               <select
                 name="status"
@@ -325,7 +325,7 @@ const ProductModal = ({
             </div>
 
             {/* Featured */}
-            <div>
+            <div className="flex-1">
               <label className="block text-sm mb-1">Featured</label>
               <select
                 name="is_featured"
@@ -342,22 +342,28 @@ const ProductModal = ({
           </div>
 
           {/* Sizes */}
-          <Select
-            isMulti
-            options={sizes.map((s) => ({ value: s.id, label: s.name }))}
-            value={sizeSelection}
-            onChange={setSizeSelection}
-            placeholder="Select Sizes"
-          />
+          <div>
+            <label className="block text-sm mb-1">Sizes</label>
+            <Select
+              isMulti
+              options={sizes.map((s) => ({ value: s.id, label: s.name }))}
+              value={sizeSelection}
+              onChange={setSizeSelection}
+              placeholder="Select Sizes"
+            />
+          </div>
 
           {/* Colors */}
-          <Select
-            isMulti
-            options={colors.map((c) => ({ value: c.id, label: c.name }))}
-            value={colorSelection}
-            onChange={setColorSelection}
-            placeholder="Select Colors"
-          />
+          <div>
+            <label className="block text-sm mb-1">Colors</label>
+            <Select
+              isMulti
+              options={colors.map((c) => ({ value: c.id, label: c.name }))}
+              value={colorSelection}
+              onChange={setColorSelection}
+              placeholder="Select Colors"
+            />
+          </div>
 
           {/* Main Image */}
           <div>
@@ -398,8 +404,11 @@ const ProductModal = ({
               {galleryPreviews.map((src, idx) => (
                 <div key={idx} className="relative">
                   <img
-
-                    src={product?.name ? `http://192.168.110.207:8000/api/storage/${src}`:src}
+                    src={
+                      product?.name
+                        ? `http://192.168.110.207:8000/api/storage/public/${src}`
+                        : src
+                    }
                     alt="Gallery"
                     className="h-20 w-20 object-cover rounded-lg"
                   />
@@ -425,7 +434,7 @@ const ProductModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-[#ff9100] text-white rounded-lg hover:bg-[#f6a63e]"
             >
               {product.id ? "Update Product" : "Create Product"}
             </button>
