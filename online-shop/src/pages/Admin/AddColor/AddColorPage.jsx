@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const AddColorPage = () => {
+  const { t, i18n } = useTranslation();
   const axiosSecure = useAxiosSecure();
   const [colors, setColors] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Form state
- const [form, setForm] = useState({ id: null, name: "", status: "1" });
-
+  const [form, setForm] = useState({ id: null, name: "", status: "1" });
 
   // Modal state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -41,47 +45,99 @@ const AddColorPage = () => {
   };
 
   // Reset form
-const resetForm = () => {
-  setForm({ id: null, name: "", status: "1" });
-};
+  const resetForm = () => {
+    setForm({ id: null, name: "", status: "1" });
+  };
 
   // Submit create/update
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (form.id) {
-        await axiosSecure.post(`/admin/colors/${form.id}?_method=PUT`, form, {
+        // ✅ Update (PUT)
+        await axiosSecure.put(`/admin/colors/${form.id}`, form, {
           headers: { "Content-Type": "application/json" },
         });
+
+        Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: "Color has been updated successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
       } else {
+        // ✅ Create (POST)
         await axiosSecure.post("/admin/colors", form, {
           headers: { "Content-Type": "application/json" },
         });
+
+        Swal.fire({
+          icon: "success",
+          title: "Created!",
+          text: "Color has been added successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
       }
+
       fetchColors();
       resetForm();
       setIsCreateOpen(false);
       setIsEditOpen(false);
     } catch (error) {
       console.error(error);
-      alert("Error saving size");
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error.response?.data?.message || "Error saving color.",
+      });
     }
   };
 
-  // Edit
-  const handleEdit = (size) => {
-    setForm({ id: size.id, name: size.name });
+  // ✏️ Edit
+  const handleEdit = (color) => {
+    setForm({
+      id: color.id,
+      name: color.name,
+      status: color.status?.toString() || "1",
+    });
     setIsEditOpen(true);
   };
 
-  // Delete
+  // 🗑️ Delete
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this size?")) return;
-    try {
-      await axiosSecure.delete(`/admin/colors/${id}`);
-      fetchColors();
-    } catch (error) {
-      console.error(error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won’t be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await axiosSecure.delete(`/admin/colors/${id}`);
+        fetchColors();
+
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Color has been deleted successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Failed to delete color.",
+        });
+      }
     }
   };
 
@@ -94,7 +150,7 @@ const resetForm = () => {
           onClick={() => setIsCreateOpen(true)}
           className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
         >
-          + Add Size
+          + Add Color
         </button>
       </div>
 
@@ -104,37 +160,87 @@ const resetForm = () => {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <table className="min-w-full overflow-auto rounded-2xl bg-white">
-              <thead className="bg-gray-100 rounded-2xl">
-                <tr>
-                  <th className="px-4 py-6">#</th>
-                  <th className="px-4 py-6 text-left">Name</th>
-                  <th className="px-4 py-6 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {colors.map((size, index) => (
-                  <tr key={size.id} className="border-b">
-                    <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2">{size.name}</td>
-                    <td className="px-4 py-2 flex space-x-2 justify-center">
-                      <button
-                        onClick={() => handleEdit(size)}
-                        className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
-                      >
-                        ✏
-                      </button>
-                      <button
-                        onClick={() => handleDelete(size.id)}
-                        className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
-                      >
-                        🗑
-                      </button>
-                    </td>
-                  </tr>
+            <>
+              {/* ✅ TABLE VIEW (Desktop) */}
+              <div className="hidden md:block">
+                <table className="min-w-full overflow-auto rounded-2xl bg-white">
+                  <thead className="bg-gray-100 rounded-2xl">
+                    <tr>
+                      <th className="px-4 py-6">#</th>
+                      <th className="px-4 py-6 text-left">Name</th>
+                      <th className="px-4 py-6 text-center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {colors.map((color, index) => (
+                      <tr key={color.id} className="border-b">
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{color.name}</td>
+                        <td className="px-4 py-2 flex space-x-2 justify-center">
+                          <button
+                            onClick={() => handleEdit(color)}
+                            className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
+                          >
+                            ✏
+                          </button>
+                          <button
+                            onClick={() => handleDelete(color.id)}
+                            className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
+                          >
+                            🗑
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* ✅ CARD VIEW (Mobile) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:hidden">
+                {colors.map((color, index) => (
+                  <div
+                    key={color.id}
+                    className="card bg-white shadow-lg rounded-2xl p-4 border border-gray-200"
+                  >
+                    <div className="card-body p-0">
+                      <div className="flex justify-between">
+                        <h2 className="card-title text-lg font-semibold">
+                          Title: {color.name}
+                        </h2>
+                        <h4>
+                          Status:{" "}
+                          <span
+                            className={`badge ${
+                              color.status === 1
+                                ? "badge-success"
+                                : "badge-error"
+                            }`}
+                          >
+                            {" "}
+                            {color.status === 1 ? "Active" : "Inactive"}
+                          </span>
+                        </h4>
+                      </div>
+                      <div className="flex justify-end space-x-2 mt-3">
+                        <button
+                          onClick={() => handleEdit(color)}
+                          className="hover:text-yellow-600 text-yellow-600 border-none"
+                        >
+                          <FaEdit size={24} /> {/* 👈 Increased size */}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(color.id)}
+                          className="hover:text-red-700 text-red-600 border-none"
+                        >
+                          <MdDelete size={26} /> {/* 👈 Increased size */}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -158,7 +264,7 @@ const resetForm = () => {
                   className="w-full px-3 py-2 border rounded"
                 />
               </div>
-                            <div>
+              <div>
                 <label className="block text-sm font-medium">Status</label>
                 <select
                   name="status"

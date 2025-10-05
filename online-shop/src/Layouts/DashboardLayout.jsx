@@ -9,7 +9,7 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // closed by default for mobile
 
   return (
-    <div className="min-h-screen flex flex-col bg-amber-50 border border-blue-950">
+    <div className="min-h-screen flex flex-col bg-white border border-blue-950">
       <div className="flex flex-1 max-w-7xl mx-auto w-full relative">
         {/* Sidebar */}
         <Sidebar isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
