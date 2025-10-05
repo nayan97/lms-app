@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          SeeAllProducts:"See All Products",
           Logout: "Log out",
           Menu: "Menu",
           Youwillreceive: "You will be received",
@@ -151,29 +152,28 @@ i18n
           instructionsPlaceholder: "Write any additional instructions",
           thana: "Select a Thana",
           thanaPlaceholder: "Select a Thana",
-          Logout: "Log out",
-          Menu: "Menu",
-          Youwillreceive: "You will be received",
-          Products: "Products",
-          AddNewProduct: "Add New Product",
-          Checkout: "Checkout",
-          Image: "Image",
-          Title: "Title",
-          Price: "Price",
-          Featured: "Featured",
-          Actions: "Actions",
-          Loading: "Loading...",
-          NoProductsFound: "No products found.",
-          Yes: "Yes",
-          No: "No",
-          Edit: "Edit",
-          Delete: "Delete",
+Products: "Products",
+AddNewProduct: "Add New Product",
+Checkout: "Checkout",
+Image: "Image",
+Title: "Title",
+Price: "Price",
+Featured: "Featured",
+Actions: "Actions",
+Loading: "Loading...",
+NoProductsFound: "No products found.",
+Yes: "Yes",
+No: "No",
+Edit: "Edit",
+Delete: "Delete"
+
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          SeeAllProducts : "সকল পণ্য দেখুন",
           Logout: "লগ আউট",
           Menu: "মেনু",
           Youwillreceive: "আপনি পাবেন",
