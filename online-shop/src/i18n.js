@@ -182,6 +182,11 @@ i18n
           Gender:"Gender",
           Address:"Address",
          
+          productscolor: "Products Colors",
+          Addcolor: "Add Color",
+          Categories: "Categories",
+          AddCategory: "Add Category",
+
           // extra as per your given format
         },
       },
@@ -199,6 +204,11 @@ i18n
           Vendorlist:"ভেনডর লিস্ট",
           SeeAll:"সবগুলো দেখুন",
           Category:"ক্যাটাগরি",
+          Categories: "ক্যাটাগরি সমূহ",
+          AddCategory: "ক্যাটাগরি যোগ করুন",
+          category: "ক্যাটাগরি",
+          Addcolor: "রঙ যোগ করুন",
+          productscolor: "পণ্যের রঙ",
           ProductSizes: "পণ্যের আকার",
           AddSize: "আকার যোগ করুন",
           SeeAllProducts: "সকল পণ্য দেখুন",
