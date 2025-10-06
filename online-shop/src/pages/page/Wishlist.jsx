@@ -136,7 +136,24 @@ const Wishlist = () => {
   }
 
   return (
-    <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-2">
+    <div>
+      <div className="bg-[#ff9100] h-20">
+              <div className="flex items-center gap-4">
+                <Link
+                to={"/shop"}
+                className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+              >
+                ← 
+              </Link>
+              <h1 className="text-white  font-bold"> {t("wishlist")}
+      </h1>
+      
+              </div>
+              
+             
+            </div>
+
+       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
       <section className="flex justify-center items-center py-3">
         <h2 className="text-2xl font-bold text-center">{t("myWishlist")}</h2>
       </section>
@@ -218,6 +235,9 @@ const Wishlist = () => {
         </div>
       </section>
     </main>
+
+    </div>
+   
   );
 };
 

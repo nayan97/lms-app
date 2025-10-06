@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import Spinner from "../../components/Spinner";
 import { IoCartOutline } from "react-icons/io5";
 import { CiHeart } from "react-icons/ci";
+import Header from "../Shared/Header";
 
 export default function ProductPage() {
   const location = useLocation();
@@ -38,10 +39,18 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
 
   const [cartCount, setCartCount] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(product?.image_gal[0]);
+ const [selectedImage, setSelectedImage] = useState(null);
 
-
-
+// When product is loaded, set first gallery image or fallback to main image
+useEffect(() => {
+  if (product) {
+    if (product.image_gal?.length > 0) {
+      setSelectedImage(product.image_gal[0]);
+    } else {
+      setSelectedImage(product.image_url);
+    }
+  }
+}, [product]); // <-- watch 'product'
 
   useEffect(() => {
     if (!id) return;
@@ -53,6 +62,7 @@ export default function ProductPage() {
         setProduct(data.data.product);
         setSizes(data.data.sizes || []);
         setColors(data.data.colors || []);
+        setSelectedImage(data?.product?.image_gal[0]);
       } catch (error) {
         console.error("Failed to load product:", error);
       } finally {
@@ -78,6 +88,9 @@ export default function ProductPage() {
     fetchCart();
   }, [axiosSecure]);
 
+
+
+ 
   if (loading) return <Spinner />;
   if (!product)
     return (
@@ -270,6 +283,40 @@ export default function ProductPage() {
     alert("Product details copied!");
   };
 
+
+const handleDownloadGallery = () => {
+  if (!product?.image_gal?.length) {
+    Swal.fire({
+      icon: "info",
+      title: t("noGalleryImages") || "No gallery images available",
+    });
+    return;
+  }
+
+  product.image_gal.forEach((imgUrl, index) => {
+    const link = document.createElement("a");
+    link.href = imgUrl;
+
+    // filename
+    link.download = `${product.title.replace(/\s/g, "_")}_image_${index + 1}.jpg`;
+
+    // append, click, remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  Swal.fire({
+    icon: "success",
+    title: t("downloadStarted") || "Download started!",
+    timer: 1500,
+    showConfirmButton: false,
+  });
+};
+
+
+
+
   return (
     <div className="min-h-screen rounded-t-[50px] flex flex-col bg-[#ff9100]">
       {/* Header */}
@@ -306,44 +353,47 @@ export default function ProductPage() {
               {cartCount ?? 0}
             </span>
           </Link>
-          <div className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white">
+          <div  onClick={handleDownloadGallery} className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white">
             <ArrowBigDownDash />
           </div>
         </div>
       </div>
-      <div>
-      {/* Main Image */}
-      <div className="bg-white rounded-t-[50px] p-4">
-        <img
-          src={selectedImage}
-          alt="Product"
-          className="w-full rounded-xl transition-all duration-300"
-        />
-      </div>
+   
 
-      {/* Image Gallery Thumbnails */}
-     
-    </div>
-     
+      <div>
+        {/* Main Image */}
+        <div className="bg-white rounded-t-[50px] p-4">
+          <img
+            src={
+              selectedImage}
+            alt="Product"
+            className="w-full rounded-xl transition-all duration-300"
+          />
+        </div>
+
+        {/* Image Gallery Thumbnails */}
+      </div>
 
       <div className="bg-gray-100">
         {/* Product Image */}
 
-         {product.image_gal?.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto mt-3 pb-2">
-          {product.image_gal.map((gal, index) => (
-            <img
-              key={index}
-              src={gal}
-              alt={product.title}
-              onClick={() => setSelectedImage(gal)}
-              className={`w-24 h-24 rounded-lg cursor-pointer object-cover transition-transform hover:scale-105 border-2 ${
-                selectedImage === gal ? "border-yellow-500" : "border-transparent"
-              }`}
-            />
-          ))}
-        </div>
-      )}
+        {product.image_gal?.length > 0 && (
+          <div className="flex gap-2 overflow-x-auto mt-3 pb-2">
+            {product.image_gal.map((gal, index) => (
+              <img
+                key={index}
+                src={gal}
+                alt={product.title}
+                onClick={() => setSelectedImage(gal)}
+                className={`w-24 h-24 rounded-lg cursor-pointer object-cover transition-transform hover:scale-105 border-2 ${
+                  selectedImage === gal
+                    ? "border-yellow-500"
+                    : "border-transparent"
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Product Info */}
         <div className="p-4 mt-2 rounded-xl shadow">
@@ -421,7 +471,7 @@ export default function ProductPage() {
           )}
 
           {/* Seller */}
-          <div className="flex items-center justify-between mt-3 bg-gray-100 rounded-lg p-2">
+          {/* <div className="flex items-center justify-between mt-3 bg-gray-100 rounded-lg p-2">
             <div className="flex items-center space-x-2">
               <Store className="w-5 h-5 text-yellow-500" />
               <span className="font-medium">{product.source_url}</span>
@@ -429,7 +479,7 @@ export default function ProductPage() {
             <button className="bg-yellow-400 text-white px-3 py-1 rounded-lg">
               Store
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Product Details */}
@@ -449,7 +499,7 @@ export default function ProductPage() {
       </div>
 
       {/* Footer */}
-      <div className="fixed w-full gap-2 mb-2 bottom-0 flex px-2">
+      <div className="fixed left-1/2 -translate-x-1/2 w-full gap-2 mb-2 bottom-0 flex px-2">
         <button
           onClick={handleAddToCart}
           className="w-full rounded-xl bg-yellow-400 text-white py-3 font-semibold flex items-center justify-center"

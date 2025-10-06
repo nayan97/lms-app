@@ -1,21 +1,33 @@
 import React from "react";
-import { BellIcon, HomeIcon, WalletIcon, UsersIcon, UserIcon, ShoppingBagIcon } from "lucide-react";
-import { Link } from 'react-router';
+import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import offerimg from "../../assets/offer.png"
+import videoimg from "../../assets/video.png"
+import addsimg from "../../assets/add.png"
+import quizimg from "../../assets/quiz.png"
+import rechargeimg from "../../assets/recharge.png"
+import jobimg from "../../assets/job.png"
+import microimg from "../../assets/micro.png"
+import resellimg from "../../assets/resell.png"
+import bonusimg from "../../assets/bonus.png"
+import freeimg from "../../assets/free.png"
+import dailyimg from "../../assets/daily.png"
+import microjobimg from "../../assets/microjob.png"
 
+// You can use local images stored in /public/assets/
 const projects1 = [
-  { name: "MobileRecharge", icon: "💳", isActive: false, link: "/mobile-recharge" },
-  { name: "DriveOffer", icon: "🎁", isActive:false },
-  { name: "ResellingProduct", icon: "🛒", isActive:false },
-  { name: "AdsViewIncome", icon: "🖼️", isActive:false },
-  { name: "MicroJob", icon: "📄", isActive:false },
-  { name: "JobPost", icon: "➕", isActive:false },
-  { name: "TypingJob", icon: "⌨️",  isActive: true ,link:"comingsoon"},
-  { name: "QuizJob", icon: "❓" , isActive: true,link:"comingsoon"},
-  { name: "WatchVideo", icon: "🎥" , isActive:true, link:"comingsoon"},
-  { name: "MarkSalary", icon: "🗄️", isActive:true,link:"comingsoon" },
-  { name: "DailyTargetBonus", icon: "$", isActive:true,link:"comingsoon" },
-  { name: "FreelancingCourse", icon: "💻", isActive:true,link:"comingsoon" },
+  { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
+  { name: "DriveOffer", icon: offerimg, isActive: true, link: "comingsoon" },
+  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "/shop"},
+  { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "comingsoon" },
+  { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
+  { name: "JobPost", icon: jobimg, isActive: true , link: "comingsoon"},
+  { name: "TypingJob", icon: microimg, isActive: true, link: "comingsoon" },
+  { name: "QuizJob", icon: quizimg, isActive: true, link: "comingsoon" },
+  { name: "WatchVideo", icon: videoimg, isActive: true, link: "comingsoon" },
+  { name: "MarkSalary", icon: bonusimg, isActive: true, link: "comingsoon" },
+  { name: "DailyTargetBonus", icon: dailyimg, isActive: true, link: "comingsoon" },
+  { name: "FreelancingCourse", icon: freeimg, isActive: true, link: "comingsoon" },
 ];
 
 export default function LifeGoodHome() {
@@ -45,7 +57,16 @@ export default function LifeGoodHome() {
                 ${!p.isActive ? "opacity-50 cursor-not-allowed pointer-events-none" : "hover:shadow-lg"}
               `}
             >
-              <span className="text-2xl">{p.icon}</span>
+              {/* Icon as image */}
+              {p.icon ? (
+                <img
+                  src={p.icon}
+                  alt={p.name}
+                  className="w-10 h-10 object-contain"
+                />
+              ) : (
+                <span className="text-2xl">❓</span> // fallback if no image
+              )}
               <span className="text-xs mt-2">{t(p.name)}</span>
             </Link>
           ))}
@@ -58,7 +79,6 @@ export default function LifeGoodHome() {
           {t("Free")} {t("Ads")} {t("Banner")}
         </div>
       </div>
-
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useUserAxios from "../hooks/useUserAxios";
 import { Link } from "react-router";
+import { t } from "i18next";
 
 const PopularProducts = () => {
   const axios = useUserAxios();
@@ -22,9 +23,9 @@ const PopularProducts = () => {
   }, []);
 
   return (
-    <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100 rounded-t-[50px]">
+    <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100 ">
       <div className="px-4">
-        <h4 className="mb-4 text-lg font-semibold">Most Popular Products</h4>
+        <h4 className="mb-4 text-lg font-semibold">{t("MostPopularProducts")}</h4>
 
         {/* 👇 Skeleton loader while loading */}
         {loading ? (

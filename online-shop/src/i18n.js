@@ -9,7 +9,18 @@ i18n
     resources: {
       en: {
         translation: {
-          SeeAllProducts: "See All Products",
+          Country:"Country",
+          Email:"Email",
+          MobileNumber:"Mobile Number",
+          FullName:"Full Name",
+          PersonalInformation:"Personal Information",
+          LatestProducts:"Latest Products",
+          MostPopularProducts:"Most Popular Products",
+          Vendorlist:"Vendor List",
+          SeeAll:"See All",
+          Category:"Category",
+          mycart:"Cart",
+          SeeAllProducts:"See All Products",
           Logout: "Log out",
           Menu: "Menu",
           Youwillreceive: "You will be received",
@@ -168,6 +179,9 @@ i18n
           Delete: "Delete",
           ProductSizes: "Product Sizes",
           AddSize: "Add Size",
+          Gender:"Gender",
+          Address:"Address",
+         
           productscolor: "Products Colors",
           Addcolor: "Add Color",
           Categories: "Categories",
@@ -178,6 +192,18 @@ i18n
       },
       bn: {
         translation: {
+          Address:"ঠিকানা",
+          Gender:"লিঙ্গ",
+          Country:"দেশ",
+          Email:"ইমেইল",
+          MobileNumber:"মোবাইল নম্বর",
+          FullName:"সম্পূর্ণ নাম",
+          PersonalInformation:"বাক্তিগত তথ্য",
+          LatestProducts:"নতুন প্রোডাক্ট্স",
+          MostPopularProducts: "জনপ্রিয় প্রোডাক্টস",
+          Vendorlist:"ভেনডর লিস্ট",
+          SeeAll:"সবগুলো দেখুন",
+          Category:"ক্যাটাগরি",
           Categories: "ক্যাটাগরি সমূহ",
           AddCategory: "ক্যাটাগরি যোগ করুন",
           category: "ক্যাটাগরি",
