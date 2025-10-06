@@ -168,12 +168,21 @@ i18n
           Delete: "Delete",
           ProductSizes: "Product Sizes",
           AddSize: "Add Size",
+          productscolor: "Products Colors",
+          Addcolor: "Add Color",
+          Categories: "Categories",
+          AddCategory: "Add Category",
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          Categories: "ক্যাটাগরি সমূহ",
+          AddCategory: "ক্যাটাগরি যোগ করুন",
+          category: "ক্যাটাগরি",
+          Addcolor: "রঙ যোগ করুন",
+          productscolor: "পণ্যের রঙ",
           ProductSizes: "পণ্যের আকার",
           AddSize: "আকার যোগ করুন",
           SeeAllProducts: "সকল পণ্য দেখুন",

@@ -145,12 +145,12 @@ const AddColorPage = () => {
     <div className="p-2 lg:p-6 max-w-[425px] md:max-w-5xl lg:max-w-7xl xl:max-w-[1600px] mx-auto min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold mb-4">Product colors</h2>
+        <h2 className="text-xl font-bold mb-4">{t("productscolor")}</h2>
         <button
           onClick={() => setIsCreateOpen(true)}
           className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
         >
-          + Add Color
+          + {t("Addcolor")}
         </button>
       </div>
 
@@ -168,6 +168,7 @@ const AddColorPage = () => {
                     <tr>
                       <th className="px-4 py-6">#</th>
                       <th className="px-4 py-6 text-left">Name</th>
+                      <th className="px-4 py-6 text-left">Status</th>
                       <th className="px-4 py-6 text-center">Action</th>
                     </tr>
                   </thead>
@@ -176,19 +177,20 @@ const AddColorPage = () => {
                       <tr key={color.id} className="border-b">
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{color.name}</td>
+                         <td className="px-4 py-2">{color.status === 1 ? "Active" : "Inactive"}</td>
                         <td className="px-4 py-2 flex space-x-2 justify-center">
-                          <button
-                            onClick={() => handleEdit(color)}
-                            className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
-                          >
-                            ✏
-                          </button>
-                          <button
-                            onClick={() => handleDelete(color.id)}
-                            className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
-                          >
-                            🗑
-                          </button>
+                              <button
+                          onClick={() => handleEdit(color)}
+                          className="hover:text-yellow-600 text-yellow-600 border-none"
+                        >
+                          <FaEdit size={24} /> {/* 👈 Increased size */}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(color.id)}
+                          className="hover:text-red-700 text-red-600 border-none"
+                        >
+                          <MdDelete size={26} /> {/* 👈 Increased size */}
+                        </button>
                         </td>
                       </tr>
                     ))}

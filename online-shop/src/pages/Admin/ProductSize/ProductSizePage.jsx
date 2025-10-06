@@ -171,6 +171,7 @@ const ProductSizePage = () => {
                     <tr>
                       <th className="px-4 py-6">#</th>
                       <th className="px-4 py-6 text-left">Name</th>
+                      <th className="px-4 py-6 text-left">Status</th>
                       <th className="px-4 py-6 text-center">Action</th>
                     </tr>
                   </thead>
@@ -179,19 +180,20 @@ const ProductSizePage = () => {
                       <tr key={size.id} className="border-b">
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{size.name}</td>
+                        <td className="px-4 py-2">{size.status === 1 ? "Active" : "Inactive"}</td>
                         <td className="px-4 py-2 flex space-x-2 justify-center">
-                          <button
-                            onClick={() => handleEdit(size)}
-                            className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
-                          >
-                            ✏
-                          </button>
-                          <button
-                            onClick={() => handleDelete(size.id)}
-                            className="px-3 py-2 bg-red-600 text-white rounded flex items-center gap-2"
-                          >
-                            🗑
-                          </button>
+                         <button
+                          onClick={() => handleEdit(size)}
+                          className="hover:text-yellow-600 text-yellow-600 border-none"
+                        >
+                          <FaEdit size={24} /> {/* 👈 Increased size */}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(size.id)}
+                          className="hover:text-red-700 text-red-600 border-none"
+                        >
+                          <MdDelete size={26} /> {/* 👈 Increased size */}
+                        </button>
                         </td>
                       </tr>
                     ))}
