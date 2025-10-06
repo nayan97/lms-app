@@ -298,7 +298,7 @@ const CategoryPage = () => {
 
               {/* 📱 Card view for mobile */}
               <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                   <div
                     key={category.id}
                     className="card bg-white shadow-md rounded-xl p-4"

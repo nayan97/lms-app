@@ -35,6 +35,7 @@ const ProductModal = ({
     "w-full bg-gray-100 rounded-xl p-2 border border-transparent focus:border-[#ccc] outline-none transition-all duration-200";
 
   // Prefill data when editing
+  // Prefill data when editing
   useEffect(() => {
     if (product && product.id) {
       setFormData({
@@ -51,11 +52,30 @@ const ProductModal = ({
         is_featured: product.is_featured || "no",
       });
 
-      setMainImagePreview(product.image ? `/storage/${product.image}` : null);
-      if (Array.isArray(product.image_gal) && product.image_gal.length > 0) {
-        setGalleryPreviews(product.image_gal.map((img) => `/storage/${img}`));
+      // ✅ Fix main image preview
+      if (product.image) {
+        setMainImagePreview(
+          product.image.startsWith("http")
+            ? product.image
+            : `http://192.168.110.207:8000/storage/${product.image}`
+        );
+      } else {
+        setMainImagePreview(null);
       }
 
+      // ✅ Fix gallery previews
+      if (Array.isArray(product.image_gal) && product.image_gal.length > 0) {
+        const normalized = product.image_gal.map((img) =>
+          img.startsWith("http")
+            ? img
+            : `http://192.168.110.207:8000/storage/${img}`
+        );
+        setGalleryPreviews(normalized);
+      } else {
+        setGalleryPreviews([]);
+      }
+
+      // Sizes
       if (product.sizes && sizes.length > 0) {
         const selectedSizes = sizes
           .filter(
@@ -67,6 +87,7 @@ const ProductModal = ({
         setSizeSelection(selectedSizes);
       }
 
+      // Colors
       if (product.colors && colors.length > 0) {
         const selectedColors = colors
           .filter(
@@ -78,6 +99,7 @@ const ProductModal = ({
         setColorSelection(selectedColors);
       }
     } else {
+      // Reset form for create mode
       setFormData({
         title: "",
         category_id: "",
@@ -276,10 +298,7 @@ const ProductModal = ({
                 onChange={handleChange}
               />
             </div>
-        
           </div>
-
-        
 
           <div className="flex items-end gap-3">
             <div className="flex-1">
@@ -391,7 +410,38 @@ const ProductModal = ({
           </div>
 
           {/* Gallery */}
+
+          {/* Gallery */}
           <div>
+            <label className="block mb-1 font-medium">Gallery Images</label>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              className={inputClass}
+              onChange={handleGallerySelect}
+            />
+            <div className="flex flex-wrap gap-2 mt-2">
+              {galleryPreviews.map((src, idx) => (
+                <div key={idx} className="relative">
+                  <img
+                    src={src}
+                    alt="Gallery"
+                    className="h-20 w-20 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveGallery(idx)}
+                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* <div>
             <label className="block mb-1 font-medium">Gallery Images</label>
             <input
               type="file"
@@ -406,7 +456,7 @@ const ProductModal = ({
                   <img
                     src={
                       product?.name
-                        ? `http://192.168.110.207:8000/api/storage/public/${src}`
+                        ? `http://192.168.110.207:8000/api/storage/${src}`
                         : src
                     }
                     alt="Gallery"
@@ -422,7 +472,7 @@ const ProductModal = ({
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-end gap-3 pt-4">
             <button
