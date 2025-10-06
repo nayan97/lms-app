@@ -16,12 +16,12 @@ import microjobimg from "../../assets/microjob.png"
 
 // You can use local images stored in /public/assets/
 const projects1 = [
-  { name: "MobileRecharge", icon: rechargeimg, isActive: false, link: "/mobile-recharge" },
-  { name: "DriveOffer", icon: offerimg, isActive: false },
-  { name: "ResellingProduct", icon: resellimg, isActive: false },
-  { name: "AdsViewIncome", icon: addsimg, isActive: false },
-  { name: "MicroJob", icon: microjobimg, isActive: false },
-  { name: "JobPost", icon: jobimg, isActive: false },
+  { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
+  { name: "DriveOffer", icon: offerimg, isActive: true, link: "comingsoon" },
+  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "/shop"},
+  { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "comingsoon" },
+  { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
+  { name: "JobPost", icon: jobimg, isActive: true , link: "comingsoon"},
   { name: "TypingJob", icon: microimg, isActive: true, link: "comingsoon" },
   { name: "QuizJob", icon: quizimg, isActive: true, link: "comingsoon" },
   { name: "WatchVideo", icon: videoimg, isActive: true, link: "comingsoon" },

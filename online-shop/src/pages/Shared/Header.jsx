@@ -8,7 +8,7 @@ import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const Header = ({ showitem }) => {
+const Header = ({ showitem, }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -294,6 +294,7 @@ useEffect(() => {
 
         {/* Arrow icon for specific pages */}
         {page.startsWith("/shop/") && (
+        
           <div className="bg-white rounded-full p-1 text-yellow-500">
             <ArrowBigDownDash />
           </div>

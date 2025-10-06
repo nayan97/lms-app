@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import Spinner from "../../components/Spinner";
 import { IoCartOutline } from "react-icons/io5";
 import { CiHeart } from "react-icons/ci";
+import Header from "../Shared/Header";
 
 export default function ProductPage() {
   const location = useLocation();
@@ -283,6 +284,38 @@ useEffect(() => {
   };
 
 
+const handleDownloadGallery = () => {
+  if (!product?.image_gal?.length) {
+    Swal.fire({
+      icon: "info",
+      title: t("noGalleryImages") || "No gallery images available",
+    });
+    return;
+  }
+
+  product.image_gal.forEach((imgUrl, index) => {
+    const link = document.createElement("a");
+    link.href = imgUrl;
+
+    // filename
+    link.download = `${product.title.replace(/\s/g, "_")}_image_${index + 1}.jpg`;
+
+    // append, click, remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+
+  Swal.fire({
+    icon: "success",
+    title: t("downloadStarted") || "Download started!",
+    timer: 1500,
+    showConfirmButton: false,
+  });
+};
+
+
+
 
   return (
     <div className="min-h-screen rounded-t-[50px] flex flex-col bg-[#ff9100]">
@@ -320,11 +353,13 @@ useEffect(() => {
               {cartCount ?? 0}
             </span>
           </Link>
-          <div className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white">
+          <div  onClick={handleDownloadGallery} className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white">
             <ArrowBigDownDash />
           </div>
         </div>
       </div>
+   
+
       <div>
         {/* Main Image */}
         <div className="bg-white rounded-t-[50px] p-4">

@@ -33,7 +33,7 @@ const LatestProducts = () => {
   return (
     <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100">
       <div className="px-4">
-        <h4 className="mb-4 text-lg font-semibold">Latest Products</h4>
+        <h4 className="mb-4 text-lg font-semibold">{t("LatestProducts")}</h4>
 
         {/* 👇 Skeleton while loading */}
         {loading ? (

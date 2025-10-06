@@ -9,14 +9,14 @@ import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CiHeart } from "react-icons/ci";
 
-const Header_shop = ({ showitem }) => {
+const HeaderProfile = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [cartCount, setCartCount] = useState(0);
+  
 
   const location = useLocation();
   const page = location.pathname;
@@ -53,20 +53,7 @@ useEffect(() => {
     setShowItem(showitem);
   }, [showitem]);
 
-  // Fetch cart count
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const { data } = await axiosSecure.get("/cart");
-        if (data.success) {
-          setCartCount(data.cartItems.length);
-        }
-      } catch (err) {
-        console.error("Cart fetch error:", err);
-      }
-    };
-    fetchCart();
-  }, [axiosSecure]);
+  
 
   const handleLogout = () => {
     logout()
@@ -170,7 +157,32 @@ useEffect(() => {
     <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
      
+{/* Hamburger icon for mobile */}
+        <button
+          onClick={() => setOpenMenu(!openMenu)}
+          className="btn text-white btn-ghost lg:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h8m-8 6h16"
+            />
+          </svg>
+        </button>
 
+
+        {/* Logo */}
+                <Link className="ml-2 text-xl text-white font-bold" to="/">
+                  {t("Profile")}
+                </Link>
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
@@ -233,51 +245,18 @@ useEffect(() => {
 
       {/* Navbar End */}
       <div className="navbar-end flex items-center space-x-2">
-        {!show && <LanguageSwitcher />}
+        
+       <Link to={"/profileEditPage"}>
+               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide p-2 text-white rounded-full shadow-sm lucide-user-round-pen-icon lucide-user-round-pen"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
 
-        {/* Notification bell */}
-        {!show && <div className="relative">
-          <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
-            <BellIcon className="w-5 h-5" />
-          </button>
-          <span className="absolute top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
-            1
-          </span>
-        </div>}
+       </Link>
 
-        {/* Cart & Wishlist */}
-        {show && (
-          <>
-            
+        
 
-            <Link
-              to="/wishlist"
-              className="relative w-10 h-10 flex text-white items-center justify-center rounded-full shadow-lg bg-[#ff9100]"
-            >
-              <CiHeart size={20} className="text-2xl" />
-            </Link>
-
-            <Link
-              to="/my-cart"
-              className="relative w-10 h-10 text-white flex items-center justify-center rounded-full shadow-lg bg-[#ff9100]"
-            >
-              <IoCartOutline className="text-2xl " />
-              <span className="badge badge-sm border-none text-white bg-red-600 absolute -top-1 -right-1">
-                {cartCount ?? 0}
-              </span>
-            </Link>
-          </>
-        )}
-
-        {/* Arrow icon for specific pages */}
-        {page.startsWith("/shop/") && (
-          <div className="bg-white rounded-full p-1 text-yellow-500">
-            <ArrowBigDownDash />
-          </div>
-        )}
+        
       </div>
     </div>
   );
 };
 
-export default Header_shop;
+export default HeaderProfile;

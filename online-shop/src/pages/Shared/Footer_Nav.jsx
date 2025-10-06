@@ -45,10 +45,10 @@ const Footer_Nav = () => {
           </span>
         </button>
 
-        <button className="hover:text-yellow-500 transition-colors flex flex-col items-center">
+        <Link to={"/profilepage"} className="hover:text-yellow-500 transition-colors flex flex-col items-center">
           <UserIcon className="w-5 h-5" />
           <span className="btm-nav-label text-xs">{t("Profile")}</span>
-        </button>
+        </Link>
       </nav>
     </div>
   );

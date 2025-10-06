@@ -22,6 +22,10 @@ import OrderHistory from "../pages/page/OrderHistory";
 import Withdrawl from "../pages/page/Withdrawl";
 import AddBalance from "../pages/page/AddBalance";
 import TransactionHistory from './../pages/page/TransactionHistory';
+import CategoryPageAll from "../pages/page/CategoryPageAll";
+import ProfilePage from "../pages/page/ProfilePage";
+import ProfileEditPage from "../pages/page/ProfileEditPage";
+
 
 export const router = createBrowserRouter([
   {
@@ -54,10 +58,30 @@ export const router = createBrowserRouter([
         Component: ComingSoon
       },
       {
+        path:"categories",
+        element: <CategoryPageAll></CategoryPageAll>
+      },
+      {
         path: "my-cart",
         element: (
           <PrivateRoute>
             <ShoppingCart />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "profilepage",
+        element: (
+          <PrivateRoute>
+            <ProfilePage></ProfilePage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "profileEditPage",
+        element: (
+          <PrivateRoute>
+            <ProfileEditPage></ProfileEditPage>
           </PrivateRoute>
         ),
       },
