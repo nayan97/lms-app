@@ -12,33 +12,26 @@ const PopularProduct = () => {
   const axiosSecure = useAxiosSecure();
   const [cartCount, setCartCount] = useState(0);
 
-  const [wishlistItems, setPopularProductItems] = useState([]);
+  const [popularproductsItems, setPopularProductItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
-    const fetchPopularProduct = async () => {
-      try {
-        const response = await axios.get("/wishlist", {
-          withCredentials: true,
-        });
-
-        if (response.data.status && Array.isArray(response.data.wishlist)) {
-          setPopularProductItems(response.data.wishlist);
-        } else {
-          setPopularProductItems([]);
+      const fetchData = async () => {
+        try {
+          const { data } = await axiosSecure.get("/home");
+          setPopularProductItems(data.allPopularProducts || []);
+        } catch (err) {
+          console.error("Error fetching shop data", err);
+        } finally {
+          setLoading(false);
         }
-      } catch (err) {
-        console.error("Error fetching wishlist:", err);
-        setError(t("wishlistLoadFailed"));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPopularProduct();
-  }, [axios, t]);
+      };
+      fetchData();
+    }, []);
+    console.log(popularproductsItems);
 
   // Fetch cart count
   useEffect(() => {
@@ -117,49 +110,41 @@ const PopularProduct = () => {
     );
   }
 
-  const handleEdit = (itemId) => {
-    axios.post(
-      `/wishlist/move-to-cart/${itemId}`,
-      {},
-      { withCredentials: true }
-    );
-  };
-  const handleDelete = (itemId) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This item will be removed from your wishlist!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
+  
+ 
+
+  const handleAddToWishlist = async (id) => {
+        
+    
+        
+    
+        // ✅ Build payload — only include optional values
+        const wishlistData = {
+          product_id: id,
+          qty
+        };
+    
         try {
-          const res = await axios.delete(`/wishlist/remove/${itemId}`);
-          if (res.status === 200) {
-            setPopularProductItems((prev) =>
-              prev.filter((item) => item.id !== itemId)
-            ); // ✅ update UI instantly
-            Swal.fire({
-              title: "Deleted!",
-              text: "The item has been removed from your wishlist.",
-              icon: "success",
-              timer: 1500,
-              showConfirmButton: false,
-            });
-          }
+          const res = await axiosSecure.post(`/wishlist/${id}`, wishlistData);
+          Swal.fire({
+            icon: "success",
+            title: t("addedToWishlist") || "Added to Wishlist!",
+            text:
+              res.data.message ||
+              t("wishlistSuccess") ||
+              "Your item has been added successfully.",
+          });
         } catch (error) {
           Swal.fire({
-            title: "Error!",
-            text: "Failed to delete item. Please try again.",
             icon: "error",
+            title: t("error") || "Error",
+            text:
+              error.response?.data?.message ||
+              t("wishlistFailed") ||
+              "Failed to add to wishlist.",
           });
         }
-      }
-    });
-  };
+      };
 
   return (
     <div>
@@ -198,6 +183,68 @@ const PopularProduct = () => {
 
       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
         <section className="wishlist">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                 {popularproductsItems.map((product) => (
+                                    <div
+                        key={product.id}
+                        className="card bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
+                      >
+                        {/* Image — clickable to product details */}
+                        <figure className="p-3">
+                          <Link to={`/shop/${product.id}`}>
+                            <img
+                              src={product.image_url}
+                              alt={product.title}
+                              className="w-full h-40 object-cover rounded-lg hover:opacity-90 transition"
+                            />
+                          </Link>
+                        </figure>
+                      
+                        {/* Body */}
+                        <div className="card-body p-3 space-y-1">
+                          {/* Product Title — also clickable */}
+                          <Link
+                            to={`/shop/${product.id}`}
+                            className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
+                          >
+                            {product.title}
+                          </Link>
+                          <div className="flex justify-between">
+                            {/* Prices (not clickable) */}
+                            <div className="flex flex-col">
+                              <Link
+                            to={`/shop/${product.id}`}
+                            className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
+                          >
+                            {product.cross_price && (
+                            <p className="text-xs text-gray-500 line-through">
+                              ৳ {Number(product.cross_price).toFixed(2)}
+                            </p>
+                          )}
+                      
+                          <h5 className="text-red-600 font-bold">
+                            ৳ {Number(product.price).toFixed(2)}
+                          </h5>
+                      
+                          </Link>
+                              
+                      
+                            </div>
+                          
+                            <Link
+                              onClick={() => handleAddToWishlist(product.id)}
+                              
+                            >
+                              <CiHeart size={20} />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                      
+                                  ))}
+
+            </div>
+            
         </section>
       </main>
     </div>

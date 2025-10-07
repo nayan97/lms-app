@@ -207,14 +207,25 @@ i18n
           AddCategory: "Add Category",
           AdsView:"Ads View",
           MyNetwork:"My Network",
-          VideoCourse:"Video Course"
-          
+          VideoCourse:"Video Course",
+          AddColor:"Add Color",
+          AddProduct:"Add Product",
+          AllProducts:"All Products",
+          Orders:"Orders",
+          ManageUsers:"Manage Users",
+          Dashboard:"Dashboard"
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          Dashboard:"ড্যাশবোর্ড",
+           ManageUsers:"ম্যানেজ ইউজার",
+          Orders:"অর্ডার",
+          AllProducts:"সব প্রোডাক্ট্",
+          AddColor:"অ্যাড কালার",
+          AddProduct:"অ্যাড প্রোডাক্ট্",
           VideoCourse:"ভিডিও কোর্স",
           MyNetwork:"মাই নেটওয়ার্ক",
           TypingJob:"টাইপিং জব",

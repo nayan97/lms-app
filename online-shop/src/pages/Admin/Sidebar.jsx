@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import useUserRole from "../../hooks/useUserRole";
 import logo from "../../../public/logo.png";
+import { t } from "i18next";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { role, isLoading } = useUserRole();
@@ -73,13 +74,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           {/* Logo */}
           <div className="flex items-center gap-2 p-2 mb-4 border-b pb-3">
          <img src={logo} className="w-15 h-15" />
-            <span className="text-lg font-semibold">Life Change</span>
+            <span className="text-lg font-semibold">{t("LifeChange")}</span>
           </div>
 
           {/* Common */}
           <NavLink to="/dashboard" onClick={handleLinkClick} className={linkClasses}>
             <LayoutDashboard className="w-5 h-5" />
-            <span>Dashboard</span>
+            <span>{t("Dashboard")}</span>
           </NavLink>
 
           {/* ADMIN LINKS */}
@@ -91,7 +92,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <FileText className="w-5 h-5" />
-                <span>Category</span>
+                <span> {t("Category")}</span>
               </NavLink>
 
               <NavLink
@@ -100,7 +101,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <Boxes className="w-5 h-5" />
-                <span>Add Size</span>
+                <span> {t("AddSize")}</span>
               </NavLink>
 
               <NavLink
@@ -109,7 +110,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <Boxes className="w-5 h-5" />
-                <span>Add Color</span>
+                <span>{t("AddColor")}</span>
               </NavLink>
 
               <NavLink
@@ -118,7 +119,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <PackagePlus className="w-5 h-5" />
-                <span>Add Product</span>
+                <span>{t("AddProduct")}</span>
               </NavLink>
 
               <NavLink
@@ -127,7 +128,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <PackageSearch className="w-5 h-5" />
-                <span>All Products</span>
+                <span>{t("AllProducts")}</span>
               </NavLink>
 
               <NavLink
@@ -136,7 +137,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <UserCog className="w-5 h-5" />
-                <span>Manage Users</span>
+                <span>{t("ManageUsers")}</span>
               </NavLink>
 
               <NavLink
@@ -145,7 +146,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={linkClasses}
               >
                 <ShieldCheck className="w-5 h-5" />
-                <span>Orders</span>
+                <span>{t("Orders")}</span>
               </NavLink>
             </>
           )}
