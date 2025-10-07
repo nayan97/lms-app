@@ -129,11 +129,11 @@ const Checkout = () => {
           title: t("success"),
           text: res.data.message || t("orderSuccess"),
           showConfirmButton: true,
-          confirmButtonText: t("Back To Shop"), // ✅ custom button text
+          confirmButtonText: t("View All Order"), // ✅ custom button text
           confirmButtonColor: "#16a34a",
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = "/shop"; // ✅ redirect
+            window.location.href = "/order-history"; // ✅ redirect
           }
         });
       }

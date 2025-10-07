@@ -45,21 +45,7 @@ const Login = () => {
 
   // ✅ Forgot Password
   const handleForgotPassword = async () => {
-    const email = getValues("email");
-    if (!email) {
-      return Swal.fire("Oops!", "Please enter your email first.", "warning");
-    }
-
-    try {
-      await axios.post("http://192.168.110.207:8000/api/forgot-password", { email });
-      Swal.fire(
-        "Success!",
-        "Password reset link sent to your email.",
-        "success"
-      );
-    } catch (error) {
-      Swal.fire("Error", error.message || "Something went wrong.", "error");
-    }
+    navigate('/forget-password')
   };
 
   return (

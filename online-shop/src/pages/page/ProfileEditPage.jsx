@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router";
 import { t } from "i18next";
 import { CiCamera } from "react-icons/ci";
+import Spinner from "../../components/Spinner"
 
 const ProfileEditPage = () => {
   const axiosSecure = useAxiosSecure();
@@ -49,7 +50,7 @@ const ProfileEditPage = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [axiosSecure]);
 
   // Handle image select + instant preview
   const handleImageChange = (e) => {
@@ -67,7 +68,10 @@ const ProfileEditPage = () => {
     try {
       const fd = new FormData();
 
-      // Append all text fields (always include)
+      // Laravel PATCH/PUT fix
+      fd.append("_method", "PUT"); // 👈 Important!
+
+      // Append all fields
       fd.append("name", name.trim());
       fd.append("email", email.trim());
       fd.append("phone", phone.trim());
@@ -75,14 +79,12 @@ const ProfileEditPage = () => {
       fd.append("gender", gender.trim());
       fd.append("address", address.trim());
 
-      // Append image only if changed
+      // Append image if selected
       if (image) fd.append("avatar", image);
 
-      const res = await axiosSecure.put("/profile", fd, {
+      const res = await axiosSecure.post("/profile", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(res);
-      
 
       const updatedUser = res.data?.data || res.data;
       setProfile(updatedUser);
@@ -109,8 +111,8 @@ const ProfileEditPage = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading profile.</p>;
+  if (loading) return <Spinner></Spinner>;
+  if (error) return <p className="text-red-500">Failed to load profile.</p>;
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans flex flex-col">

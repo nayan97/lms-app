@@ -25,6 +25,7 @@ import TransactionHistory from './../pages/page/TransactionHistory';
 import CategoryPageAll from "../pages/page/CategoryPageAll";
 import ProfilePage from "../pages/page/ProfilePage";
 import ProfileEditPage from "../pages/page/ProfileEditPage";
+import ForgetPasswordPage from "../pages/Auth/ForgetPassaword";
 
 
 export const router = createBrowserRouter([
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: Login,
+      },
+       {
+        path: "forget-password",
+        Component: ForgetPasswordPage,
       },
       {
         path: "register",
