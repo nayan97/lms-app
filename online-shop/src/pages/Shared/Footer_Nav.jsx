@@ -24,26 +24,26 @@ const Footer_Nav = () => {
           <span className="btm-nav-label text-xs">{t("Home")}</span>
         </Link>
 
-        <button className="hover:text-yellow-500 transition-colors ml-10 flex flex-col items-center">
+        <Link to={"/wallet"} className="hover:text-yellow-500 transition-colors ml-10 flex flex-col items-center">
           <WalletIcon className="w-5 h-5" />
           <span className=" btm-nav-label text-xs">{t("Wallet")}</span>
-        </button>
+        </Link>
 
         <Link
-          to={"shop"}
+          to={"/shop"}
           className="bg-[#ff9100] drop-shadow-lg relative bottom-10 p-1 text-white rounded-full shadow-lg hover:bg-yellow-600 transition-colors"
         >
           <img src={logo} className="w-15 h-15" />
         </Link>
 
-        <button className="hover:text-yellow-500 mr-10 transition-colors flex flex-col items-center">
+        <Link to={"/mynetwork"} className="hover:text-yellow-500 mr-10 transition-colors flex flex-col items-center">
           <UsersIcon className="w-5 h-5" />
           <span className=" btm-nav-label break-words text-xs">
             <span>{t("My")}</span>
             <br />
             <span>{t("Network")}</span>{" "}
           </span>
-        </button>
+        </Link>
 
         <Link to={"/profilepage"} className="hover:text-yellow-500 transition-colors flex flex-col items-center">
           <UserIcon className="w-5 h-5" />

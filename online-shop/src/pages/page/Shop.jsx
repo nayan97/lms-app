@@ -19,7 +19,7 @@ const Shop = () => {
       {/* Header */}
       <Header_shop showitem={true}></Header_shop>
 
-      <div className="bg-gray-100 pt-5 rounded-t-[50px]">
+      <div className="bg-gray-100 pt-5 max-w-7xl mx-auto rounded-t-[50px]">
         {/* Search bar */}
      <SearchBar></SearchBar>
       

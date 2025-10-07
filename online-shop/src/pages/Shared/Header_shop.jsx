@@ -8,6 +8,12 @@ import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CiHeart } from "react-icons/ci";
+import { FaHistory, FaSignOutAlt } from "react-icons/fa";
+import { MdAttachMoney } from "react-icons/md";
+import { IoWalletOutline } from "react-icons/io5";
+import Swal from "sweetalert2";
+
+
 
 const Header_shop = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -22,6 +28,7 @@ const Header_shop = ({ showitem }) => {
   const page = location.pathname;
 
   const [show, setShowItem] = useState(showitem);
+  const navigate = useNavigate();
 
   // Close menu when clicking outside
 useEffect(() => {
@@ -68,11 +75,33 @@ useEffect(() => {
     fetchCart();
   }, [axiosSecure]);
 
-  const handleLogout = () => {
-    logout()
-      .then(() => console.log("Logout successful"))
-      .catch((err) => console.log(err));
-  };
+ const handleLogout = () => {
+   logout()
+     .then(() => {
+       // Show SweetAlert success message
+       Swal.fire({
+         icon: "success",
+         title: "Logged out",
+         text: "You have successfully logged out.",
+         timer: 2000,
+         showConfirmButton: false,
+       });
+ 
+       // Navigate to login page after 2 seconds
+       setTimeout(() => {
+         navigate("/login");
+       }, 2000);
+     })
+     .catch((err) => {
+       console.error(err);
+       // Optional: Show error alert
+       Swal.fire({
+         icon: "error",
+         title: "Error",
+         text: "Logout failed. Please try again.",
+       });
+     });
+ };
   const referCode = "45425486";
 
   const handleCopy = () => {
@@ -81,90 +110,63 @@ useEffect(() => {
     // Optional: nice feedback
     alert("Refer code copied!");
   };
-  const Navlinks = (
-    <>
-      <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Home")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/shop"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Shop")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/wishlist"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Wishlist")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/order-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("OrderHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/transaction-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("TransactionHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/add-balance"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("AddBalance")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/withdrawl"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Withdrawl")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          onClick={handleLogout}
-          className={({ isActive }) =>
-            isActive ? "text-red-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Logout")}
-        </NavLink>
-      </li>
-    </>
-  );
+ const Navlinks = (
+  <>
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <FaHistory /> {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <IoWalletOutline /> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/add-balance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney /> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney /> {t("Withdrawl")}
+      </NavLink>
+    </li>
+    <li>
+      <LanguageSwitcher />
+    </li>
+    <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <FaSignOutAlt /> {t("Logout")}
+      </NavLink>
+    </li>
+  </>
+);
 
   return (
     <div className="navbar bg-[#ff9100]   ">
