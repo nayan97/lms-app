@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import { useTranslation } from "react-i18next";
 
 const ProductModal = ({
   product = {},
@@ -11,6 +12,8 @@ const ProductModal = ({
   onClose,
 }) => {
   const axiosSecure = useAxiosSecure();
+
+   const { t, i18n } = useTranslation();
 
   const [mainImagePreview, setMainImagePreview] = useState(null);
   const [galleryPreviews, setGalleryPreviews] = useState([]);
@@ -186,16 +189,18 @@ const ProductModal = ({
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      Swal.fire(
-        "Success!",
-        `Product ${product.id ? "updated" : "created"} successfully.`,
-        "success"
-      );
+    Swal.fire({
+      icon: "success",
+      title: product.id ? t("successTitleUpdate") : t("successTitleCreate"),
+      text: product.id ? t("successTextUpdate") : t("successTextCreate"),
+      confirmButtonColor: "#16a34a",
+    });
 
       onClose();
     } catch (err) {
       console.error("Error saving product", err.response?.data || err);
       Swal.fire("Error!", "Failed to save product.", "error");
+      
     }
   };
 
@@ -221,24 +226,6 @@ const ProductModal = ({
               onChange={handleChange}
               required
             />
-          </div>
-
-          <div>
-            <label className="block text-sm mb-1">Category</label>
-            <select
-              name="category_id"
-              className={inputClass}
-              value={formData.category_id}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
           </div>
 
           <div>
@@ -302,19 +289,34 @@ const ProductModal = ({
 
           <div className="flex items-end gap-3">
             <div className="flex-1">
-              <label className="block text-sm mb-1">Profit</label>
-              <input
-                type="number"
+              {/* <input
+                type="hidden"
                 name="profit"
                 placeholder="Profit"
                 className={inputClass}
                 value={formData.profit}
                 onChange={handleChange}
-              />
+              /> */}
+
+              <label className="block text-sm mb-1">Category</label>
+              <select
+                name="category_id"
+                className={inputClass}
+                value={formData.category_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="flex-1">
-              <label className="block text-sm mb-1">Source URL</label>
+              <label className="block text-sm mb-1">Source/Vendor</label>
               <input
                 type="text"
                 name="source_url"

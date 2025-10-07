@@ -33,6 +33,7 @@ import LatestProduct from "../pages/page/LatestProduct";
 import PopularProduct from "../pages/page/PopularProduct";
 import MyNetwork from "../pages/page/MyNetwork";
 
+import ForgetPasswordPage from "../pages/Auth/ForgetPassaword";
 
 
 export const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: Login,
+      },
+       {
+        path: "forget-password",
+        Component: ForgetPasswordPage,
       },
       {
         path: "register",
