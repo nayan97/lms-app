@@ -3,11 +3,14 @@ import useUserAxios from "../hooks/useUserAxios";
 import { Link } from "react-router";
 import { CiHeart } from "react-icons/ci";
 import { t } from "i18next";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const LatestProducts = () => {
   const axios = useUserAxios();
   const [latestProducts, setLatestProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,8 +28,34 @@ const LatestProducts = () => {
   }, []);
 
   console.log(latestProducts);
-  const handleAddToWishlist=()=>{
-    console.log("Item added to wishlist");
+  const handleAddToWishlist= async (id)=>{
+    
+      // ✅ Build payload — only include optional values
+          const wishlistData = {
+            product_id: id,
+            qty
+          };
+      
+          try {
+            const res = await useAxiosSecure.post(`/wishlist/${id}`, wishlistData);
+            Swal.fire({
+              icon: "success",
+              title: t("addedToWishlist") || "Added to Wishlist!",
+              text:
+                res.data.message ||
+                t("wishlistSuccess") ||
+                "Your item has been added successfully.",
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: t("error") || "Error",
+              text:
+                error.response?.data?.message ||
+                t("wishlistFailed") ||
+                "Failed to add to wishlist.",
+            });
+          }
   }
   
 

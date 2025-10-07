@@ -16,6 +16,7 @@ const LatestProduct = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { t } = useTranslation();
+  const [qty, setQty] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +46,39 @@ const LatestProduct = () => {
     };
     fetchCart();
   }, [axiosSecure]);
+
+  const handleAddToWishlist = async (id) => {
+      
+  
+      
+  
+      // ✅ Build payload — only include optional values
+      const wishlistData = {
+        product_id: id,
+        qty
+      };
+  
+      try {
+        const res = await axiosSecure.post(`/wishlist/${id}`, wishlistData);
+        Swal.fire({
+          icon: "success",
+          title: t("addedToWishlist") || "Added to Wishlist!",
+          text:
+            res.data.message ||
+            t("wishlistSuccess") ||
+            "Your item has been added successfully.",
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: t("error") || "Error",
+          text:
+            error.response?.data?.message ||
+            t("wishlistFailed") ||
+            "Failed to add to wishlist.",
+        });
+      }
+    };
 
   // ✅ Skeleton loader while fetching
   if (loading) {
