@@ -1,8 +1,34 @@
 import React from "react";
+import Header from "../Shared/Header";
+import { t } from "i18next";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const ComingSoon = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const page = location.pathname;
+
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
+    <div>
+      <div className="bg-[#ff9100] w-full h-20">
+              <div className="flex items-center gap-4">
+                <Link
+                to={"/"}
+                className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+              >
+                ← 
+              </Link>
+              <h1 className="text-white  font-bold"> {t("")}
+      </h1>
+      
+              </div>
+              
+             
+            </div>
+
+             <div className="flex flex-col rounded-t-[50px] items-center justify-center min-h-screen bg-white px-4">
+      
       {/* Animated Logo or Icon */}
       <div
   className="mb-2 w-10 h-10"
@@ -49,6 +75,8 @@ const ComingSoon = () => {
       </p>
 
     </div>
+    </div>
+   
   );
 };
 
