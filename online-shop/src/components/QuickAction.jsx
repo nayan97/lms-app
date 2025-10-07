@@ -16,20 +16,21 @@ const QuickAction = () => {
 
   return (
     <div className="p-5">
-      <div className="grid grid-cols-4 gap-4">
-        {actions.map((action) => (
-          <Link
-            to={action.link}
-            key={action.id}
-            className={`card ${action.color || 'bg-base-100'} shadow-lg hover:shadow-xl cursor-pointer aspect-square flex flex-col items-center justify-center text-black font-semibold text-xs transition-all hover:scale-105`}
-          >
-            {action.icon && (
-              <img src={action.icon} alt={action.title} className="w-12 h-12 mb-2" />
-            )}
-            {t(action.title)}
-          </Link>
-        ))}
-      </div>
+      <div className="grid grid-cols-4 gap-2">
+  {actions.map((action) => (
+    <Link
+      to={action.link}
+      key={action.id}
+      className={`card ${action.color || 'bg-base-100'} shadow-lg hover:shadow-xl cursor-pointer aspect-square flex flex-col items-center justify-center text-black font-semibold text-[10px] transition-all hover:scale-105`}
+    >
+      {action.icon && (
+        <img src={action.icon} alt={action.title} className="w-10 h-10 mb-2" />
+      )}
+      {t(action.title)}
+    </Link>
+  ))}
+</div>
+
     </div>
   );
 };

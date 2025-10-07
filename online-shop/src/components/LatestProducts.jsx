@@ -33,7 +33,11 @@ const LatestProducts = () => {
   return (
     <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100">
       <div className="px-4">
-        <h4 className="mb-4 text-lg font-semibold">{t("LatestProducts")}</h4>
+        
+        <div className="flex justify-between items-center mb-2">
+                <h4 className="mb-4 text-lg font-semibold">{t("LatestProducts")}</h4>
+                <Link to={"/latestproduct"} className="text-sm text-gray-500">{t("SeeAll")}</Link>
+       </div>
 
         {/* 👇 Skeleton while loading */}
         {loading ? (
