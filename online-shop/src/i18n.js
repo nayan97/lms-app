@@ -192,12 +192,22 @@ i18n
           Addcolor: "Add Color",
           Categories: "Categories",
           AddCategory: "Add Category",
+          Pending: "Pending",
+          Processing: "Processing",
+          Delivered: "Delivered:",
+          Cancelled: "Cancelled",
+          OrderStatus: "Order Status",
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          OrderStatus: "অর্ডার স্ট্যাটাস",
+          Pending: "পেন্ডিং",
+          Processing: "প্রসেসিং",
+          Delivered: "ডেলিভার্ড",
+          Cancelled: "ক্যানসেল্ড",
           oops: "ওহো!",
           orderFailed: "অর্ডার ব্যর্থ হয়েছে, দয়া করে আবার চেষ্টা করুন।",
           successTitleCreate: "তৈরি হয়েছে! 🎉",

@@ -12,7 +12,7 @@ export default function OrderHistory() {
   const [filter, setFilter] = useState("Pending");
   const [loading, setLoading] = useState(true);
 
-  const tabs = ["Pending", "Processing", "Delivered", "Cancelled"];
+  const tabs = [t("Pending"), t("Processing"), t("Delivered"), t("Cancelled")];
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -56,7 +56,7 @@ export default function OrderHistory() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 rounded-t-[50px] ">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className=" mb-4">
         <div className="bg-[#ff9100] h-20">
