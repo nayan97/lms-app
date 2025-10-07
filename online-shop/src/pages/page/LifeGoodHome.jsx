@@ -19,15 +19,16 @@ const projects1 = [
   { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
   { name: "DriveOffer", icon: offerimg, isActive: true, link: "comingsoon" },
   { name: "ResellingProduct", icon: resellimg, isActive: true , link: "/shop"},
-  { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "comingsoon" },
+  { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "adsview" },
   { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
   { name: "JobPost", icon: jobimg, isActive: true , link: "comingsoon"},
-  { name: "TypingJob", icon: microimg, isActive: true, link: "comingsoon" },
-  { name: "QuizJob", icon: quizimg, isActive: true, link: "comingsoon" },
+  { name: "TypingJob", icon: microimg, isActive: true, link: "/typing-job" },
+  { name: "QuizJob", icon: quizimg, isActive: true, link: "quizjob" },
   { name: "WatchVideo", icon: videoimg, isActive: true, link: "comingsoon" },
   { name: "MarkSalary", icon: bonusimg, isActive: true, link: "comingsoon" },
   { name: "DailyTargetBonus", icon: dailyimg, isActive: true, link: "comingsoon" },
   { name: "FreelancingCourse", icon: freeimg, isActive: true, link: "comingsoon" },
+  { name: "VideoCourse", icon: videoimg, isActive: true, link: "comingsoon" },
 ];
 
 export default function LifeGoodHome() {

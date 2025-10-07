@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
@@ -7,8 +7,12 @@ import { IoCartOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { IoWalletOutline } from "react-icons/io5";
+import { FaHistory, FaSignOutAlt } from "react-icons/fa";
+import { MdAttachMoney } from "react-icons/md";
+import Swal from "sweetalert2";
 
-const Header = ({ showitem, }) => {
+const Header = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -21,31 +25,31 @@ const Header = ({ showitem, }) => {
   const page = location.pathname;
 
   const [show, setShowItem] = useState(showitem);
+  const navigate = useNavigate();
 
   // Close menu when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setOpenMenu(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenu(false);
+      }
+    };
 
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-      setOpenMenu(false);
-    }
-  };
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpenMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  window.addEventListener("resize", handleResize);
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", handleResize);
 
-  // Cleanup
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-    window.removeEventListener("resize", handleResize);
-  };
-}, []);
-
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Update showitem prop
   useEffect(() => {
@@ -68,10 +72,32 @@ useEffect(() => {
   }, [axiosSecure]);
 
   const handleLogout = () => {
-    logout()
-      .then(() => console.log("Logout successful"))
-      .catch((err) => console.log(err));
-  };
+  logout()
+    .then(() => {
+      // Show SweetAlert success message
+      Swal.fire({
+        icon: "success",
+        title: "Logged out",
+        text: "You have successfully logged out.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      // Navigate to login page after 2 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    })
+    .catch((err) => {
+      console.error(err);
+      // Optional: Show error alert
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Logout failed. Please try again.",
+      });
+    });
+};
   const referCode = "45425486";
 
   const handleCopy = () => {
@@ -80,91 +106,63 @@ useEffect(() => {
     // Optional: nice feedback
     alert("Refer code copied!");
   };
-  const Navlinks = (
-    <>
-      <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Home")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/shop"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Shop")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/wishlist"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Wishlist")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/order-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("OrderHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/transaction-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("TransactionHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/add-balance"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("AddBalance")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/withdrawl"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Withdrawl")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          onClick={handleLogout}
-          className={({ isActive }) =>
-            isActive ? "text-red-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Logout")}
-        </NavLink>
-      </li>
-    </>
-  );
-
+ const Navlinks = (
+  <>
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <FaHistory /> {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <IoWalletOutline /> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/add-balance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney /> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney /> {t("Withdrawl")}
+      </NavLink>
+    </li>
+    <li>
+      <LanguageSwitcher />
+    </li>
+    <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+        }
+      >
+        <FaSignOutAlt /> {t("Logout")}
+      </NavLink>
+    </li>
+  </>
+);
   return (
     <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
@@ -203,62 +201,63 @@ useEffect(() => {
 
       {/* Mobile Menu */}
       {/* Mobile Menu + Overlay */}
-{openMenu && (
-  <>
-    {/* Overlay */}
-    <div
-      onClick={() => setOpenMenu(false)}
-      className="fixed inset-0 bg-black/50 z-40"
-    ></div>
+      {openMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            onClick={() => setOpenMenu(false)}
+            className="fixed inset-0 bg-black/50 z-40"
+          ></div>
 
-    {/* Sidebar Menu */}
-    <ul
-      ref={menuRef}
-      className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
+          {/* Sidebar Menu */}
+          <ul
+            ref={menuRef}
+            className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
                  shadow overflow-y-auto transform transition-transform duration-300"
-    >
-      <div>
-        <div className="flex justify-between items-center ">
-          <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
-            <div className="flex flex-col items-start gap-4 ">
-              <div className="avatar mr-3">
-                <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
-                  <img
-                    src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
-                    alt="User Profile"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
-                    }}
-                  />
-                </div>
-              </div>
+          >
+            <div>
+              <div className="flex justify-between items-center ">
+                <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
+                  <div className="flex flex-col items-start gap-4 ">
+                    <div className="avatar mr-3">
+                      <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
+                        <img
+                          src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                          alt="User Profile"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
+                          }}
+                        />
+                      </div>
+                    </div>
 
-              <div>
-                <p className="text-lg font-bold leading-none">Md. ÃL~Ãmĩn</p>
-                <div className="flex items-center text-white">
-                  <span>Refer Code: {referCode}</span>
-                  <Copy
-                    onClick={handleCopy}
-                    className="size-4 ml-2 cursor-pointer text-white transition"
-                  />
+                    <div>
+                      <p className="text-lg font-bold leading-none">
+                        Md. ÃL~Ãmĩn
+                      </p>
+                      <div className="flex items-center text-white">
+                        <span>Refer Code: {referCode}</span>
+                        <Copy
+                          onClick={handleCopy}
+                          className="size-4 ml-2 cursor-pointer text-white transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {Navlinks}
-    </ul>
-  </>
-)}
-
+            {Navlinks}
+          </ul>
+        </>
+      )}
 
       {/* Navbar End */}
       <div className="navbar-end flex items-center space-x-2">
-        <LanguageSwitcher />
+        
 
         {/* Notification bell */}
         <div className="relative">
@@ -294,7 +293,6 @@ useEffect(() => {
 
         {/* Arrow icon for specific pages */}
         {page.startsWith("/shop/") && (
-        
           <div className="bg-white rounded-full p-1 text-yellow-500">
             <ArrowBigDownDash />
           </div>

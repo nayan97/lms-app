@@ -25,6 +25,14 @@ import TransactionHistory from './../pages/page/TransactionHistory';
 import CategoryPageAll from "../pages/page/CategoryPageAll";
 import ProfilePage from "../pages/page/ProfilePage";
 import ProfileEditPage from "../pages/page/ProfileEditPage";
+import Quizjob from "../pages/page/Quizjob";
+import Typingjob from "../pages/page/Typingjob";
+import WalletPage from "../pages/page/WalletPage";
+import AdsViewPage from "../pages/page/AdsViewPage";
+import LatestProduct from "../pages/page/LatestProduct";
+import PopularProduct from "../pages/page/PopularProduct";
+import MyNetwork from "../pages/page/MyNetwork";
+
 
 
 export const router = createBrowserRouter([
@@ -70,10 +78,50 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "quizjob",
+        element: (
+          <PrivateRoute>
+            <Quizjob></Quizjob>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "adsview",
+        element: (
+          <PrivateRoute>
+            <AdsViewPage></AdsViewPage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/typing-job",
+        element: (
+          <PrivateRoute>
+          <Typingjob></Typingjob>
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "profilepage",
         element: (
           <PrivateRoute>
             <ProfilePage></ProfilePage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/wallet",
+        element: (
+          <PrivateRoute>
+            <WalletPage></WalletPage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/mynetwork",
+        element: (
+          <PrivateRoute>
+            <MyNetwork></MyNetwork>
           </PrivateRoute>
         ),
       },
@@ -90,6 +138,22 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Wishlist />
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "/latestproduct",
+        element: (
+          <PrivateRoute>
+            <LatestProduct></LatestProduct>
+          </PrivateRoute>
+        ),
+      },
+            {
+        path: "/popularproduct",
+        element: (
+          <PrivateRoute>
+            <PopularProduct></PopularProduct>
           </PrivateRoute>
         ),
       },

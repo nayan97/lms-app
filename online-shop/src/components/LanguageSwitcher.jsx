@@ -4,19 +4,18 @@ import { useTranslation } from "react-i18next";
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
 
-  const changeLanguage = (e) => {
-    i18n.changeLanguage(e.target.value);
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "bn" ? "en" : "bn";
+    i18n.changeLanguage(newLang);
   };
 
   return (
-    <select
-      onChange={changeLanguage}
-      value={i18n.language || "bn"} // default bn
-      className="select w-18 text-[12px]"
+    <button
+      onClick={toggleLanguage}
+      className="px-4 py-2 bg-white text-yellow-600  text-sm font-medium hover:bg-yellow-100 transition"
     >
-      <option value="bn">বাংলা</option>
-      <option value="en">EN</option>
-    </select>
+      {i18n.language === "bn" ? "English" : "বাংলা"}
+    </button>
   );
 };
 

@@ -18,6 +18,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { CiHeart } from "react-icons/ci";
 import Header from "../Shared/Header";
 
+
 export default function ProductPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -264,24 +265,77 @@ useEffect(() => {
     }
   };
   const referCode = "45425486";
-  const handleCopy = () => {
-    navigator.clipboard.writeText(referCode);
-    console.log("Copied code!");
-    // Optional: nice feedback
-    alert("Product code copied!");
-  };
-  const handleCopyProductName = () => {
-    navigator.clipboard.writeText(product.title);
-    console.log("Copied Name!");
-    // Optional: nice feedback
-    alert("Product name copied!");
-  };
-  const handleCopyProductDetails = () => {
-    navigator.clipboard.writeText(product.description);
-    console.log("Copied Details!");
-    // Optional: nice feedback
-    alert("Product details copied!");
-  };
+  
+
+// Copy refer code
+const handleCopy = () => {
+  navigator.clipboard.writeText(referCode)
+    .then(() => {
+      console.log("Copied code!");
+      Swal.fire({
+        icon: "success",
+        title: "Copied!",
+        text: "Product code copied to clipboard",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to copy the code",
+      });
+    });
+};
+
+// Copy product name
+const handleCopyProductName = () => {
+  navigator.clipboard.writeText(product.title)
+    .then(() => {
+      console.log("Copied Name!");
+      Swal.fire({
+        icon: "success",
+        title: "Copied!",
+        text: "Product name copied to clipboard",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to copy the name",
+      });
+    });
+};
+
+// Copy product details
+const handleCopyProductDetails = () => {
+  navigator.clipboard.writeText(product.description)
+    .then(() => {
+      console.log("Copied Details!");
+      Swal.fire({
+        icon: "success",
+        title: "Copied!",
+        text: "Product details copied to clipboard",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to copy the details",
+      });
+    });
+};
+
 
 
 const handleDownloadGallery = () => {
