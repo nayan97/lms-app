@@ -22,18 +22,18 @@ export default function ProductPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const page = location.pathname;
-  console.log(page);
+  // console.log(page);
   const { id } = useParams();
   const axios = useUserAxios();
   const axiosSecure = useAxiosSecure();
   const { t } = useTranslation();
 
   const [product, setProduct] = useState(null);
-  console.log(product);
+  // console.log(product);
   const [sizes, setSizes] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [colors, setColors] = useState([]);
-  console.log(colors);
+  // console.log(colors);
   const [selectedColor, setSelectedColor] = useState("");
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
