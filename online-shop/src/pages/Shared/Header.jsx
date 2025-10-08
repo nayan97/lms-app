@@ -3,7 +3,7 @@ import { Link, Navigate, NavLink, useLocation, useNavigate } from "react-router"
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
-import { IoCartOutline } from "react-icons/io5";
+import { IoCartOutline, IoLanguageOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -109,6 +109,7 @@ const Header = ({ showitem }) => {
   };
  const Navlinks = (
   <>
+   <span> <span>{t("Account")}</span>
     <li>
       <NavLink
         to="/order-history"
@@ -149,9 +150,18 @@ const Header = ({ showitem }) => {
         <MdAttachMoney /> {t("Withdrawl")}
       </NavLink>
     </li>
+    </span>
+    <span> <span>{t("Language")}</span>
     <li>
-      <LanguageSwitcher />
+      <div className="flex">
+        <span><IoLanguageOutline className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
     </li>
+    </span>
+    <span> <span>{t("Logout")}</span>
     <li>
       <NavLink
         onClick={handleLogout}
@@ -162,6 +172,7 @@ const Header = ({ showitem }) => {
         <FaSignOutAlt /> {t("Logout")}
       </NavLink>
     </li>
+    </span>
   </>
 );
   return (
@@ -264,14 +275,19 @@ const Header = ({ showitem }) => {
         
 
         {/* Notification bell */}
-        <div className="relative">
+       {page!=="/wallet" && <div className="relative">
           <button className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0">
             <BellIcon className="w-5 h-5" />
           </button>
           <span className="absolute text-white top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
             1
           </span>
-        </div>
+        </div>}
+        {page=="/wallet" && 
+          <div className="rounded-full p-3 shadow-sm text-white">
+                      <FaHistory />
+                  </div>
+         }
 
         {/* Cart & Wishlist */}
         {show && (
