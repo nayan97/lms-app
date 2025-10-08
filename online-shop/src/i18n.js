@@ -221,13 +221,15 @@ i18n
           ManageUsers:"Manage Users",
           Dashboard:"Dashboard",
           ViewAllOrder:"Order List",
-          successOrder: "Wellcome!"
+          successOrder: "Wellcome!",
+          voucherbalancewithdraw:"Withdraw"
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          voucherbalancewithdraw:"উইথড্র",
           voucherbalance:"ভাওচার ব্যালেন্স",
           successOrder:"অভিনন্দন!",
           ViewAllOrder:"অর্ডার লিস্ট",

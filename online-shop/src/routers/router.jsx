@@ -35,6 +35,8 @@ import MyNetwork from "../pages/page/MyNetwork";
 
 import ForgetPasswordPage from "../pages/Auth/ForgetPassaword";
 import VoucherBalance from "../pages/page/VoucherBalance";
+import Earning from "../pages/page/Earning";
+import VoucherBalanceWithdraw from "../pages/page/VoucherBalanceWithdraw";
 
 
 export const router = createBrowserRouter([
@@ -124,10 +126,26 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "/voucherbalancewithdraw",
+        element: (
+          <PrivateRoute>
+            <VoucherBalanceWithdraw></VoucherBalanceWithdraw>
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "/wallet/voucherbalance",
         element: (
           <PrivateRoute>
            <VoucherBalance></VoucherBalance>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/wallet/earning",
+        element: (
+          <PrivateRoute>
+           <Earning></Earning>
           </PrivateRoute>
         ),
       },

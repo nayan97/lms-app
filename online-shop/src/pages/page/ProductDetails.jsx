@@ -95,65 +95,68 @@ export default function ProductPage() {
     );
 
   // ✅ Add to cart
-const handleAddToCart = async (e) => {
-  e.preventDefault();
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
 
-  const hasSizeOption = product.sizes?.length > 0;
-  const hasColorOption = product.colors?.length > 0;
+    const hasSizeOption = product.sizes?.length > 0;
+    const hasColorOption = product.colors?.length > 0;
 
-  // 🧩 Validate only when size/color options exist
-  if (hasSizeOption && !selectedSize) {
-    return Swal.fire({
-      icon: "warning",
-      title: t("selectSizeTitle") || "Size Required",
-      text: t("selectSizeText") || "Please select a size before adding to cart.",
-    });
-  }
-
-  if (hasColorOption && !selectedColor) {
-    return Swal.fire({
-      icon: "warning",
-      title: t("selectColorTitle") || "Color Required",
-      text: t("selectColorText") || "Please select a color before adding to cart.",
-    });
-  }
-
-  try {
-    const res = await axiosSecure.post(`/cart/${id}`, {
-      qty: Number(qty),
-      ...(selectedSize && { size: selectedSize }),
-      ...(selectedColor && { color: selectedColor }),
-    });
-
-    if (res.data.success) {
-      Swal.fire({
-        icon: "success",
-        title: t("addedToCart") || "Added to Cart!",
-        text: res.data.message || t("cartSuccess") || "Item added successfully.",
-        timer: 1500,
-        showConfirmButton: false,
+    // 🧩 Validate only when size/color options exist
+    if (hasSizeOption && !selectedSize) {
+      return Swal.fire({
+        icon: "warning",
+        title: t("selectSizeTitle") || "Size Required",
+        text:
+          t("selectSizeText") || "Please select a size before adding to cart.",
       });
-      setQty(1);
-      navigate("/shop");
-    } else {
+    }
+
+    if (hasColorOption && !selectedColor) {
+      return Swal.fire({
+        icon: "warning",
+        title: t("selectColorTitle") || "Color Required",
+        text:
+          t("selectColorText") ||
+          "Please select a color before adding to cart.",
+      });
+    }
+
+    try {
+      const res = await axiosSecure.post(`/cart/${id}`, {
+        qty: Number(qty),
+        ...(selectedSize && { size: selectedSize }),
+        ...(selectedColor && { color: selectedColor }),
+      });
+
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: t("addedToCart") || "Added to Cart!",
+          text:
+            res.data.message || t("cartSuccess") || "Item added successfully.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        setQty(1);
+        navigate("/shop");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: t("error") || "Error",
+          text: res.data.message || t("cartFailed") || "Failed to add to cart.",
+        });
+      }
+    } catch (error) {
       Swal.fire({
         icon: "error",
         title: t("error") || "Error",
-        text: res.data.message || t("cartFailed") || "Failed to add to cart.",
+        text:
+          error.response?.data?.message ||
+          t("cartFailed") ||
+          "Failed to add to cart.",
       });
     }
-  } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: t("error") || "Error",
-      text:
-        error.response?.data?.message ||
-        t("cartFailed") ||
-        "Failed to add to cart.",
-    });
-  }
-};
-
+  };
 
   const handleBuy = async (e) => {
     e.preventDefault();

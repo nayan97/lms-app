@@ -226,11 +226,14 @@ useEffect(() => {
             <Link className="ml-2 text-xl text-white font-bold" to="/">
           {t("MyNetwork")}
         </Link>
+        <Link to={"/profilepage"}>
         <FaUserCircle className="text-3xl  text-white" />
+        </Link>
+        
 
         </div>
       <div className="flex items-center justify-between px-4 py-4">
-        <button className="text-2xl text-white">
+        <button  className="text-2xl text-white">
           <i className="fas fa-bars"></i>
         </button>
         
