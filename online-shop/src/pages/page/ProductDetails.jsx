@@ -18,40 +18,39 @@ import { IoCartOutline } from "react-icons/io5";
 import { CiHeart } from "react-icons/ci";
 import Header from "../Shared/Header";
 
-
 export default function ProductPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const page = location.pathname;
-  console.log(page);
+  // console.log(page);
   const { id } = useParams();
   const axios = useUserAxios();
   const axiosSecure = useAxiosSecure();
   const { t } = useTranslation();
 
   const [product, setProduct] = useState(null);
-  console.log(product);
+  // console.log(product);
   const [sizes, setSizes] = useState([]);
   const [selectedSize, setSelectedSize] = useState("");
   const [colors, setColors] = useState([]);
-  console.log(colors);
+  // console.log(colors);
   const [selectedColor, setSelectedColor] = useState("");
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
 
   const [cartCount, setCartCount] = useState(0);
- const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-// When product is loaded, set first gallery image or fallback to main image
-useEffect(() => {
-  if (product) {
-    if (product.image_gal?.length > 0) {
-      setSelectedImage(product.image_gal[0]);
-    } else {
-      setSelectedImage(product.image_url);
+  // When product is loaded, set first gallery image or fallback to main image
+  useEffect(() => {
+    if (product) {
+      if (product.image_gal?.length > 0) {
+        setSelectedImage(product.image_gal[0]);
+      } else {
+        setSelectedImage(product.image_url);
+      }
     }
-  }
-}, [product]); // <-- watch 'product'
+  }, [product]); // <-- watch 'product'
 
   useEffect(() => {
     if (!id) return;
@@ -89,9 +88,6 @@ useEffect(() => {
     fetchCart();
   }, [axiosSecure]);
 
-
-
- 
   if (loading) return <Spinner />;
   if (!product)
     return (
@@ -99,107 +95,119 @@ useEffect(() => {
     );
 
   // ✅ Add to cart
-  const handleAddToCart = async (e) => {
-    e.preventDefault();
+const handleAddToCart = async (e) => {
+  e.preventDefault();
 
-    if (!selectedSize) {
+  const hasSizeOption = product.sizes?.length > 0;
+  const hasColorOption = product.colors?.length > 0;
+
+  // 🧩 Validate only when size/color options exist
+  if (hasSizeOption && !selectedSize) {
+    return Swal.fire({
+      icon: "warning",
+      title: t("selectSizeTitle") || "Size Required",
+      text: t("selectSizeText") || "Please select a size before adding to cart.",
+    });
+  }
+
+  if (hasColorOption && !selectedColor) {
+    return Swal.fire({
+      icon: "warning",
+      title: t("selectColorTitle") || "Color Required",
+      text: t("selectColorText") || "Please select a color before adding to cart.",
+    });
+  }
+
+  try {
+    const res = await axiosSecure.post(`/cart/${id}`, {
+      qty: Number(qty),
+      ...(selectedSize && { size: selectedSize }),
+      ...(selectedColor && { color: selectedColor }),
+    });
+
+    if (res.data.success) {
       Swal.fire({
-        icon: "warning",
-        title: t("selectSize"),
+        icon: "success",
+        title: t("addedToCart") || "Added to Cart!",
+        text: res.data.message || t("cartSuccess") || "Item added successfully.",
+        timer: 1500,
+        showConfirmButton: false,
       });
-      return;
-    }
-    if (!selectedColor) {
-      Swal.fire({
-        icon: "warning",
-        title: t("selectColor"),
-      });
-      return;
-    }
-
-    try {
-      const res = await axiosSecure.post(`/cart/${id}`, {
-        qty: Number(qty),
-        size: selectedSize,
-        color: selectedColor,
-      });
-
-      if (res.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: t("addedToCart"),
-          text: res.data.message || t("cartSuccess"),
-          timer: 1500,
-          showConfirmButton: false,
-        });
-        setQty(1);
-        navigate("/shop");
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: t("error"),
-          text: res.data.message || t("cartFailed"),
-        });
-      }
-    } catch (error) {
+      setQty(1);
+      navigate("/shop");
+    } else {
       Swal.fire({
         icon: "error",
-        title: t("error"),
-        text: error.response?.data?.message || t("cartFailed"),
+        title: t("error") || "Error",
+        text: res.data.message || t("cartFailed") || "Failed to add to cart.",
       });
     }
-  };
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: t("error") || "Error",
+      text:
+        error.response?.data?.message ||
+        t("cartFailed") ||
+        "Failed to add to cart.",
+    });
+  }
+};
+
 
   const handleBuy = async (e) => {
     e.preventDefault();
 
-    if (!selectedSize) {
-      Swal.fire({
+    const hasSizeOption = product.sizes?.length > 0;
+    const hasColorOption = product.colors?.length > 0;
+
+    // ✅ Only validate if options exist
+    if (hasSizeOption && !selectedSize) {
+      return Swal.fire({
         icon: "warning",
-        title: t("selectSize"),
+        title: t("selectSizeTitle") || "Size Required",
+        text: t("selectSizeText") || "Please select a size before buying.",
       });
-      return;
     }
-    if (!selectedColor) {
-      Swal.fire({
+
+    if (hasColorOption && !selectedColor) {
+      return Swal.fire({
         icon: "warning",
-        title: t("selectColor"),
+        title: t("selectColorTitle") || "Color Required",
+        text: t("selectColorText") || "Please select a color before buying.",
       });
-      return;
     }
 
     try {
       const res = await axiosSecure.post(`/cart/${id}`, {
         qty: Number(qty),
-        size: selectedSize,
-        color: selectedColor,
+        ...(selectedSize && { size: selectedSize }),
+        ...(selectedColor && { color: selectedColor }),
       });
 
       if (res.data.success) {
-        // Swal.fire({
-        //   icon: "success",
-        //   title: t("addedToCart"),
-        //   text: res.data.message || t("cartSuccess"),
-        //   timer: 1500,
-        //   showConfirmButton: false,
-        // });
+        // ✅ Reset quantity & go to checkout
         setQty(1);
         navigate("/checkout");
       } else {
         Swal.fire({
           icon: "error",
-          title: t("error"),
-          text: res.data.message || t("cartFailed"),
+          title: t("error") || "Error",
+          text: res.data.message || t("cartFailed") || "Failed to add to cart.",
         });
       }
     } catch (error) {
       Swal.fire({
         icon: "error",
-        title: t("error"),
-        text: error.response?.data?.message || t("cartFailed"),
+        title: t("error") || "Error",
+        text:
+          error.response?.data?.message ||
+          t("cartFailed") ||
+          "Failed to add to cart.",
       });
     }
   };
+
   // ✅ Add to wishlist
   const handleAddToWishlist = async () => {
     // 🧠 Check if this product offers size or color options
@@ -265,111 +273,110 @@ useEffect(() => {
     }
   };
   const referCode = "45425486";
-  
 
-// Copy refer code
-const handleCopy = () => {
-  navigator.clipboard.writeText(referCode)
-    .then(() => {
-      console.log("Copied code!");
-      Swal.fire({
-        icon: "success",
-        title: "Copied!",
-        text: "Product code copied to clipboard",
-        timer: 1500,
-        showConfirmButton: false,
+  // Copy refer code
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(referCode)
+      .then(() => {
+        console.log("Copied code!");
+        Swal.fire({
+          icon: "success",
+          title: "Copied!",
+          text: "Product code copied to clipboard",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to copy the code",
+        });
       });
-    })
-    .catch((err) => {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to copy the code",
+  };
+
+  // Copy product name
+  const handleCopyProductName = () => {
+    navigator.clipboard
+      .writeText(product.title)
+      .then(() => {
+        console.log("Copied Name!");
+        Swal.fire({
+          icon: "success",
+          title: "Copied!",
+          text: "Product name copied to clipboard",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to copy the name",
+        });
       });
+  };
+
+  // Copy product details
+  const handleCopyProductDetails = () => {
+    navigator.clipboard
+      .writeText(product.description)
+      .then(() => {
+        console.log("Copied Details!");
+        Swal.fire({
+          icon: "success",
+          title: "Copied!",
+          text: "Product details copied to clipboard",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to copy the details",
+        });
+      });
+  };
+
+  const handleDownloadGallery = () => {
+    if (!product?.image_gal?.length) {
+      Swal.fire({
+        icon: "info",
+        title: t("noGalleryImages") || "No gallery images available",
+      });
+      return;
+    }
+
+    product.image_gal.forEach((imgUrl, index) => {
+      const link = document.createElement("a");
+      link.href = imgUrl;
+
+      // filename
+      link.download = `${product.title.replace(/\s/g, "_")}_image_${
+        index + 1
+      }.jpg`;
+
+      // append, click, remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
-};
 
-// Copy product name
-const handleCopyProductName = () => {
-  navigator.clipboard.writeText(product.title)
-    .then(() => {
-      console.log("Copied Name!");
-      Swal.fire({
-        icon: "success",
-        title: "Copied!",
-        text: "Product name copied to clipboard",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to copy the name",
-      });
-    });
-};
-
-// Copy product details
-const handleCopyProductDetails = () => {
-  navigator.clipboard.writeText(product.description)
-    .then(() => {
-      console.log("Copied Details!");
-      Swal.fire({
-        icon: "success",
-        title: "Copied!",
-        text: "Product details copied to clipboard",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to copy the details",
-      });
-    });
-};
-
-
-
-const handleDownloadGallery = () => {
-  if (!product?.image_gal?.length) {
     Swal.fire({
-      icon: "info",
-      title: t("noGalleryImages") || "No gallery images available",
+      icon: "success",
+      title: t("downloadStarted") || "Download started!",
+      timer: 1500,
+      showConfirmButton: false,
     });
-    return;
-  }
-
-  product.image_gal.forEach((imgUrl, index) => {
-    const link = document.createElement("a");
-    link.href = imgUrl;
-
-    // filename
-    link.download = `${product.title.replace(/\s/g, "_")}_image_${index + 1}.jpg`;
-
-    // append, click, remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-
-  Swal.fire({
-    icon: "success",
-    title: t("downloadStarted") || "Download started!",
-    timer: 1500,
-    showConfirmButton: false,
-  });
-};
-
-
-
+  };
 
   return (
     <div className="min-h-screen rounded-t-[50px] flex flex-col bg-[#ff9100]">
@@ -407,19 +414,20 @@ const handleDownloadGallery = () => {
               {cartCount ?? 0}
             </span>
           </Link>
-          <div  onClick={handleDownloadGallery} className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white">
+          <div
+            onClick={handleDownloadGallery}
+            className="bg-[#ff9100] rounded-full p-1 shadow-lg text-white"
+          >
             <ArrowBigDownDash />
           </div>
         </div>
       </div>
-   
 
       <div>
         {/* Main Image */}
         <div className="bg-white rounded-t-[50px] p-4">
           <img
-            src={
-              selectedImage}
+            src={selectedImage}
             alt="Product"
             className="w-full rounded-xl transition-all duration-300"
           />
@@ -456,7 +464,7 @@ const handleDownloadGallery = () => {
               <h2 className="text-lg font-bold">{product.title}</h2>
               <Copy
                 onClick={handleCopyProductName}
-                className="size-10 ml-2 cursor-pointer text-black transition"
+                className="size-6 ml-2 cursor-pointer text-black transition"
               />
             </div>
             <div className="ml-25 rounded-full h-8 bg-red-100 p-2">
@@ -466,16 +474,26 @@ const handleDownloadGallery = () => {
             </div>
           </div>
 
-          <p className="text-green-500 font-medium">Stock: instock</p>
+          <p
+            className={`font-medium ${
+              product.status === 1 ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {t("Stock")}:{" "}
+            {product.status === 1 ? t("In Stock") : t("Stock Out")}
+          </p>
+
           <div className="mt-2 space-y-1">
             <div className="flex bg-white rounded-2xl p-2 justify-center">
               <p className="font-semibold text-center ">
-                Admin Price: <span className="text-black">৳999</span>
+                Admin Price:{" "}
+                <span className="text-black">৳{product.price}</span>
               </p>
             </div>
             <div className="flex bg-white rounded-2xl p-2 justify-center">
               <p className="font-semibold text-center">
-                Reseller Price: <span className="text-green-600">৳1400</span>
+                Reseller Price:{" "}
+                <span className="text-green-600">৳{product.max_price}</span>
               </p>
             </div>
           </div>
@@ -491,7 +509,7 @@ const handleDownloadGallery = () => {
                     onClick={() => setSelectedSize(size)}
                     className={`px-4 py-2 rounded-lg shadow ${
                       selectedSize === size
-                        ? "bg-yellow-400 text-white border-yellow-500"
+                        ? "bg-white text-gray-700 border-1 border-yellow-500"
                         : "bg-white text-gray-700"
                     }`}
                   >
@@ -513,7 +531,7 @@ const handleDownloadGallery = () => {
                     onClick={() => setSelectedColor(color)}
                     className={`px-4 py-2 rounded-lg shadow ${
                       selectedColor === color
-                        ? "bg-yellow-400 text-white border-yellow-500"
+                        ? "bg-white text-gray-700 border-1 border-yellow-500"
                         : "bg-white text-gray-700"
                     }`}
                   >

@@ -205,6 +205,11 @@ i18n
           Addcolor: "Add Color",
           Categories: "Categories",
           AddCategory: "Add Category",
+          Pending: "Pending",
+          Processing: "Processing",
+          Delivered: "Delivered:",
+          Cancelled: "Cancelled",
+          OrderStatus: "Order Status",
           AdsView:"Ads View",
           MyNetwork:"My Network",
           VideoCourse:"Video Course",
@@ -213,13 +218,17 @@ i18n
           AllProducts:"All Products",
           Orders:"Orders",
           ManageUsers:"Manage Users",
-          Dashboard:"Dashboard"
+          Dashboard:"Dashboard",
+          ViewAllOrder:"Order List",
+          successOrder: "Wellcome!"
 
           // extra as per your given format
         },
       },
       bn: {
         translation: {
+          successOrder:"অভিনন্দন!",
+          ViewAllOrder:"অর্ডার লিস্ট",
           Dashboard:"ড্যাশবোর্ড",
            ManageUsers:"ম্যানেজ ইউজার",
           Orders:"অর্ডার",
@@ -330,9 +339,9 @@ i18n
           products: "পণ্য",
           price: "মূল্য",
           quantity: "পরিমাণ",
-          total: "মোট",
+          total: "টোটাল",
           subtotal: "সাবটোটাল",
-          cartTotal: "কার্ট মোট",
+          cartTotal: "কার্ট টোটাল",
           proceedCheckout: "চেকআউটে যান",
           continueShopping: "কেনাকাটা চালিয়ে যান",
           noProduct: "কোন পণ্য পাওয়া যায়নি!",
@@ -385,7 +394,7 @@ i18n
           wishlistLoadFailed: "ইচ্ছে তালিকা লোড করা যায়নি।",
           checkout: "চেকআউট",
           customerDetails: "গ্রাহকের তথ্য",
-          customerName: "গ্রাহকের নাম",
+          customerName: "কস্টমার নাম",
           phone: "ফোন",
           district: "জেলা নির্বাচন করুন",
           subdistrict: "উপজেলা নির্বাচন করুন",
@@ -393,7 +402,7 @@ i18n
           instructions: "অতিরিক্ত নির্দেশনা",
           orderSummary: "অর্ডারের সারসংক্ষেপ",
           resellerSellPrice: "রিসেলার বিক্রয় মূল্য",
-          resellerProfit: "রিসেলার লাভ",
+          resellerProfit: "রিসেলার প্রফিট",
           adminPrice: "অ্যাডমিন মূল্য",
           maxSellPrice: "সর্বোচ্চ বিক্রয় মূল্য",
           deliveryCharge: "ডেলিভারি চার্জ",
@@ -401,16 +410,15 @@ i18n
           cashOnDelivery: "ক্যাশ অন ডেলিভারি",
           placeOrder: "অর্ডার করুন",
           success: "সফল!",
-          oops: "উফ...",
           orderSuccess: "অর্ডার সফলভাবে সম্পন্ন হয়েছে!",
           orderFailed: "অর্ডার সম্পন্ন করতে ব্যর্থ",
           somethingWrong: "কিছু ভুল হয়েছে!",
           priceExceed: "রিসেলার মূল্য সর্বোচ্চ মূল্যের বেশি হতে পারবে না",
           Dhaka: "ঢাকা",
 
-          customerNamePlaceholder: "গ্রাহকের নাম লিখুন",
+          customerNamePlaceholder: "আপনার কস্টমার নাম লিখুন",
 
-          phonePlaceholder: "ফোন নম্বর লিখুন",
+          phonePlaceholder: "আপনার কস্টমার নম্বর লিখুন",
 
           districtPlaceholder: "একটি জেলা নির্বাচন করুন",
 

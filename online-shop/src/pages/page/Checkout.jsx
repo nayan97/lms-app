@@ -35,6 +35,8 @@ const Checkout = () => {
     const fetchCheckoutData = async () => {
       try {
         const { data } = await axiosSecure.get("/checkout-data");
+        // console.log(data);
+
         if (data.status) {
           setCarts(data.carts || []);
         }
@@ -46,16 +48,16 @@ const Checkout = () => {
     };
     fetchCheckoutData();
   }, [axiosSecure]);
-
+  console.log(carts);
   // ✅ Prices
-  const adminPrice = carts[0]?.product?.source_price || 0;
+  const adminPrice = carts[0]?.product?.price || 0;
   const maxPrice = carts[0]?.product?.max_price || 0;
+  // const size = carts[0]?.product?.max_price || 0;
 
   const resellerProfit = formData.reseller_sell_price
     ? parseFloat(formData.reseller_sell_price) - adminPrice
     : 0;
 
-  
   const total =
     (parseFloat(formData.reseller_sell_price) || 0) * formData.quantity;
 
@@ -127,10 +129,10 @@ const Checkout = () => {
       } else {
         Swal.fire({
           icon: "success",
-          title: t("success"),
-          text: res.data.message || t("orderSuccess"),
+          title: t("successOrder"),
+          text:  t("orderSuccess"),
           showConfirmButton: true,
-          confirmButtonText: t("View All Order"), // ✅ custom button text
+          confirmButtonText: t("ViewAllOrder"), // ✅ custom button text
           confirmButtonColor: "#16a34a",
         }).then((result) => {
           if (result.isConfirmed) {
@@ -190,33 +192,31 @@ const Checkout = () => {
                 <div className="flex gap-4">
                   <img
                     src={cart.image_url}
-                    alt={cart.product?.title}
+                    alt={cart.product_title}
                     className="w-20 h-20 rounded-lg object-cover"
                   />
                   <div className="flex-1">
                     <h5 className="font-semibold text-lg">
-                      {cart.product?.title}
+                      {cart.product_title}
                     </h5>
-
-                    <div className="flex items-center gap-2 mt-2">
-                      <button
-                        type="button"
-                        onClick={() => handleQtyChange("dec")}
-                        className="btn btn-sm btn-outline"
-                      >
-                        −
-                      </button>
+                    <button
+                      type="button"
+                      onClick={() => handleQtyChange("dec")}
+                      className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                    >
+                      −
+                    </button>
                       <span className="px-3 text-base font-medium">
                         {formData.quantity}
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => handleQtyChange("inc")}
-                        className="btn btn-sm btn-outline"
-                      >
-                        +
-                      </button>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleQtyChange("inc")}
+                      className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
 
@@ -263,7 +263,7 @@ const Checkout = () => {
                     </label>
                     <input
                       type="number"
-                      value={adminPrice}
+                      value={cart?.product?.price}
                       readOnly
                       className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                     />
@@ -275,11 +275,38 @@ const Checkout = () => {
                     </label>
                     <input
                       type="number"
-                      value={maxPrice}
+                      value={cart?.product?.max_price}
                       readOnly
                       className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                     />
                   </div>
+                  {cart.size && (
+                    <div>
+                      <label className="block text-sm font-medium mb-1 ml-2">
+                        {t("size")}
+                      </label>
+                      <input
+                        type="text"
+                        value={cart.size}
+                        readOnly
+                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                      />
+                    </div>
+                  )}
+
+                  {cart.color && (
+                    <div>
+                      <label className="block text-sm font-medium mb-1 ml-2">
+                        {t("color")}
+                      </label>
+                      <input
+                        type="text"
+                        value={cart.color}
+                        readOnly
+                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -388,18 +415,17 @@ const Checkout = () => {
 
           {/* Right Column */}
           <div className="bg-white shadow-lg rounded-xl p-4  pb-4 space-y-4">
-            <h4 className="text-xl font-semibold">{t("orderSummary")}</h4>
+            {/* <h4 className="text-xl font-semibold">{t("orderSummary")}</h4> */}
 
             <div className="flex justify-between">
               <span>{t("resellerProfit")}</span>
               <span>{resellerProfit}৳</span>
             </div>
-            
+
             <div className="flex justify-between font-bold text-lg">
               <span>{t("total")}</span>
               <span>{total}৳</span>
             </div>
-
 
             <button
               type="submit"

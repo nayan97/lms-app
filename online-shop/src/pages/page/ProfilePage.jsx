@@ -31,46 +31,67 @@ const ProfilePage = () => {
   }, []);
 
   const handleDeleteAccount = async () => {
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "This will permanently delete your account!",
-      icon: "warning",
+    const { value: password } = await Swal.fire({
+      title: "Confirm Deletion",
+      input: "password",
+      inputLabel: "Enter your current password to confirm",
+      inputPlaceholder: "Enter your password",
+      inputAttributes: {
+        autocapitalize: "off",
+        autocorrect: "off",
+      },
       showCancelButton: true,
+      confirmButtonText: "Delete Account",
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
+      preConfirm: (password) => {
+        if (!password) {
+          Swal.showValidationMessage("Password is required");
+        }
+        return password;
+      },
     });
 
-    if (!confirm.isConfirmed) return;
+    if (!password) return;
 
     setDeleting(true);
     try {
-      const response = await axiosSecure.delete("/profile");
+      const response = await axiosSecure.post(
+        "/profile/delete",
+        { password },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       Swal.fire({
         icon: "success",
         title: "Account Deleted",
-        text: response.data?.message || "Your profile has been deleted successfully.",
+        text:
+          response.data?.message ||
+          "Your account has been deleted successfully.",
         timer: 2000,
         showConfirmButton: false,
       });
 
-      // Optionally redirect after deletion
+      // Clear localStorage and redirect
       setTimeout(() => {
-        window.location.href = "/login"; // or homepage
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
       }, 2000);
     } catch (err) {
-      console.error("Delete failed:", err);
       Swal.fire({
         icon: "error",
         title: "Delete Failed",
-        text: err.response?.data?.message || "Something went wrong while deleting your account.",
+        text:
+          err.response?.data?.message ||
+          "Incorrect password or something went wrong while deleting your account.",
       });
     } finally {
       setDeleting(false);
     }
   };
-
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading profile</p>;
@@ -103,57 +124,65 @@ const ProfilePage = () => {
           </h2>
         </div>
         <div className="rounded-t-[50px]">
+          {/* Profile Details Card */}
+          <div className="max-w-lg mx-auto bg-gray-100 shadow-md rounded-2xl p-6 mt-6">
+            <div className="space-y-3">
+              <div className="flex justify-between bg-white p-2 rounded-2xl">
+                <span className="font-medium text-gray-600">{t("Email")}:</span>
+                <span className="text-gray-800">{profile?.email || "N/A"}</span>
+              </div>
 
-            {/* Profile Details Card */}
-        <div className="max-w-lg mx-auto bg-gray-100 shadow-md rounded-2xl p-6 mt-6">
-          <div className="space-y-3">
-            <div className="flex justify-between bg-white p-2 rounded-2xl">
-              <span className="font-medium text-gray-600">{t("Email")}:</span>
-              <span className="text-gray-800">{profile?.email || "N/A"}</span>
-            </div>
+              <div className="flex justify-between bg-white p-2 rounded-2xl">
+                <span className="font-medium text-gray-600">
+                  {t("Mobile")}:
+                </span>
+                <span className="text-gray-800">{profile?.phone || "N/A"}</span>
+              </div>
 
-            <div className="flex justify-between bg-white p-2 rounded-2xl">
-              <span className="font-medium text-gray-600">{t("Mobile")}:</span>
-              <span className="text-gray-800">{profile?.phone || "N/A"}</span>
-            </div>
+              <div className="flex justify-between bg-white p-2 rounded-2xl">
+                <span className="font-medium text-gray-600">
+                  {t("Gender")}:
+                </span>
+                <span className="text-gray-800">
+                  {profile?.gender || "N/A"}
+                </span>
+              </div>
 
-            <div className="flex justify-between bg-white p-2 rounded-2xl">
-              <span className="font-medium text-gray-600">{t("Gender")}:</span>
-              <span className="text-gray-800">{profile?.gender || "N/A"}</span>
-            </div>
+              <div className="flex justify-between bg-white p-2 rounded-2xl">
+                <span className="font-medium text-gray-600">
+                  {t("Country")}:
+                </span>
+                <span className="text-gray-800">
+                  {profile?.country || "N/A"}
+                </span>
+              </div>
 
-            <div className="flex justify-between bg-white p-2 rounded-2xl">
-              <span className="font-medium text-gray-600">{t("Country")}:</span>
-              <span className="text-gray-800">{profile?.country || "N/A"}</span>
-            </div>
-
-            <div className="flex justify-between bg-white p-2 rounded-2xl">
-              <span className="font-medium text-gray-600">{t("Address")}:</span>
-              <span className="text-gray-800 text-right">
-                {profile?.address || "N/A"}
-              </span>
+              <div className="flex justify-between bg-white p-2 rounded-2xl">
+                <span className="font-medium text-gray-600">
+                  {t("Address")}:
+                </span>
+                <span className="text-gray-800 text-right">
+                  {profile?.address || "N/A"}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Delete Account Button */}
-<div className="w-full max-w-lg mb-10 mx-auto text-center mt-8">
-          <button
-            onClick={handleDeleteAccount}
-            disabled={deleting}
-            className={`${
-              deleting
-                ? "bg-gray-300 cursor-not-allowed"
-                : "text-red-500 hover:text-red-600"
-            } font-bold text-lg transition-colors duration-200`}
-          >
-            {deleting ? "Deleting..." : "Delete Account"}
-          </button>
+          {/* Delete Account Button */}
+          <div className="w-full max-w-lg mb-10 mx-auto text-center mt-8">
+            <button
+              onClick={handleDeleteAccount}
+              disabled={deleting}
+              className={`${
+                deleting
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "text-red-500 hover:text-red-600"
+              } font-bold text-lg transition-colors duration-200`}
+            >
+              {deleting ? "Deleting..." : "Delete Account"}
+            </button>
+          </div>
         </div>
-
-
-        </div>
-        
       </main>
 
       {/* Footer */}
