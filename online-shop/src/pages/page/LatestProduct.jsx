@@ -83,7 +83,7 @@ const LatestProduct = () => {
   // ✅ Skeleton loader while fetching
   if (loading) {
     return (
-      <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-[50px] px-6 py-6">
+      <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-6">
         <section className="animate-pulse space-y-4">
           <div className="h-8 bg-gray-300 rounded w-1/3 mx-auto"></div>
 
