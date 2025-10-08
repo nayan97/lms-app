@@ -46,32 +46,54 @@ const ShoppingCart = () => {
     return sum + price * qty;
   }, 0);
 
-  // ✅ Update quantity
-  const handleQtyChange = async (id, newQty) => {
-    if (newQty < 1) return;
 
-    try {
-      await axios.put(`/cart/${id}`, { product_qty: newQty });
-      setCartItems((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, product_qty: newQty } : item
-        )
-      );
-      Swal.fire({
-        icon: "success",
-        title: t("qtyUpdated"),
-        text: `${t("productQtyUpdated")}`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: t("error"),
-        text: t("updateFailed"),
-      });
-    }
-  };
+  // ✅ Update quantity (supports + / − buttons)
+
+ const handleQtyChange = async (id, actionOrQty) => {
+  // 1️⃣ Find the current cart item
+  const currentItem = cartItems.find((item) => item.id === id);
+  if (!currentItem) return;
+
+  const currentQty = Number(currentItem.product_qty) || 1;
+  const price = Number(currentItem.price) || 0;
+
+  // 2️⃣ Determine new quantity
+  let newQty;
+  if (actionOrQty === "inc") newQty = currentQty + 1;
+  else if (actionOrQty === "dec") newQty = Math.max(1, currentQty - 1);
+  else newQty = Number(actionOrQty) || 1;
+
+  // 3️⃣ Calculate total price for the item
+  const totalPrice = price * newQty;
+
+  // 4️⃣ Update UI instantly (optimistic update)
+  setCartItems((prevItems) =>
+    prevItems.map((item) =>
+      item.id === id ? { ...item, product_qty: newQty } : item
+    )
+  );
+
+  // 5️⃣ Send update request to backend
+  try {
+    await axios.put(`/cart/${id}`, {
+      product_qty: newQty,
+      price: price,
+      total_price: totalPrice,
+    });
+
+    Swal.fire({
+      icon: "success",
+      title: t("qtyUpdated"),
+      text: `${t("productQtyUpdated")}`,
+      timer: 1000,
+      showConfirmButton: false,
+    });
+  } catch (error) {
+    console.error("Error updating quantity:", error);
+  }
+};
+
+
 
   // ✅ Remove item
   const handleRemove = async (id) => {
@@ -218,12 +240,13 @@ const ShoppingCart = () => {
                       >
                         <div className="card-body p-4">
                           <div className="flex gap-4 items-center">
+                            
                             <img
                               src={item.image_url}
                               alt={item.product_title}
                               className="w-20 h-20 object-cover rounded-lg"
                             />
-                            <div>
+                            <div className="flex flex-col">
                               <h3 className="font-semibold text-lg">
                                 {item.product_title}
                               </h3>
@@ -233,19 +256,30 @@ const ShoppingCart = () => {
                               <p className="text-gray-600">
                                 {t("total")}: ${total}
                               </p>
-                            </div>
-                          </div>
+                              <div className="flex justify-between gap-2 items-center mt-4">
+                            <div className="w-1/2 flex">
+                              <button
+                              type="button"
+                              onClick={() => handleQtyChange(item.id, "dec")}
+                              className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                            >
+                              −
+                            </button>
 
-                          <div className="flex justify-between items-center mt-4">
-                            <input
-                              type="number"
-                              value={qty}
-                              min="1"
-                              className="input input-bordered w-24"
-                              onChange={(e) =>
-                                handleQtyChange(item.id, Number(e.target.value))
-                              }
-                            />
+                            <span className="px-3 text-base font-medium">
+                              {item?.product_qty}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => handleQtyChange(item.id, "inc")}
+                              className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                            >
+                              +
+                            </button>
+
+
+                            </div>
                             <button
                               onClick={() => handleRemove(item.id)}
                               className="btn btn-error btn-sm text-white"
@@ -253,6 +287,11 @@ const ShoppingCart = () => {
                               <FaTrash />
                             </button>
                           </div>
+                            </div>
+                             
+                          </div>
+
+                         
                         </div>
                       </div>
                     );
@@ -286,7 +325,7 @@ const ShoppingCart = () => {
                     </ul>
                     <Link
                       to="/checkout"
-                      className="btn btn-primary w-full rounded-xl"
+                      className="btn bg-[#ff9100] text-white w-full rounded-xl"
                     >
                       {t("proceedCheckout")}
                     </Link>

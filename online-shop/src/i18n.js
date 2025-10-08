@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          voucherbalance:"Voucher Balance",
           Country:"Country",
           Email:"Email",
           MobileNumber:"Mobile Number",
@@ -227,6 +228,7 @@ i18n
       },
       bn: {
         translation: {
+          voucherbalance:"ভাওচার ব্যালেন্স",
           successOrder:"অভিনন্দন!",
           ViewAllOrder:"অর্ডার লিস্ট",
           Dashboard:"ড্যাশবোর্ড",

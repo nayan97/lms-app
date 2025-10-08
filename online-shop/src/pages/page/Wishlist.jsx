@@ -192,12 +192,14 @@ const Wishlist = () => {
                   <td className="font-medium">${item.price}</td>
                   <td>
                     <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handleEdit(item.id)}
-                        className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                      >
+
+                      <Link className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700" to={`/shop/${item.id}`}>
+                        
+                      
                         <FaEdit />
-                      </button>
+                      </Link>
+                         
+                      
                       <button
                         onClick={() => handleDelete(item.id)}
                         className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
@@ -219,18 +221,25 @@ const Wishlist = () => {
       key={item.id}
       className="card bg-white shadow-lg rounded-xl p-4 flex flex-col gap-2"
     >
+      <Link to={`/shop/${item.id}`}>
       <img
         src={item.image_url}
         alt={item.product_title}
         className="w-full rounded-xl h-32 object-cover "
       />
+      </Link>
+      
      <div className="flex flex-col gap-2 w-36">
   {/* Product title */}
-  <h5 className="font-semibold text-sm truncate">{item.product_title}</h5>
+   <Link to={`/shop/${item.id}`}>
+   <h5 className="font-semibold text-sm truncate">{item.product_title}</h5>
+   </Link>
+  
 
   {/* Price and heart icon in the same row */}
   <div className="flex justify-between items-center">
   {/* Price column */}
+  <Link to={`/shop/${item.id}`}>
   <div className="flex flex-col">
     {item.product.cross_price && (
       <p className="font-medium text-sm line-through text-red-600">
@@ -241,6 +250,9 @@ const Wishlist = () => {
     
   </div>
 
+  
+  </Link>
+  
   {/* Heart icon column */}
   <FaHeart
     onClick={() => handleDelete(item.id)}

@@ -34,6 +34,7 @@ import PopularProduct from "../pages/page/PopularProduct";
 import MyNetwork from "../pages/page/MyNetwork";
 
 import ForgetPasswordPage from "../pages/Auth/ForgetPassaword";
+import VoucherBalance from "../pages/page/VoucherBalance";
 
 
 export const router = createBrowserRouter([
@@ -119,6 +120,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <WalletPage></WalletPage>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/wallet/voucherbalance",
+        element: (
+          <PrivateRoute>
+           <VoucherBalance></VoucherBalance>
           </PrivateRoute>
         ),
       },
