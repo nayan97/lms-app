@@ -156,8 +156,8 @@ const LatestProducts = () => {
         )}
       </div>
        <div className="mb-25 mx-4 mt-4 bg-gray-100 ">
-        <button className="bg-[#ff9100] rounded-2xl text-white btn w-full">{t("SeeAllProducts")}
-        </button>
+        <Link to="/latestproduct" className="bg-[#ff9100] rounded-2xl text-white btn w-full">{t("SeeAllProducts")}
+        </Link>
       </div>
     </section>
   );

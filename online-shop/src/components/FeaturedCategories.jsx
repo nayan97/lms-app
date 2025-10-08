@@ -24,7 +24,9 @@ const FeaturedCategories = () => {
     <div className="mt-6 px-4">
       <div className="flex justify-between items-center mb-2">
         <h2 className="font-semibold">{t("Category")}</h2>
-        <Link to={"/categories"} className="text-sm text-gray-500">{t("SeeAll")}</Link>
+        <Link to={"/categories"} className="text-sm text-gray-500">
+          {t("SeeAll")}
+        </Link>
       </div>
 
       {/* Scrollable container */}

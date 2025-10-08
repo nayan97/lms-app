@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 const Header = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
+   
 
   const { t } = useTranslation();
   const { user, logout } = useAuth();
@@ -189,9 +190,12 @@ const Header = ({ showitem }) => {
         </button>
 
         {/* Logo */}
-        <Link className="ml-2 text-xl text-white font-bold" to="/">
+        {page=="/" && <Link className="ml-2 text-xl text-white font-bold" to="/">
           {t("LifeChange")}
-        </Link>
+        </Link>}
+        {page=="/wallet" && <Link className="ml-2 text-xl text-white font-bold" to="/">
+          {t("Wallet")}
+        </Link>}
       </div>
 
       {/* Navbar Center (Large screens) */}

@@ -5,6 +5,7 @@ import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 const Checkout = () => {
   const { t, i18n } = useTranslation();
@@ -190,7 +191,23 @@ const Checkout = () => {
   }
 
   return (
-    <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-t-[60px] px-6 pt-2 pb-6">
+    <div>
+       <div className="bg-[#ff9100] h-20">
+              <div className="flex items-center gap-4">
+                <Link
+                to={"/shop"}
+                className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+              >
+                ← 
+              </Link>
+              <h1 className="text-white  font-bold"> {t("Checkout")}
+      </h1>
+      
+              </div>
+              
+             
+            </div>
+             <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-t-[50px] px-6 pt-2 pb-6">
       <div className="container mx-auto">
         <h4 className="text-2xl font-semibold mb-4 text-center pt-2">
           {t("checkout")}
@@ -454,6 +471,9 @@ const Checkout = () => {
         </form>
       </div>
     </main>
+
+    </div>
+   
   );
 };
 

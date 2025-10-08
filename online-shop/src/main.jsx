@@ -8,11 +8,16 @@ import { ToastContainer } from 'react-toastify'
 import "./i18n"; // 👈 import i18n setup
 
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    
       <AuthProvider>
         <RouterProvider router={router} />
          <ToastContainer position="top-center" autoClose={3000}  />
       </AuthProvider>
+
+
+      
   </StrictMode>,
 )
