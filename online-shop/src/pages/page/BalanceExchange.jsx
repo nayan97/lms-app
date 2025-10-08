@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header_wallet from "../Shared/Header_wallet";
 import { t } from "i18next";
 
-const VoucherBalanceAdd = () => {
+const BalanceExchange = () => {
   const [amount, setAmount] = useState("");
 
   const handleSubmit = (e) => {
@@ -24,11 +24,12 @@ const VoucherBalanceAdd = () => {
 
       {/* Page Title */}
       <div className="flex mb-5 items-center flex-col">
-              <h2 className="text-gray-300 text-xs font-bold ">
-               {t("voucherbalance")}
-            </h2>
-            <h1 className="text-white font-bold">150</h1>
-            </div>
+        <h2 className="text-gray-300 text-xs font-bold ">
+        {t("Incomebalance")}
+      </h2>
+      <h1 className="text-white font-bold">150</h1>
+      </div>
+      
 
       {/* Form Card */}
       <div className="bg-gray-100 h-svh w-full md:w-3/5 rounded-t-[50px] p-6 shadow">
@@ -36,7 +37,7 @@ const VoucherBalanceAdd = () => {
           {/* Amount Input */}
           <div>
             <label className="block text-gray-700 font-semibold mb-1">
-              টাকার পরিমাণ
+             {t("Amount")} 
             </label>
             <input
               type="number"
@@ -51,9 +52,9 @@ const VoucherBalanceAdd = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="btn bg-[#ff9100] hover:bg-[#e57e00] text-white w-full rounded-xl font-bold"
+            className="btn bg-[#ff9100] hover:bg-[#e57e00]  w-full rounded-xl font-bold"
           >
-            যোগ করুন
+            {t("Exchange")}
           </button>
         </form>
       </div>
@@ -61,4 +62,4 @@ const VoucherBalanceAdd = () => {
   );
 };
 
-export default VoucherBalanceAdd;
+export default BalanceExchange;
