@@ -14,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::latest()->paginate(10);
+        $categories = Category::latest()->paginate(10)->map(function ($category) {
+                $category->image_url = $category->image 
+                    ? asset('storage/' . $category->image) 
+                    : null;
+                return $category;
+            });;
 
         return response()->json($categories);
     }

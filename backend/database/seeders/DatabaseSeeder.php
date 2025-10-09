@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Database\Seeders\AdSeeder;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ProductsTableSeeder;
 use Database\Seeders\DistrictsTableSeeder;
@@ -18,8 +19,8 @@ class DatabaseSeeder extends Seeder
     {
         // Example user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            // 'name' => 'Test User',
+            // 'email' => 'test@example.com',
         ]);
 
         // Call your custom seeders
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DistrictsTableSeeder::class,
             SubdistrictTableSeeder::class,
             ProductsTableSeeder::class,
+            AdSeeder::class,
         ]);
     }
 }

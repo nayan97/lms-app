@@ -55,8 +55,6 @@ public function store(Request $request, $id)
 
     $request->validate([
         'qty' => 'required|integer|min:1',
-        'size' => 'required|string|max:255',
-        'color' => 'required|string|max:255',
     ]);
 
     $user = Auth::user();
@@ -88,6 +86,64 @@ public function store(Request $request, $id)
         'cartItem' => $cart
     ]);
 }
+
+
+public function update(Request $request, $id)
+{
+    if (!Auth::check()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    $request->validate([
+        'qty' => 'required|integer|min:1',
+    ]);
+
+    $user = Auth::user();
+
+    // Find the cart item by ID and ensure it belongs to the authenticated user
+    $cart = Cart::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+
+    // Find the associated product
+    $product = Product::findOrFail($cart->product_id);
+
+    // Calculate updated price
+    $unitPrice = (int) ($product->cross_price ?? $product->price);
+    $qty = (int) $request->qty;
+
+    // Update fields
+    $cart->product_qty = $qty;
+    $cart->price = $unitPrice * $qty;
+
+    $cart->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Cart item updated successfully',
+        'cartItem' => $cart
+    ]);
+}
+
+public function destroy($id)
+    {
+        try {
+            $cart = Cart::findOrFail($id);
+            $cart->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item removed from cart.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item not found or could not be removed.',
+                'error' => $e->getMessage()
+            ], 404);
+        }
+    }
 
 
 

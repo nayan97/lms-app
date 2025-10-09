@@ -24,7 +24,32 @@ class HomeController extends Controller
                 return $product;
             });
 
+            $allProducts = Product::where('status', '1')
+            ->latest()
+            ->get()
+            ->map(function ($product) {
+                $product->image_url = $product->image 
+                    ? asset('storage/' . $product->image) 
+                    : asset('images/no-image.png'); // optional default image
+                return $product;
+            });
+
         // Popular Products (featured first, then latest)
+                $allPopularProducts = Product::where('status', '1')
+            ->where(function ($query) {
+                $query->where('is_featured', '1')
+                      ->orWhereNotNull('id');
+            })
+            ->orderBy('is_featured', 'desc')
+            ->latest()
+            ->get()
+            ->map(function ($product) {
+                $product->image_url = $product->image 
+                    ? asset('storage/' . $product->image) 
+                    : null;
+                return $product;
+            });
+
         $popularProducts = Product::where('status', '1')
             ->where(function ($query) {
                 $query->where('is_featured', '1')
@@ -46,8 +71,10 @@ class HomeController extends Controller
 
         return response()->json([
             'success' => true,
+            'allProducts' => $allProducts,
             'latestpros' => $latestpros,
             'popularProducts' => $popularProducts,
+            'allPopularProducts' => $allPopularProducts,
             'categories' => $cats,
         ]);
     }
