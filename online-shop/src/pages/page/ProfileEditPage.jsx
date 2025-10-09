@@ -243,7 +243,7 @@ const ProfileEditPage = () => {
             <button
               type="submit"
               disabled={updating}
-              className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:bg-yellow-500 transition"
+              className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:bg-[#ff9100] transition"
             >
               {updating ? "Updating..." : "Update Profile"}
             </button>

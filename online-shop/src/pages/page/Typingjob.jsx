@@ -58,7 +58,7 @@ const Typingjob = () => {
               but I'll use a visual simulation of the progress bar look. */}
                 <div className="w-full bg-gray-200 rounded-full h-1 mb-8">
                   <div
-                    className="bg-yellow-500 h-1 rounded-full transition-all duration-500"
+                    className="bg-[#ff9100] h-1 rounded-full transition-all duration-500"
                     style={{ width: `${quizJobData.progress}%` }}
                     role="progressbar"
                     aria-valuenow={quizJobData.progress}
@@ -90,7 +90,7 @@ const Typingjob = () => {
               {/* Action Button (Fixed to the bottom of the card content for mobile feel) */}
               {/* Use the card-actions class structure from DaisyUI concept */}
               <div className="p-6 md:p-8 pt-0 w-full sticky bottom-0 bg-white">
-                <button className="w-full btn bg-yellow-500 text-white border-0 hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 rounded-lg shadow-lg py-3 text-lg font-bold transition duration-150 ease-in-out">
+                <button className="w-full btn bg-[#ff9100] text-white border-0 hover:bg-yellow-600 focus:outline-none focus:ring-4 focus:ring-yellow-300 rounded-lg shadow-lg py-3 text-lg font-bold transition duration-150 ease-in-out">
                   {quizJobData.buttonText}
                 </button>
               </div>

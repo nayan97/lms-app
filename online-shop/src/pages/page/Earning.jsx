@@ -34,7 +34,7 @@ const WalletFeatureItem = ({ label, Icon }) => (
   >
     <div className="flex items-center">
       {/* Icon with yellow background matching the list style in the image */}
-      <div className="bg-yellow-500/20 text-yellow-500 p-2 rounded-full mr-4">
+      <div className="bg-[#ff9100]/20 text-yellow-500 p-2 rounded-full mr-4">
         <Icon className="h-5 w-5" />
       </div>
       <span className="text-gray-800 text-lg font-medium">{label}</span>
@@ -103,7 +103,7 @@ const formattedDate = `${monthYear.split(" ")[0]} ${dayWithOrdinal} ${date.getFu
   
 
   return (
-    <div className="min-h-screen mb-10 bg-yellow-500 font-sans antialiased flex flex-col max-w-xl mx-auto">
+    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
       
       {/* Fixed Top Header (Yellow Section) */}
       <Header_wallet></Header_wallet>

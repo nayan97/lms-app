@@ -236,7 +236,12 @@ i18n
           TodayEarning:"Today Earning",
           YesterdayEarning:"Yesterday Earning",
           Language:"Language",
-          Account:"Account"
+          Account:"Account",
+          DaysEarning:"7 days income",
+          daysEarning:"30 days income",
+          AllTimeEarning:"All Time Earning",
+          TotalIncomeWithdraw:"Total Income Withdraw"
+
 
 
 
@@ -245,6 +250,10 @@ i18n
       },
       bn: {
         translation: {
+          TotalIncomeWithdraw:"মোট ইনকাম উইথড্র",
+          AllTimeEarning:"এখন পর্যন্ত মোট ইনকাম",
+          daysEarning:"৩০ দিনের ইনকাম",
+          DaysEarning:"৭ দিনের ইনকাম",
           Account:"অ্যাকাউন্ট",
           Language:"ভাষা",
           YesterdayEarning:"গতকালের ইনকাম",
@@ -351,7 +360,7 @@ i18n
           Shop: "শপ",
           Business: "ব্যবসায় ",
           DriveOffer: "ড্রাইভ অফার",
-          ResellingProduct: "পণ্য পুনঃবিক্রয়",
+          ResellingProduct: "প্রোডাক্ট রিসেলিং",
           AdsViewIncome: "বিজ্ঞাপন থেকে আয়",
           MicroJob: "মাইক্রো জব",
           JobPost: "চাকরির পোস্ট",

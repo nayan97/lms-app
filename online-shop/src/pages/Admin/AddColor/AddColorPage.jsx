@@ -148,7 +148,7 @@ const AddColorPage = () => {
         <h2 className="text-xl font-bold mb-4">{t("productscolor")}</h2>
         <button
           onClick={() => setIsCreateOpen(true)}
-          className="px-4 py-2 bg-yellow-500 text-white rounded-lg mb-2"
+          className="px-4 py-2 bg-[#ff9100] text-white rounded-lg mb-2"
         >
           + {t("Addcolor")}
         </button>

@@ -232,7 +232,7 @@ const Header = ({ showitem }) => {
           >
             <div>
               <div className="flex justify-between items-center ">
-                <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
+                <div className="bg-[#ff9100] w-full h-full text-white p-2 flex flex-col justify-start">
                   <div className="flex flex-col items-start gap-4 ">
                     <div className="avatar mr-3">
                       <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">

@@ -27,7 +27,7 @@ const WalletIcon = ({ className = "h-5 w-5", fill = "currentColor" }) => (
 const WalletFeatureItem = ({ label, Icon, link }) => (
   <div className="flex justify-between items-center py-2 w-full px-2 hover:bg-gray-50 transition-colors rounded-lg">
     <div className="flex items-center">
-      <div className="bg-yellow-500/20 text-yellow-500 p-2 rounded-full mr-4">
+      <div className="bg-[#ff9100]/20 text-yellow-500 p-2 rounded-full mr-4">
         <div className="w-8 h-8 relative">
           <Icon />
         </div>
@@ -51,14 +51,14 @@ const WalletPage = () => {
     { label: "SeeVoucherBalance", Icon: WalletIcon, link: "/wallet/voucherbalance" },
     { label: "TodayEarning", Icon: WalletIcon, link: "/wallet/earning" },
     { label: "YesterdayEarning", Icon: WalletIcon, link: "/wallet/earning" },
-    { label: "7 Days Earning", Icon: WalletIcon, link: "/wallet/earning" },
-    { label: "30 Days Earning", Icon: WalletIcon, link: "/wallet/earning" },
-    { label: "All Time Earning", Icon: WalletIcon, link: "/wallet/earning" },
-    { label: "Total Income Withdraw", Icon: WalletIcon, link: "/wallet/earning" },
+    { label: "DaysEarning", Icon: WalletIcon, link: "/wallet/earning" },
+    { label: "daysEarning", Icon: WalletIcon, link: "/wallet/earning" },
+    { label: "AllTimeEarning", Icon: WalletIcon, link: "/wallet/earning" },
+    { label: "TotalIncomeWithdraw", Icon: WalletIcon, link: "/wallet/earning" },
   ];
 
   return (
-    <div className="min-h-screen mb-10 bg-yellow-500 font-sans antialiased flex flex-col max-w-xl mx-auto">
+    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
       <Header />
       <main className="flex-1 w-full relative -mt-4 rounded-t-3xl bg-gray-100 shadow-2xl overflow-hidden">
         <div className="p-6 md:p-8">
@@ -66,10 +66,10 @@ const WalletPage = () => {
           <div className="flex flex-col bg-white rounded-2xl items-center justify-center p-8">
             <div className="w-40 h-40 relative">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none" className="w-full h-full">
-                <rect x="50" y="100" width="400" height="300" rx="60" ry="60" fill="#FACC15" stroke="#333" strokeWidth="20" />
+                <rect x="50" y="100" width="400" height="300" rx="60" ry="60" fill="#ff9100" stroke="#333" strokeWidth="20" />
                 <rect x="330" y="200" width="100" height="40" rx="20" ry="20" fill="#fff" stroke="#333" strokeWidth="10" />
-                <circle cx="380" cy="220" r="15" fill="#FACC15" stroke="#333" strokeWidth="10" />
-                <path d="M50 160 Q 150 50, 250 100 L 250 160 L 50 160 Z" fill="#FACC15" stroke="#333" strokeWidth="20" />
+                <circle cx="380" cy="220" r="15" fill="#ff9100" stroke="#333" strokeWidth="10" />
+                <path d="M50 160 Q 150 50, 250 100 L 250 160 L 50 160 Z" fill="#ff9100" stroke="#333" strokeWidth="20" />
                 <text x="250" y="270" textAnchor="middle" fontSize="55" fontWeight="bold" fill="#333">
                   {currentBalance.replace("৳", "")}
                 </text>

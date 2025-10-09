@@ -187,7 +187,7 @@ const ProductsPage = () => {
                   <td className="px-4 py-2 flex space-x-2">
                     <button
                       onClick={() => setEditProduct(product)}
-                      className="px-3 py-2 bg-yellow-500 text-white rounded flex items-center gap-2"
+                      className="px-3 py-2 bg-[#ff9100] text-white rounded flex items-center gap-2"
                     >
                       <i className="fa fa-pencil-alt"></i>
                     </button>
