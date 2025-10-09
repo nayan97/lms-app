@@ -240,9 +240,13 @@ i18n
           DaysEarning:"7 days income",
           daysEarning:"30 days income",
           AllTimeEarning:"All Time Earning",
-          TotalIncomeWithdraw:"Total Income Withdraw"
+          TotalIncomeWithdraw:"Total Income Withdraw",
           profileUpdate: "Your profile has been updated successfully",
           ProfileUpdated: "Profile Updated!",
+          Loggedout:"Logged out",
+          Youhavesuccessfullyloggedout:"You have successfully logged out.",
+          LogoutfailedPleasetryagain:"Logout failed, Please try again.",
+          
 
 
 
@@ -252,6 +256,9 @@ i18n
       },
       bn: {
         translation: {
+          LogoutfailedPleasetryagain:"আপনি লগড আউট হননি, আবার চেষ্টা করুন।",
+          Youhavesuccessfullyloggedout:"আপনি সফলভাবে লগ আউট হয়েছেন",
+          Loggedout:"লগড আউট",
           TotalIncomeWithdraw:"মোট ইনকাম উইথড্র",
           AllTimeEarning:"এখন পর্যন্ত মোট ইনকাম",
           daysEarning:"৩০ দিনের ইনকাম",

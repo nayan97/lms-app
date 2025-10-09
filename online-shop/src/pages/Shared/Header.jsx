@@ -162,7 +162,7 @@ const Header = ({ showitem }) => {
     </li>
     </span>
     <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
-    <li>
+      <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
@@ -180,7 +180,7 @@ const Header = ({ showitem }) => {
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger icon for mobile */}
-        <button
+        {user && <button
           onClick={() => setOpenMenu(!openMenu)}
           className="btn text-white btn-ghost lg:hidden"
         >
@@ -198,7 +198,7 @@ const Header = ({ showitem }) => {
               d="M4 6h16M4 12h8m-8 6h16"
             />
           </svg>
-        </button>
+        </button>}
 
         {/* Logo */}
         {page=="/" && <Link className="ml-2 text-xl text-white font-bold" to="/">
@@ -265,7 +265,7 @@ const Header = ({ showitem }) => {
               </div>
             </div>
 
-            {Navlinks}
+             {Navlinks}
           </ul>
         </>
       )}
