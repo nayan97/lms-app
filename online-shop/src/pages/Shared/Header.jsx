@@ -27,7 +27,30 @@ const Header = ({ showitem }) => {
 
   const [show, setShowItem] = useState(showitem);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  console.log(profile);
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+
+
+  useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const response = await axiosSecure.get("/profile");
+          // assuming API returns something like: { user: {...}, image: "..." }
+          setProfile(response.data.user || response.data);
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchProfile();
+    }, []);
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -99,7 +122,7 @@ const Header = ({ showitem }) => {
       });
     });
 };
-  const referCode = "45425486";
+  const referCode = profile?.referred_code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -162,7 +185,7 @@ const Header = ({ showitem }) => {
     </li>
     </span>
     <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
-    <li>
+      <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
@@ -175,12 +198,79 @@ const Header = ({ showitem }) => {
     </span>
   </>
 );
+ const Navlinkslarge = (
+  <>
+  
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaHistory size={15}/> {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <IoWalletOutline size={15} /> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/add-balance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("Withdrawl")}
+      </NavLink>
+    </li>
+   
+    <li>
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
+    </li>
+   
+   
+      <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaSignOutAlt size={15} /> {t("Logout")}
+      </NavLink>
+    </li>
+    
+  </>
+);
   return (
     <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger icon for mobile */}
-        <button
+        {user && <button
           onClick={() => setOpenMenu(!openMenu)}
           className="btn text-white btn-ghost lg:hidden"
         >
@@ -198,7 +288,7 @@ const Header = ({ showitem }) => {
               d="M4 6h16M4 12h8m-8 6h16"
             />
           </svg>
-        </button>
+        </button>}
 
         {/* Logo */}
         {page=="/" && <Link className="ml-2 text-xl text-white font-bold" to="/">
@@ -211,7 +301,7 @@ const Header = ({ showitem }) => {
 
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
+        <ul className="menu menu-horizontal px-1">{Navlinkslarge}</ul>
       </div>
 
       {/* Mobile Menu */}
@@ -237,7 +327,7 @@ const Header = ({ showitem }) => {
                     <div className="avatar mr-3">
                       <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
                         <img
-                          src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                          src={profile.avatar_url}
                           alt="User Profile"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -250,7 +340,7 @@ const Header = ({ showitem }) => {
 
                     <div>
                       <p className="text-lg font-bold leading-none">
-                        Md. ÃL~Ãmĩn
+                        {profile?.name}
                       </p>
                       <div className="flex items-center text-white">
                         <span>Refer Code: {referCode}</span>
@@ -265,7 +355,7 @@ const Header = ({ showitem }) => {
               </div>
             </div>
 
-            {Navlinks}
+             {Navlinks}
           </ul>
         </>
       )}
@@ -285,7 +375,10 @@ const Header = ({ showitem }) => {
         </div>}
         {page=="/wallet" && 
           <div className="rounded-full p-3 shadow-sm text-white">
-                      <FaHistory />
+             <Link to={"/incomehistory"}>
+              <FaHistory />
+             </Link>
+                     
                   </div>
          }
 

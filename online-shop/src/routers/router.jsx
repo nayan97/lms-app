@@ -39,13 +39,18 @@ import Earning from "../pages/page/Earning";
 import VoucherBalanceWithdraw from "../pages/page/VoucherBalanceWithdraw";
 import VoucherBalanceAdd from "../pages/page/Voucherbalanceadd";
 import BalanceExchange from "../pages/page/BalanceExchange";
+import ErrorPage from "../components/ErrorPage";
+import AdsMarketing from "../pages/page/AdsMarketing";
+import IncomeHistory from "../pages/page/IncomeHistory";
+import DriveOffer from "../pages/page/DriveOffer";
+import AllOrders from "../pages/page/AllOrders";
 
 
 export const router = createBrowserRouter([
   {
     Component: Layout,
     hydrateFallbackElement: <Spinner></Spinner>,
-    errorElement: <>error</>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -78,6 +83,22 @@ export const router = createBrowserRouter([
       {
         path:"categories",
         element: <CategoryPageAll></CategoryPageAll>
+      },
+      {
+        path:"/adsmarketing",
+        element: <AdsMarketing></AdsMarketing>
+      },
+      {
+        path:"/incomehistory",
+        element: <IncomeHistory></IncomeHistory>
+      },
+      {
+        path: "/driveoffer",
+        element: (
+          <PrivateRoute>
+            <DriveOffer></DriveOffer>
+          </PrivateRoute>
+        ),
       },
       {
         path: "my-cart",
@@ -277,6 +298,10 @@ export const router = createBrowserRouter([
       {
         path: "add-product",
         Component: ProductsPage,
+      },
+      {
+        path: "all-order",
+        Component: AllOrders,
       },
       {
         path: "add-product-detail",

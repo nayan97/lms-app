@@ -13,8 +13,6 @@ import { MdAttachMoney } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
 
-
-
 const Header_shop = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
@@ -29,31 +27,53 @@ const Header_shop = ({ showitem }) => {
 
   const [show, setShowItem] = useState(showitem);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  console.log(profile);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // fetch user data for profile image,name and refercode
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axiosSecure.get("/profile");
+        // assuming API returns something like: { user: {...}, image: "..." }
+        setProfile(response.data.user || response.data);
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   // Close menu when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setOpenMenu(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenu(false);
+      }
+    };
 
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-      setOpenMenu(false);
-    }
-  };
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpenMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  window.addEventListener("resize", handleResize);
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", handleResize);
 
-  // Cleanup
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-    window.removeEventListener("resize", handleResize);
-  };
-}, []);
-
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Update showitem prop
   useEffect(() => {
@@ -75,34 +95,34 @@ useEffect(() => {
     fetchCart();
   }, [axiosSecure]);
 
- const handleLogout = () => {
-   logout()
-     .then(() => {
-       // Show SweetAlert success message
-       Swal.fire({
-         icon: "success",
-         title: "Logged out",
-         text: "You have successfully logged out.",
-         timer: 2000,
-         showConfirmButton: false,
-       });
- 
-       // Navigate to login page after 2 seconds
-       setTimeout(() => {
-         navigate("/login");
-       }, 2000);
-     })
-     .catch((err) => {
-       console.error(err);
-       // Optional: Show error alert
-       Swal.fire({
-         icon: "error",
-         title: "Error",
-         text: "Logout failed. Please try again.",
-       });
-     });
- };
-  const referCode = "45425486";
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        // Show SweetAlert success message
+        Swal.fire({
+          icon: "success",
+          title: "Logged out",
+          text: "You have successfully logged out.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        // Navigate to login page after 2 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      })
+      .catch((err) => {
+        console.error(err);
+        // Optional: Show error alert
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Logout failed. Please try again.",
+        });
+      });
+  };
+  const referCode = profile?.referred_code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -110,74 +130,157 @@ useEffect(() => {
     // Optional: nice feedback
     alert("Refer code copied!");
   };
- const Navlinks = (
- <>
-   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
-    <li>
-      <NavLink
-        to="/order-history"
-        className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
-        }
-      >
-        <FaHistory size={15}/> {t("OrderHistory")}
-      </NavLink>
-    </li>
-    <li>
-      <NavLink
-        to="/transaction-history"
-        className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-        }
-      >
-        <IoWalletOutline size={15} /> {t("TransactionHistory")}
-      </NavLink>
-    </li>
-    <li>
-      <NavLink
-        to="/add-balance"
-        className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-        }
-      >
-        <MdAttachMoney size={15} /> {t("AddBalance")}
-      </NavLink>
-    </li>
-    <li>
-      <NavLink
-        to="/withdrawl"
-        className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-        }
-      >
-        <MdAttachMoney size={15} /> {t("Withdrawl")}
-      </NavLink>
-    </li>
-    </span>
-    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
-    <li>
-      <div className="flex">
-        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
-        <LanguageSwitcher />
-      </div>
+  const Navlinks = (
+    <>
+      <span className="pt-5">
+        {" "}
+        <span className="p-3">{t("Account")}</span>
+        <li>
+          <NavLink
+            to="/order-history"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <FaHistory size={15} /> {t("OrderHistory")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/transaction-history"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <IoWalletOutline size={15} /> {t("TransactionHistory")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/add-balance"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <MdAttachMoney size={15} /> {t("AddBalance")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/withdrawl"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <MdAttachMoney size={15} /> {t("Withdrawl")}
+          </NavLink>
+        </li>
+      </span>
+      <span className="pt-3">
+        {" "}
+        <span className="p-3">{t("Language")}</span>
+        <li>
+          <div className="flex">
+            <span>
+              <IoLanguageOutline size={15} className="text-yellow-500" />
+            </span>
+            <LanguageSwitcher />
+          </div>
+        </li>
+      </span>
+      <span className="pt-5">
+        {" "}
+        <span className="p-3">{t("Logout")}</span>
+        <li>
+          <NavLink
+            onClick={handleLogout}
+            className={({ isActive }) =>
+              isActive
+                ? "text-red-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <FaSignOutAlt size={15} /> {t("Logout")}
+          </NavLink>
+        </li>
+      </span>
+    </>
+  );
+  const Navlinkslarge = (
+    <>
+    
+      <li>
+        <NavLink
+          to="/order-history"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+          }
+        >
+          <FaHistory size={15}/> {t("OrderHistory")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/transaction-history"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          }
+        >
+          <IoWalletOutline size={15} /> {t("TransactionHistory")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/add-balance"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          }
+        >
+          <MdAttachMoney size={15} /> {t("AddBalance")}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/withdrawl"
+          className={({ isActive }) =>
+            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          }
+        >
+          <MdAttachMoney size={15} /> {t("Withdrawl")}
+        </NavLink>
+      </li>
+     
+      <li>
+        <div className="flex">
+          <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+          <LanguageSwitcher />
+        </div>
+        
+        
+      </li>
+     
+     
+        <li>
+        <NavLink
+          onClick={handleLogout}
+          className={({ isActive }) =>
+            isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          }
+        >
+          <FaSignOutAlt size={15} /> {t("Logout")}
+        </NavLink>
+      </li>
       
-      
-    </li>
-    </span>
-    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
-    <li>
-      <NavLink
-        onClick={handleLogout}
-        className={({ isActive }) =>
-          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-        }
-      >
-        <FaSignOutAlt size={15} /> {t("Logout")}
-      </NavLink>
-    </li>
-    </span>
-  </>
-);
+    </>
+  );
 
   return (
     <div className="navbar bg-[#ff9100]   ">
@@ -212,83 +315,84 @@ useEffect(() => {
 
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
+        <ul className="menu menu-horizontal px-1">{Navlinkslarge}</ul>
       </div>
 
       {/* Mobile Menu */}
       {/* Mobile Menu + Overlay */}
-{openMenu && (
-  <>
-    {/* Overlay */}
-    <div
-      onClick={() => setOpenMenu(false)}
-      className="fixed inset-0 bg-black/50 z-40"
-    ></div>
+      {openMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            onClick={() => setOpenMenu(false)}
+            className="fixed inset-0 bg-black/50 z-40"
+          ></div>
 
-    {/* Sidebar Menu */}
-    <ul
-      ref={menuRef}
-      className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
+          {/* Sidebar Menu */}
+          <ul
+            ref={menuRef}
+            className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
                  shadow overflow-y-auto transform transition-transform duration-300"
-    >
-      <div>
-        <div className="flex justify-between items-center ">
-          <div className="bg-[#ff9100] w-full h-full text-white p-2 flex flex-col justify-start">
-            <div className="flex flex-col items-start gap-4 ">
-              <div className="avatar mr-3">
-                <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
-                  <img
-                    src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
-                    alt="User Profile"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
-                    }}
-                  />
-                </div>
-              </div>
+          >
+            <div>
+              <div className="flex justify-between items-center ">
+                <div className="bg-[#ff9100] w-full h-full text-white p-2 flex flex-col justify-start">
+                  <div className="flex flex-col items-start gap-4 ">
+                    <div className="avatar mr-3">
+                      <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
+                        <img
+                          src={profile?.avatar_url}
+                          alt="User Profile"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
+                          }}
+                        />
+                      </div>
+                    </div>
 
-              <div>
-                <p className="text-lg font-bold leading-none">Md. ÃL~Ãmĩn</p>
-                <div className="flex items-center text-white">
-                  <span>Refer Code: {referCode}</span>
-                  <Copy
-                    onClick={handleCopy}
-                    className="size-4 ml-2 cursor-pointer text-white transition"
-                  />
+                    <div>
+                      <p className="text-lg font-bold leading-none">
+                        {profile?.name}
+                      </p>
+                      <div className="flex items-center text-white">
+                        <span>Refer Code: {referCode}</span>
+                        <Copy
+                          onClick={handleCopy}
+                          className="size-4 ml-2 cursor-pointer text-white transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {Navlinks}
-    </ul>
-  </>
-)}
-
+            {Navlinks}
+          </ul>
+        </>
+      )}
 
       {/* Navbar End */}
       <div className="navbar-end flex items-center space-x-2">
         {!show && <LanguageSwitcher />}
 
         {/* Notification bell */}
-        {!show && <div className="relative">
-          <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
-            <BellIcon className="w-5 h-5" />
-          </button>
-          <span className="absolute top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
-            1
-          </span>
-        </div>}
+        {!show && (
+          <div className="relative">
+            <button className="btn btn-circle btn-sm bg-white text-yellow-500 border-0">
+              <BellIcon className="w-5 h-5" />
+            </button>
+            <span className="absolute top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              1
+            </span>
+          </div>
+        )}
 
         {/* Cart & Wishlist */}
         {show && (
           <>
-            
-
             <Link
               to="/wishlist"
               className="relative w-10 h-10 flex text-white items-center justify-center rounded-full shadow-lg bg-[#ff9100]"

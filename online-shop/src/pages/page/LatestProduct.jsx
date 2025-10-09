@@ -183,17 +183,17 @@ const LatestProduct = () => {
       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
         <section className="wishlist">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {latestProducts.map((product) => (
+                      {latestProducts?.map((product) => (
                         <div
-            key={product.id}
+            key={product?.id}
             className="card bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
           >
             {/* Image — clickable to product details */}
             <figure className="p-3">
-              <Link to={`/shop/${product.id}`}>
+              <Link to={`/shop/${product?.id}`}>
                 <img
-                  src={product.image_url}
-                  alt={product.title}
+                  src={product?.image_url}
+                  alt={product?.title}
                   className="w-full h-40 object-cover rounded-lg hover:opacity-90 transition"
                 />
               </Link>
@@ -203,26 +203,26 @@ const LatestProduct = () => {
             <div className="card-body p-3 space-y-1">
               {/* Product Title — also clickable */}
               <Link
-                to={`/shop/${product.id}`}
+                to={`/shop/${product?.id}`}
                 className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
               >
-                {product.title}
+                {product?.title}
               </Link>
               <div className="flex justify-between">
                 {/* Prices (not clickable) */}
                 <div className="flex flex-col">
                   <Link
-                to={`/shop/${product.id}`}
+                to={`/shop/${product?.id}`}
                 className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
               >
-                {product.cross_price && (
+                {product?.cross_price && (
                 <p className="text-xs text-gray-500 line-through">
-                  ৳ {Number(product.cross_price).toFixed(2)}
+                  ৳ {Number(product?.cross_price).toFixed(2)}
                 </p>
               )}
           
               <h5 className="text-red-600 font-bold">
-                ৳ {Number(product.price).toFixed(2)}
+                ৳ {Number(product?.price).toFixed(2)}
               </h5>
           
               </Link>
@@ -231,7 +231,7 @@ const LatestProduct = () => {
                 </div>
               
                 <Link
-                  onClick={() => handleAddToWishlist(product.id)}
+                  onClick={() => handleAddToWishlist(product?.id)}
                   
                 >
                   <CiHeart size={20} />

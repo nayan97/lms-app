@@ -3,7 +3,11 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
-import { IoCartOutline, IoLanguageOutline, IoWalletOutline } from "react-icons/io5";
+import {
+  IoCartOutline,
+  IoLanguageOutline,
+  IoWalletOutline,
+} from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -14,16 +18,32 @@ import { FaHistory, FaSignOutAlt } from "react-icons/fa";
 const HeaderProfile = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
-
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const axiosSecure = useAxiosSecure();
-
   const location = useLocation();
   const page = location.pathname;
-
   const [show, setShowItem] = useState(showitem);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axiosSecure.get("/profile");
+        // assuming API returns something like: { user: {...}, image: "..." }
+        setProfile(response.data.user || response.data);
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -58,7 +78,7 @@ const HeaderProfile = ({ showitem }) => {
       .then(() => console.log("Logout successful"))
       .catch((err) => console.log(err));
   };
-  const referCode = "45425486";
+  const referCode = profile?.referred_code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -67,8 +87,93 @@ const HeaderProfile = ({ showitem }) => {
     alert("Refer code copied!");
   };
   const Navlinks = (
-   <>
-   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
+    <>
+      <span className="pt-5">
+        {" "}
+        <span className="p-3">{t("Account")}</span>
+        <li>
+          <NavLink
+            to="/order-history"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <FaHistory size={15} /> {t("OrderHistory")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/transaction-history"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <IoWalletOutline size={15} /> {t("TransactionHistory")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/add-balance"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <MdAttachMoney size={15} /> {t("AddBalance")}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/withdrawl"
+            className={({ isActive }) =>
+              isActive
+                ? "text-gray-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <MdAttachMoney size={15} /> {t("Withdrawl")}
+          </NavLink>
+        </li>
+      </span>
+      <span className="pt-3">
+        {" "}
+        <span className="p-3">{t("Language")}</span>
+        <li>
+          <div className="flex">
+            <span>
+              <IoLanguageOutline size={15} className="text-yellow-500" />
+            </span>
+            <LanguageSwitcher />
+          </div>
+        </li>
+      </span>
+      <span className="pt-5">
+        {" "}
+        <span className="p-3">{t("Logout")}</span>
+        <li>
+          <NavLink
+            onClick={handleLogout}
+            className={({ isActive }) =>
+              isActive
+                ? "text-red-900 font-bold  flex items-center gap-2"
+                : " flex items-center gap-2"
+            }
+          >
+            <FaSignOutAlt size={15} /> {t("Logout")}
+          </NavLink>
+        </li>
+      </span>
+    </>
+  );
+
+  const Navlinkslarge = (
+  <>
+  
     <li>
       <NavLink
         to="/order-history"
@@ -109,8 +214,7 @@ const HeaderProfile = ({ showitem }) => {
         <MdAttachMoney size={15} /> {t("Withdrawl")}
       </NavLink>
     </li>
-    </span>
-    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
+   
     <li>
       <div className="flex">
         <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
@@ -119,9 +223,9 @@ const HeaderProfile = ({ showitem }) => {
       
       
     </li>
-    </span>
-    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
-    <li>
+   
+   
+      <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
@@ -131,9 +235,9 @@ const HeaderProfile = ({ showitem }) => {
         <FaSignOutAlt size={15} /> {t("Logout")}
       </NavLink>
     </li>
-    </span>
+    
   </>
-  );
+);
 
   return (
     <div className="navbar bg-[#ff9100]   ">
@@ -166,7 +270,7 @@ const HeaderProfile = ({ showitem }) => {
       </Link>
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
+        <ul className="menu menu-horizontal px-1">{Navlinkslarge}</ul>
       </div>
 
       {/* Mobile Menu */}
@@ -192,7 +296,7 @@ const HeaderProfile = ({ showitem }) => {
                     <div className="avatar mr-3">
                       <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
                         <img
-                          src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                          src={profile?.avatar_url}
                           alt="User Profile"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -205,7 +309,7 @@ const HeaderProfile = ({ showitem }) => {
 
                     <div>
                       <p className="text-lg font-bold leading-none">
-                        Md. ÃL~Ãmĩn
+                        {profile?.name}
                       </p>
                       <div className="flex items-center text-white">
                         <span>Refer Code: {referCode}</span>

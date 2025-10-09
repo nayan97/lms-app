@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          earning:"Earning",
           voucherbalance:"Voucher Balance",
           Country:"Country",
           Email:"Email",
@@ -243,6 +244,10 @@ i18n
           TotalIncomeWithdraw:"Total Income Withdraw",
           profileUpdate: "Your profile has been updated successfully",
           ProfileUpdated: "Profile Updated!",
+          Loggedout:"Logged out",
+          Youhavesuccessfullyloggedout:"You have successfully logged out.",
+          LogoutfailedPleasetryagain:"Logout failed, Please try again.",
+          
 
 
 
@@ -252,6 +257,10 @@ i18n
       },
       bn: {
         translation: {
+          earning:"ইনকাম",
+          LogoutfailedPleasetryagain:"আপনি লগড আউট হননি, আবার চেষ্টা করুন।",
+          Youhavesuccessfullyloggedout:"আপনি সফলভাবে লগ আউট হয়েছেন",
+          Loggedout:"লগড আউট",
           TotalIncomeWithdraw:"মোট ইনকাম উইথড্র",
           AllTimeEarning:"এখন পর্যন্ত মোট ইনকাম",
           daysEarning:"৩০ দিনের ইনকাম",
@@ -364,10 +373,10 @@ i18n
           Shop: "শপ",
           Business: "ব্যবসায় ",
           DriveOffer: "ড্রাইভ অফার",
-          ResellingProduct: "প্রোডাক্ট রিসেলিং",
-          AdsViewIncome: "বিজ্ঞাপন থেকে আয়",
+          ResellingProduct: "রিসেলিং প্রোডাক্ট",
+          AdsViewIncome: "অ্যাড দেখে ইনকাম",
           MicroJob: "মাইক্রো জব",
-          JobPost: "চাকরির পোস্ট",
+          JobPost: "জব পোস্ট",
           TypingJob: "টাইপিং জব",
           QuizJob: "কুইজ জব",
           WatchVideo: "ভিডিও দেখে আয় করুন",

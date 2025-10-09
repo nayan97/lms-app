@@ -4,23 +4,11 @@ import Header from "../Shared/Header";
 import { Link } from "react-router";
 import { FaArrowRight } from "react-icons/fa";
 import { t } from "i18next"; // ✅ import t
+import walletimg from "../../assets/wallet.png"
 
 // --- Icon Component ---
 const WalletIcon = ({ className = "h-5 w-5", fill = "currentColor" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" fill="none" stroke="currentColor" />
-    <path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z" fill="none" stroke="currentColor" />
-    <circle cx="15" cy="12" r="1" fill="currentColor" />
-  </svg>
+  <img src={walletimg} alt="" />
 );
 
 // --- List Item Component ---
@@ -64,20 +52,15 @@ const WalletPage = () => {
         <div className="p-6 md:p-8">
           {/* Wallet Balance Section */}
           <div className="flex flex-col bg-white rounded-2xl items-center justify-center p-8">
-            <div className="w-40 h-40 relative">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none" className="w-full h-full">
-                <rect x="50" y="100" width="400" height="300" rx="60" ry="60" fill="#ff9100" stroke="#333" strokeWidth="20" />
-                <rect x="330" y="200" width="100" height="40" rx="20" ry="20" fill="#fff" stroke="#333" strokeWidth="10" />
-                <circle cx="380" cy="220" r="15" fill="#ff9100" stroke="#333" strokeWidth="10" />
-                <path d="M50 160 Q 150 50, 250 100 L 250 160 L 50 160 Z" fill="#ff9100" stroke="#333" strokeWidth="20" />
-                <text x="250" y="270" textAnchor="middle" fontSize="55" fontWeight="bold" fill="#333">
-                  {currentBalance.replace("৳", "")}
-                </text>
-                <text x="350" y="270" textAnchor="end" fontSize="55" fontWeight="bold" fill="#333">
-                  ৳
-                </text>
-              </svg>
-            </div>
+            <div className="relative w-40 h-40 flex items-center justify-center">
+  {/* Wallet image */}
+  <img src={walletimg} alt="wallet" className="w-full h-full object-contain" />
+
+  {/* Balance text overlay */}
+  <h1 className="absolute text-xl font-bold text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    {currentBalance.replace("৳", "")}
+  </h1>
+</div>
             <h2 className="text-xl font-bold text-gray-700 mt-4">{t("currentbalance")}</h2>
           </div>
 
