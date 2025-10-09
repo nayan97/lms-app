@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosSecure = axios.create({
-  baseURL: "http://192.168.110.207:8000/api",
+  baseURL: "http://127.0.0.1:8000/api",
 });
 
 // ✅ Attach interceptor right away

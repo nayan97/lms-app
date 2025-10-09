@@ -60,7 +60,7 @@ const ProductModal = ({
         setMainImagePreview(
           product.image.startsWith("http")
             ? product.image
-            : `http://192.168.110.207:8000/storage/${product.image}`
+            : `http://127.0.0.1:8000/storage/${product.image}`
         );
       } else {
         setMainImagePreview(null);
@@ -71,7 +71,7 @@ const ProductModal = ({
         const normalized = product.image_gal.map((img) =>
           img.startsWith("http")
             ? img
-            : `http://192.168.110.207:8000/storage/${img}`
+            : `http://127.0.0.1:8000/storage/${img}`
         );
         setGalleryPreviews(normalized);
       } else {
@@ -458,7 +458,7 @@ const ProductModal = ({
                   <img
                     src={
                       product?.name
-                        ? `http://192.168.110.207:8000/api/storage/${src}`
+                        ? `http://127.0.0.1:8000/api/storage/${src}`
                         : src
                     }
                     alt="Gallery"

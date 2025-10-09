@@ -246,7 +246,7 @@ const Wishlist = () => {
                         {/* Price and heart icon in the same row */}
                         <div className="flex justify-between items-center">
                           {/* Price column */}
-                          <Link to={`/shop/${item.id}`}>
+                          <Link to={`/shop/${item.product_id}`}>
                             <div className="flex flex-col">
                               {item.product.cross_price && (
                                 <p className="font-medium text-sm line-through text-red-600">

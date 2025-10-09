@@ -199,7 +199,7 @@ const ProductsPage = () => {
                       <td className="p-3 border text-center">
                         {p.image ? (
                           <img
-                            src={`http://192.168.110.207:8000/storage/${p.image}`}
+                            src={`http://127.0.0.1:8000/storage/${p.image}`}
                             alt={p.title}
                             className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded mx-auto"
                           />
@@ -251,7 +251,7 @@ const ProductsPage = () => {
                       <figure className="p-3">
                         {p.image ? (
                           <img
-                            src={`http://192.168.110.207:8000/storage/${p.image}`}
+                            src={`http://127.0.0.1:8000/storage/${p.image}`}
                             alt={p.title}
                             className="w-full h-46 object-cover rounded-t-xl"
                           />

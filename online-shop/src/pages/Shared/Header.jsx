@@ -27,7 +27,30 @@ const Header = ({ showitem }) => {
 
   const [show, setShowItem] = useState(showitem);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  console.log(profile);
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+
+
+  useEffect(() => {
+      const fetchProfile = async () => {
+        try {
+          const response = await axiosSecure.get("/profile");
+          // assuming API returns something like: { user: {...}, image: "..." }
+          setProfile(response.data.user || response.data);
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchProfile();
+    }, []);
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -99,7 +122,7 @@ const Header = ({ showitem }) => {
       });
     });
 };
-  const referCode = "45425486";
+  const referCode = profile?.referred_code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -237,7 +260,7 @@ const Header = ({ showitem }) => {
                     <div className="avatar mr-3">
                       <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
                         <img
-                          src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                          src={profile.avatar_url}
                           alt="User Profile"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -250,7 +273,7 @@ const Header = ({ showitem }) => {
 
                     <div>
                       <p className="text-lg font-bold leading-none">
-                        Md. ÃL~Ãmĩn
+                        {profile?.name}
                       </p>
                       <div className="flex items-center text-white">
                         <span>Refer Code: {referCode}</span>

@@ -52,6 +52,7 @@ export default function LifeGoodHome() {
             <Link
               key={i}
               to={p.isActive ? p.link : "#"}
+              state={{ name: p.name }}
               className={`
                 btn w-full h-full flex flex-col items-center justify-center
                 bg-white shadow rounded-xl py-6

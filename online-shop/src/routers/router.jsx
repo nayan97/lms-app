@@ -39,13 +39,14 @@ import Earning from "../pages/page/Earning";
 import VoucherBalanceWithdraw from "../pages/page/VoucherBalanceWithdraw";
 import VoucherBalanceAdd from "../pages/page/Voucherbalanceadd";
 import BalanceExchange from "../pages/page/BalanceExchange";
+import ErrorPage from "../components/ErrorPage";
 
 
 export const router = createBrowserRouter([
   {
     Component: Layout,
     hydrateFallbackElement: <Spinner></Spinner>,
-    errorElement: <>error</>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

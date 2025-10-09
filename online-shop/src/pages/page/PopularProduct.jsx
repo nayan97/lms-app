@@ -19,19 +19,19 @@ const PopularProduct = () => {
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const { data } = await axiosSecure.get("/home");
-          setPopularProductItems(data.allPopularProducts || []);
-        } catch (err) {
-          console.error("Error fetching shop data", err);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
-    }, []);
-    console.log(popularproductsItems);
+    const fetchData = async () => {
+      try {
+        const { data } = await axiosSecure.get("/home");
+        setPopularProductItems(data.allPopularProducts || []);
+      } catch (err) {
+        console.error("Error fetching shop data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(popularproductsItems);
 
   // Fetch cart count
   useEffect(() => {
@@ -110,41 +110,34 @@ const PopularProduct = () => {
     );
   }
 
-  
- 
-
   const handleAddToWishlist = async (id) => {
-        
-    
-        
-    
-        // ✅ Build payload — only include optional values
-        const wishlistData = {
-          product_id: id,
-          qty
-        };
-    
-        try {
-          const res = await axiosSecure.post(`/wishlist/${id}`, wishlistData);
-          Swal.fire({
-            icon: "success",
-            title: t("addedToWishlist") || "Added to Wishlist!",
-            text:
-              res.data.message ||
-              t("wishlistSuccess") ||
-              "Your item has been added successfully.",
-          });
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: t("error") || "Error",
-            text:
-              error.response?.data?.message ||
-              t("wishlistFailed") ||
-              "Failed to add to wishlist.",
-          });
-        }
-      };
+    // ✅ Build payload — only include optional values
+    const wishlistData = {
+      product_id: id,
+      qty,
+    };
+
+    try {
+      const res = await axiosSecure.post(`/wishlist/${id}`, wishlistData);
+      Swal.fire({
+        icon: "success",
+        title: t("addedToWishlist") || "Added to Wishlist!",
+        text:
+          res.data.message ||
+          t("wishlistSuccess") ||
+          "Your item has been added successfully.",
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: t("error") || "Error",
+        text:
+          error.response?.data?.message ||
+          t("wishlistFailed") ||
+          "Failed to add to wishlist.",
+      });
+    }
+  };
 
   return (
     <div>
@@ -183,68 +176,59 @@ const PopularProduct = () => {
 
       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
         <section className="wishlist">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                 {popularproductsItems?.map((product) => (
-                                    <div
-                        key={product?.id}
-                        className="card bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
-                      >
-                        {/* Image — clickable to product details */}
-                        <figure className="p-3">
-                          <Link to={`/shop/${product.id}`}>
-                            <img
-                              src={product?.image_url}
-                              alt={product.title}
-                              className="w-full h-40 object-cover rounded-lg hover:opacity-90 transition"
-                            />
-                          </Link>
-                        </figure>
-                      
-                        {/* Body */}
-                        <div className="card-body p-3 space-y-1">
-                          {/* Product Title — also clickable */}
-                          <Link
-                            to={`/shop/${product?.id}`}
-                            className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
-                          >
-                            {product.title}
-                          </Link>
-                          <div className="flex justify-between">
-                            {/* Prices (not clickable) */}
-                            <div className="flex flex-col">
-                              <Link
-                            to={`/shop/${product?.id}`}
-                            className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
-                          >
-                            {product.cross_price && (
-                            <p className="text-xs text-gray-500 line-through">
-                              ৳ {Number(product?.cross_price).toFixed(2)}
-                            </p>
-                          )}
-                      
-                          <h5 className="text-red-600 font-bold">
-                            ৳ {Number(product?.price).toFixed(2)}
-                          </h5>
-                      
-                          </Link>
-                              
-                      
-                            </div>
-                          
-                            <Link
-                              onClick={() => handleAddToWishlist(product.id)}
-                              
-                            >
-                              <CiHeart size={20} />
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                      
-                                  ))}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {popularproductsItems?.map((product) => (
+              <div
+                key={product?.id}
+                className="card bg-white shadow-md rounded-2xl overflow-hidden hover:shadow-lg transition"
+              >
+                {/* Image — clickable to product details */}
+                <figure className="p-3">
+                  <Link to={`/shop/${product?.id}`}>
+                    <img
+                      src={product?.image_url}
+                      alt={product?.title}
+                      className="w-full h-40 object-cover rounded-lg hover:opacity-90 transition"
+                    />
+                  </Link>
+                </figure>
 
-            </div>
-            
+                {/* Body */}
+                <div className="card-body p-3 space-y-1">
+                  {/* Product Title — also clickable */}
+                  <Link
+                    to={`/shop/${product?.id}`}
+                    className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
+                  >
+                    {product?.title}
+                  </Link>
+                  <div className="flex justify-between">
+                    {/* Prices (not clickable) */}
+                    <div className="flex flex-col">
+                      <Link
+                        to={`/shop/${product?.id}`}
+                        className="block text-sm text-gray-700 font-medium truncate hover:text-blue-600 transition"
+                      >
+                        {product.cross_price && (
+                          <p className="text-xs text-gray-500 line-through">
+                            ৳ {Number(product?.cross_price).toFixed(2)}
+                          </p>
+                        )}
+
+                        <h5 className="text-red-600 font-bold">
+                          ৳ {Number(product?.price).toFixed(2)}
+                        </h5>
+                      </Link>
+                    </div>
+
+                    <Link onClick={() => handleAddToWishlist(product?.id)}>
+                      <CiHeart size={20} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       </main>
     </div>
