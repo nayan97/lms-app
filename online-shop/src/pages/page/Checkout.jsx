@@ -25,7 +25,6 @@ const Checkout = () => {
     upazila_id: "",
     delivery_address: "",
     additional_instruction: "",
-    reseller_sell_price: "",
     paymethod: "Cash On",
     quantity: 1,
   });
@@ -35,10 +34,13 @@ const Checkout = () => {
     const fetchCheckoutData = async () => {
       try {
         const { data } = await axiosSecure.get("/checkout-data");
-        // console.log(data);
-
         if (data.status) {
-          setCarts(data.carts || []);
+          // Add reseller_sell_price field for each cart item
+          const updatedCarts = (data.carts || []).map((item) => ({
+            ...item,
+            reseller_sell_price: item?.product?.price || 0,
+          }));
+          setCarts(updatedCarts);
         }
       } catch (err) {
         console.error("Failed to fetch checkout data:", err);
@@ -48,18 +50,22 @@ const Checkout = () => {
     };
     fetchCheckoutData();
   }, [axiosSecure]);
-  console.log(carts);
-  // ✅ Prices
-  const adminPrice = carts[0]?.product?.price || 0;
-  const maxPrice = carts[0]?.product?.max_price || 0;
-  // const size = carts[0]?.product?.max_price || 0;
 
-  const resellerProfit = formData.reseller_sell_price
-    ? parseFloat(formData.reseller_sell_price) - adminPrice
-    : 0;
+  // ✅ Calculate totals dynamically
+  const adminPrice = carts.reduce(
+    (sum, item) => sum + (item?.product?.price || 0),
+    0
+  );
+  const maxPrice = carts.reduce(
+    (sum, item) => sum + (item?.product?.max_price || 0),
+    0
+  );
 
-  const total =
-    (parseFloat(formData.reseller_sell_price) || 0) * formData.quantity;
+  const total = carts.reduce(
+    (sum, item) => sum + (parseFloat(item.reseller_sell_price) || 0),
+    0
+  );
+  const totalResellerProfit = total - adminPrice;
 
   // ✅ Fetch districts
   useEffect(() => {
@@ -98,7 +104,21 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle qty
+  // ✅ Handle reseller price change for each cart
+  const handleResellerPriceChange = (index, value) => {
+    const updatedCarts = [...carts];
+    const maxP = updatedCarts[index]?.product?.max_price || 0;
+
+    if (value > maxP) {
+      toast.error(`${t("priceExceed")} (${maxP}৳)`);
+      return;
+    }
+
+    updatedCarts[index].reseller_sell_price = value;
+    setCarts(updatedCarts);
+  };
+
+  // ✅ Handle quantity change
   const handleQtyChange = (type) => {
     setFormData((prev) => ({
       ...prev,
@@ -107,44 +127,60 @@ const Checkout = () => {
     }));
   };
 
+  // ✅ Fixed Submit
+  // ✅ Submit
   // ✅ Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const payload = {
-      ...formData,
-      carts,
-      total,
-    };
-
     try {
-      const res = await axiosSecure.post("/checkout-data", payload);
-      if (res.data.success) {
-        Swal.fire({
-          icon: "error",
-          title: t("oops"),
-          text: res.data.message || t("orderFailed"),
-          confirmButtonColor: "#dc2626",
-        });
-      } else {
+      // ✅ Prepare payload
+      const payload = {
+        ...formData,
+        reseller_sell_price: carts[0]?.reseller_sell_price || 0, // ✅ single number for validation
+        carts: carts.map((item) => ({
+          product_id: item.product_id,
+          reseller_sell_price: item.reseller_sell_price,
+          quantity: formData.quantity || 1,
+        })),
+        total,
+        total_reseller_profit: totalResellerProfit,
+      };
+
+      const { data } = await axiosSecure.post("/checkout-data", payload);
+
+      // ✅ success
+      if (data.success || data.status) {
         Swal.fire({
           icon: "success",
           title: t("successOrder"),
-          text:  t("orderSuccess"),
+          text: t("orderSuccess"),
           showConfirmButton: true,
-          confirmButtonText: t("ViewAllOrder"), // ✅ custom button text
+          confirmButtonText: t("ViewAllOrder"),
           confirmButtonColor: "#16a34a",
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = "/order-history"; // ✅ redirect
+            window.location.href = "/order-history";
           }
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: t("oops"),
+          text: data.message || t("orderFailed"),
+          confirmButtonColor: "#dc2626",
         });
       }
     } catch (err) {
+      const errorMsg =
+        err.response?.data?.errors?.reseller_sell_price?.[0] ||
+        err.response?.data?.message ||
+        t("somethingWrong");
+
       Swal.fire({
         icon: "error",
         title: t("error"),
-        text: err.response?.data?.message || t("somethingWrong"),
+        text: errorMsg,
         confirmButtonColor: "#dc2626",
       });
     }
@@ -183,137 +219,137 @@ const Checkout = () => {
         >
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Cart */}
-            {carts.map((cart, i) => (
-              <div
-                key={i}
-                className="bg-white shadow p-5 rounded-2xl space-y-4 border border-gray-100"
-              >
-                <div className="flex gap-4">
-                  <img
-                    src={cart.image_url}
-                    alt={cart.product_title}
-                    className="w-20 h-20 rounded-lg object-cover"
-                  />
-                  <div className="flex-1">
-                    <h5 className="font-semibold text-lg">
-                      {cart.product_title}
-                    </h5>
-                    <button
-                      type="button"
-                      onClick={() => handleQtyChange("dec")}
-                      className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                    >
-                      −
-                    </button>
-                      <span className="px-3 text-base font-medium">
-                        {formData.quantity}
-                      </span>
+            {carts.map((cart, i) => {
+              const resellerProfit =
+                (cart.reseller_sell_price || 0) - (cart?.product?.price || 0);
 
-                    <button
-                      type="button"
-                      onClick={() => handleQtyChange("inc")}
-                      className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                    >
-                      +
-                    </button>
+              return (
+                <div
+                  key={i}
+                  className="bg-white shadow p-5 rounded-2xl space-y-4 border border-gray-100"
+                >
+                  <div className="flex gap-4">
+                    <img
+                      src={cart.image_url}
+                      alt={cart.product_title}
+                      className="w-20 h-20 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <h5 className="font-semibold text-lg">
+                        {cart.product_title}
+                      </h5>
+                      <div className="flex items-center gap-2 mt-2">
+                        <button
+                          type="button"
+                          onClick={() => handleQtyChange("dec")}
+                          className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                        >
+                          −
+                        </button>
+                        <span className="px-3 text-base font-medium">
+                          {formData.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleQtyChange("inc")}
+                          className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                {/* Prices */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1 ml-2">
-                      {t("resellerSellPrice")} *
-                    </label>
-                    <input
-                      type="number"
-                      placeholder={t("resellerSellPrice")}
-                      className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                      value={formData.reseller_sell_price || ""}
-                      onChange={(e) => {
-                        const value = parseFloat(e.target.value) || 0;
-                        if (value > maxPrice) {
-                          toast.error(`${t("priceExceed")} (${maxPrice}৳)`);
-                          return;
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1 ml-2">
+                        {t("resellerSellPrice")} *
+                      </label>
+                      <input
+                        type="number"
+                        placeholder={t("resellerSellPrice")}
+                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        value={cart.reseller_sell_price || ""}
+                        onChange={(e) =>
+                          handleResellerPriceChange(
+                            i,
+                            parseFloat(e.target.value) || 0
+                          )
                         }
-                        setFormData({
-                          ...formData,
-                          reseller_sell_price: value,
-                        });
-                      }}
-                    />
-                  </div>
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1 ml-2">
-                      {t("resellerProfit")}
-                    </label>
-                    <input
-                      type="number"
-                      value={resellerProfit}
-                      readOnly
-                      className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 ml-2">
-                      {t("adminPrice")}
-                    </label>
-                    <input
-                      type="number"
-                      value={cart?.product?.price}
-                      readOnly
-                      className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1 ml-2">
-                      {t("maxSellPrice")}
-                    </label>
-                    <input
-                      type="number"
-                      value={cart?.product?.max_price}
-                      readOnly
-                      className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                    />
-                  </div>
-                  {cart.size && (
                     <div>
                       <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("size")}
+                        {t("resellerProfit")}
                       </label>
                       <input
                         type="text"
-                        value={cart.size}
+                        value={`${resellerProfit} ৳`}
                         readOnly
                         className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                       />
                     </div>
-                  )}
 
-                  {cart.color && (
                     <div>
                       <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("color")}
+                        {t("adminPrice")}
                       </label>
                       <input
                         type="text"
-                        value={cart.color}
+                        value={`${cart?.product?.price || 0} ৳`}
                         readOnly
                         className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                       />
                     </div>
-                  )}
+
+                    <div>
+                      <label className="block text-sm font-medium mb-1 ml-2">
+                        {t("maxSellPrice")}
+                      </label>
+                      <input
+                        type="text"
+                        value={`${cart?.product?.max_price || 0} ৳`}
+                        readOnly
+                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                      />
+                    </div>
+
+                    {cart.size && (
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("size")}
+                        </label>
+                        <input
+                          type="text"
+                          value={cart.size}
+                          readOnly
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        />
+                      </div>
+                    )}
+
+                    {cart.color && (
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("color")}
+                        </label>
+                        <input
+                          type="text"
+                          value={cart.color}
+                          readOnly
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
-            {/* Customer */}
+            {/* Customer Info */}
             <div className="bg-white shadow p-4 rounded-xl space-y-4">
-              <h4 className="text-lg font-semibold">{t("customerDetails")}</h4>
+              <h4 className="text-lg font-semibold text-center">{t("customerDetails")}</h4>
 
               <div>
                 <label className="label">{t("customerName")}*</label>
@@ -353,7 +389,7 @@ const Checkout = () => {
                   >
                     <option value="">{t("districtPlaceholder")}</option>
                     {districts.map((district) => {
-                      const lang = i18n.language; // "en" or "bn"
+                      const lang = i18n.language;
                       const label =
                         lang === "bn" ? district.bn_name : district.name;
                       return (
@@ -376,7 +412,7 @@ const Checkout = () => {
                   >
                     <option value="">{t("thanaPlaceholder")}</option>
                     {subdistricts.map((sub) => {
-                      const lang = i18n.language; // "en" or "bn"
+                      const lang = i18n.language;
                       const label = lang === "bn" ? sub.bn_name : sub.name;
                       return (
                         <option key={sub.id} value={sub.id}>
@@ -414,12 +450,10 @@ const Checkout = () => {
           </div>
 
           {/* Right Column */}
-          <div className="bg-white shadow-lg rounded-xl p-4  pb-4 space-y-4">
-            {/* <h4 className="text-xl font-semibold">{t("orderSummary")}</h4> */}
-
+          <div className="bg-white shadow-lg rounded-xl p-4 pb-4 space-y-4">
             <div className="flex justify-between">
               <span>{t("resellerProfit")}</span>
-              <span>{resellerProfit}৳</span>
+              <span>{totalResellerProfit}৳</span>
             </div>
 
             <div className="flex justify-between font-bold text-lg">

@@ -427,7 +427,7 @@ i18n
           action: "অ্যাকশন",
           wishlistLoadFailed: "ইচ্ছে তালিকা লোড করা যায়নি।",
           checkout: "চেকআউট",
-          customerDetails: "গ্রাহকের তথ্য",
+          customerDetails: "কস্টমার বিবরণ",
           customerName: "কস্টমার নাম",
           phone: "ফোন",
           district: "জেলা নির্বাচন করুন",

@@ -106,9 +106,49 @@ const Wishlist = () => {
       {},
       { withCredentials: true }
     );
+    axios.post(
+      `/wishlist/move-to-cart/${itemId}`,
+      {},
+      { withCredentials: true }
+    );
   };
   const handleDelete = (itemId) => {
+  const handleDelete = (itemId) => {
     Swal.fire({
+      title: "Are you sure?",
+      text: "This item will be removed from your wishlist!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axios.delete(`/wishlist/remove/${itemId}`);
+          if (res.status === 200) {
+            setWishlistItems((prev) =>
+              prev.filter((item) => item.id !== itemId)
+            ); // ✅ update UI instantly
+            Swal.fire({
+              title: "Deleted!",
+              text: "The item has been removed from your wishlist.",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete item. Please try again.",
+            icon: "error",
+          });
+        }
+      }
+    });
+  };
       title: "Are you sure?",
       text: "This item will be removed from your wishlist!",
       icon: "warning",
@@ -157,6 +197,106 @@ const Wishlist = () => {
           <h1 className="text-white  font-bold"> {t("wishlist")}</h1>
         </div>
       </div>
+        <div className="flex items-center gap-4">
+          <Link
+            to={"/shop"}
+            className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+          >
+            ←
+          </Link>
+          <h1 className="text-white  font-bold"> {t("wishlist")}</h1>
+        </div>
+      </div>
+
+      <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
+        <section className="wishlist">
+          <div className="container mx-auto">
+            {wishlistItems.length > 0 ? (
+              <>
+                {/* Table for desktop / larger screens */}
+                <div className="overflow-x-auto hidden sm:block">
+                  <table className="table w-full bg-white rounded-xl shadow">
+                    <thead className="bg-gray-200 text-gray-700">
+                      <tr>
+                        <th>Id</th>
+                        <th>{t("products")}</th>
+                        <th className="hidden sm:table-cell">{t("size")}</th>
+                        <th className="hidden sm:table-cell">{t("color")}</th>
+                        <th>{t("price")}</th>
+                        <th>{t("action")}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {wishlistItems.map((item) => (
+                        <tr key={item.id}>
+                          <td className="font-medium">{item.id}</td>
+                          <td className="flex items-center gap-2">
+                            <img
+                              src={item.image_url}
+                              alt={item.product_title}
+                              className="w-14 h-14 object-cover rounded"
+                            />
+                            <h5 className="font-semibold">
+                              {item.product_title}
+                            </h5>
+                          </td>
+                          <td className="hidden sm:table-cell">
+                            {item.size || "-"}
+                          </td>
+                          <td className="hidden sm:table-cell">
+                            {item.color || "-"}
+                          </td>
+                          <td className="font-medium">${item.price}</td>
+                          <td>
+                            <div className="flex items-center gap-3">
+                              <button
+                                onClick={() => handleEdit(item.id)}
+                                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(item.id)}
+                                className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Cards for mobile / small screens */}
+                <div className="grid gap-4 sm:hidden grid-cols-2">
+                  {wishlistItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="card bg-white shadow-lg rounded-xl p-4 flex flex-col gap-2"
+                    >
+                      <img
+                        src={item.image_url}
+                        alt={item.product_title}
+                        className="w-full rounded-xl h-32 object-cover "
+                      />
+                      <div className="flex flex-col gap-2 w-36">
+                        {/* Product title */}
+                        <h5 className="font-semibold text-sm truncate">
+                          {item.product_title}
+                        </h5>
+
+                        {/* Price and heart icon in the same row */}
+                        <div className="flex justify-between items-center">
+                          {/* Price column */}
+                          <div className="flex flex-col">
+                            {item.product.cross_price && (
+                              <p className="font-medium text-sm line-through text-red-600">
+                                ${item.product.cross_price}
+                              </p>
+                            )}
+                            <p className="font-medium text-sm">${item.price}</p>
+                          </div>
 
       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
         <section className="wishlist">
@@ -259,6 +399,34 @@ const Wishlist = () => {
                             </div>
                           </Link>
 
+                          {/* Heart icon column */}
+                          <FaHeart
+                            onClick={() => handleDelete(item.id)}
+                            size={20}
+                            className="text-red-600 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <h1 className="text-2xl font-bold mb-4">
+                  {t("wishlistEmpty")}
+                </h1>
+                <Link
+                  to="/shop"
+                  className="btn bg-white shadow rounded-xl text-gray-800"
+                >
+                  {t("continueShopping")}
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
                           {/* Heart icon column */}
                           <FaHeart
                             onClick={() => handleDelete(item.id)}
