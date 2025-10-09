@@ -236,7 +236,10 @@ i18n
           TodayEarning:"Today Earning",
           YesterdayEarning:"Yesterday Earning",
           Language:"Language",
-          Account:"Account"
+          Account:"Account",
+          profileUpdate: "Your profile has been updated successfully",
+          ProfileUpdated: "Profile Updated!",
+
 
 
 
@@ -245,6 +248,8 @@ i18n
       },
       bn: {
         translation: {
+          ProfileUpdated: "প্রোফাইল আপডেট হয়েছে",
+          profileUpdate:"তোমার প্রোফাইল সফলভাবে আপডেট করা হয়েছে |",
           Account:"অ্যাকাউন্ট",
           Language:"ভাষা",
           YesterdayEarning:"গতকালের ইনকাম",

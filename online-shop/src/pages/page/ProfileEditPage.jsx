@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router";
 import { t } from "i18next";
 import { CiCamera } from "react-icons/ci";
-import Spinner from "../../components/Spinner"
+import Spinner from "../../components/Spinner";
 
 const ProfileEditPage = () => {
   const axiosSecure = useAxiosSecure();
@@ -40,7 +40,9 @@ const ProfileEditPage = () => {
         setCountry(user?.country || "");
         setGender(user?.gender || "");
         setAddress(user?.address || "");
-        setPreview(user?.avatar || "");
+
+        // ✅ Show avatar from DB (avatar_url)
+        setPreview(user?.avatar_url || "");
       } catch (err) {
         console.error("Failed to fetch profile:", err);
         setError(err);
@@ -52,11 +54,12 @@ const ProfileEditPage = () => {
     fetchProfile();
   }, [axiosSecure]);
 
-  // Handle image select + instant preview
+  // ✅ Handle image select + instant preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setImage(file);
+    // show live preview before uploading
     setPreview(URL.createObjectURL(file));
   };
 
@@ -67,11 +70,7 @@ const ProfileEditPage = () => {
 
     try {
       const fd = new FormData();
-
-      // Laravel PATCH/PUT fix
-      fd.append("_method", "PUT"); // 👈 Important!
-
-      // Append all fields
+      fd.append("_method", "PUT");
       fd.append("name", name.trim());
       fd.append("email", email.trim());
       fd.append("phone", phone.trim());
@@ -79,7 +78,6 @@ const ProfileEditPage = () => {
       fd.append("gender", gender.trim());
       fd.append("address", address.trim());
 
-      // Append image if selected
       if (image) fd.append("avatar", image);
 
       const res = await axiosSecure.post("/profile", fd, {
@@ -88,12 +86,16 @@ const ProfileEditPage = () => {
 
       const updatedUser = res.data?.data || res.data;
       setProfile(updatedUser);
-      if (updatedUser?.avatar) setPreview(updatedUser.avatar);
+
+      // ✅ After upload, show the new URL from backend
+      if (updatedUser?.avatar_url) {
+        setPreview(updatedUser.avatar_url);
+      }
 
       Swal.fire({
         icon: "success",
-        title: "Profile Updated!",
-        text: res.data?.message || "Your profile has been updated successfully.",
+        title: t("ProfileUpdated"),
+        text: t("profileUpdate"),
         timer: 1500,
         showConfirmButton: false,
       });
@@ -134,7 +136,10 @@ const ProfileEditPage = () => {
           <div className="avatar relative mx-auto">
             <div className="w-28 h-28 rounded-full ring-4 ring-white ring-offset-2 ring-offset-yellow-500 overflow-hidden shadow-xl">
               <img
-                src={preview || "https://placehold.co/100x100/aaaaaa/ffffff?text=User"}
+                src={
+                  preview ||
+                  "https://placehold.co/100x100/aaaaaa/ffffff?text=User"
+                }
                 alt="Profile"
                 className="object-cover w-full h-full"
                 onError={(e) => {
@@ -183,7 +188,9 @@ const ProfileEditPage = () => {
 
             {/* Phone */}
             <div>
-              <label className="block font-medium mb-1">{t("MobileNumber")}</label>
+              <label className="block font-medium mb-1">
+                {t("MobileNumber")}
+              </label>
               <input
                 type="text"
                 value={phone}
@@ -197,9 +204,10 @@ const ProfileEditPage = () => {
               <label className="block font-medium mb-1">{t("Email")}</label>
               <input
                 type="email"
+                readOnly
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-gray-200"
                 required
               />
             </div>
@@ -209,9 +217,10 @@ const ProfileEditPage = () => {
               <label className="block font-medium mb-1">{t("Country")}</label>
               <input
                 type="text"
+                readOnly
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg"
+                className="w-full p-2 border border-gray-300 rounded-lg bg-gray-200"
               />
             </div>
 
@@ -243,7 +252,7 @@ const ProfileEditPage = () => {
             <button
               type="submit"
               disabled={updating}
-              className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:bg-yellow-500 transition"
+              className="w-full bg-[#ff9100] text-black py-2 rounded-lg font-semibold hover:bg-yellow-500 transition"
             >
               {updating ? "Updating..." : "Update Profile"}
             </button>
