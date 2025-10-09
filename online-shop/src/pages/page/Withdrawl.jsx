@@ -136,7 +136,7 @@ const Withdrawl = () => {
 
         {/* Withdrawal Button (DaisyUI btn class) */}
         <button
-          className="btn w-full mt-8 bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-lg rounded-lg border-none shadow-md transition-all duration-300 disabled:bg-gray-400"
+          className="btn w-full mt-8 bg-[#ff9100] hover:bg-yellow-600 text-white font-bold text-lg rounded-lg border-none shadow-md transition-all duration-300 disabled:bg-gray-400"
           onClick={handleWithdrawal}
           // Button is disabled if essential fields are not filled
           disabled={!numericAmount || !selectedWallet || !paymentMethod || !paymentNumber}

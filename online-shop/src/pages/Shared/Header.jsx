@@ -109,67 +109,67 @@ const Header = ({ showitem }) => {
   };
  const Navlinks = (
   <>
-   <span> <span>{t("Account")}</span>
+   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
     <li>
       <NavLink
         to="/order-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaHistory /> {t("OrderHistory")}
+        <FaHistory size={15}/> {t("OrderHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/transaction-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <IoWalletOutline /> {t("TransactionHistory")}
+        <IoWalletOutline size={15} /> {t("TransactionHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/add-balance"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney /> {t("AddBalance")}
+        <MdAttachMoney size={15} /> {t("AddBalance")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/withdrawl"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney /> {t("Withdrawl")}
+        <MdAttachMoney size={15} /> {t("Withdrawl")}
       </NavLink>
     </li>
     </span>
-    <span> <span>{t("Language")}</span>
+    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
     <li>
       <div className="flex">
-        <span><IoLanguageOutline className="text-yellow-500" /></span>
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
         <LanguageSwitcher />
       </div>
       
       
     </li>
     </span>
-    <span> <span>{t("Logout")}</span>
+    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
     <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
-          isActive ? "text-red-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaSignOutAlt /> {t("Logout")}
+        <FaSignOutAlt size={15} /> {t("Logout")}
       </NavLink>
     </li>
     </span>
@@ -232,7 +232,7 @@ const Header = ({ showitem }) => {
           >
             <div>
               <div className="flex justify-between items-center ">
-                <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
+                <div className="bg-[#ff9100] w-full h-full text-white p-2 flex flex-col justify-start">
                   <div className="flex flex-col items-start gap-4 ">
                     <div className="avatar mr-3">
                       <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
