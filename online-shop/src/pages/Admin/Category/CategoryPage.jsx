@@ -124,7 +124,7 @@ const CategoryPage = () => {
     });
     setPreview(
       category.image
-        ? `http://192.168.110.207:8000/storage/${category.image}`
+        ? `http://127.0.0.1:8000/storage/${category.image}`
         : null
     );
     setIsEditOpen(true);
