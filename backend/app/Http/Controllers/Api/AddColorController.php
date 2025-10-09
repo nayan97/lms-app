@@ -13,7 +13,7 @@ class AddColorController extends Controller
      */
     public function index()
     {
-        $colors = Color::latest()->paginate(10);
+        $colors = Color::latest()->get();
 
         return response()->json([
             'success' => true,

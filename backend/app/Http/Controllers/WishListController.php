@@ -53,8 +53,7 @@ class WishListController extends Controller
         // ✅ Validate request before processing further
         $request->validate([
             'qty' => 'required|integer|min:1',
-            'size' => 'required|string|max:255',
-            'color' => 'required|string|max:255',
+     
         ]);
 
         $user = Auth::user();
@@ -165,7 +164,6 @@ class WishListController extends Controller
         $cart = new Cart;
         $cart->name = $user->name;
         $cart->email = $user->email;
-        $cart->cell = $user->cell;
         $cart->user_id = $user->id;
         $cart->product_title = $product->title;
 

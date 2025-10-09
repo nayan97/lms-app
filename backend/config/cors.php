@@ -13,7 +13,7 @@ return [
     'allowed_methods' => ['*'],
 
  // config/cors.php
-    'allowed_origins' => ['http://localhost:5173', 'http://127.0.0.1:5173'], // Make sure to include both just in case!
+    'allowed_origins' => ['http://localhost:5173', 'http://192.168.110.207'], // Make sure to include both just in case!
 
     'allowed_origins_patterns' => [],
 

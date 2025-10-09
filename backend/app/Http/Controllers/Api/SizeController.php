@@ -13,7 +13,7 @@ class SizeController extends Controller
      */
     public function index()
     {
-        $sizes = Size::latest()->paginate(10);
+        $sizes = Size::latest()->get();
 
         return response()->json([
             'success' => true,

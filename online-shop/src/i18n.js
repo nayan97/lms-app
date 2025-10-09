@@ -240,7 +240,7 @@ i18n
           DaysEarning:"7 days income",
           daysEarning:"30 days income",
           AllTimeEarning:"All Time Earning",
-          TotalIncomeWithdraw:"Total Income Withdraw"
+          TotalIncomeWithdraw:"Total Income Withdraw",
           profileUpdate: "Your profile has been updated successfully",
           ProfileUpdated: "Profile Updated!",
 

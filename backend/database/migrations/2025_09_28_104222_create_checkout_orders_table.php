@@ -40,7 +40,7 @@ class CreateCheckoutOrdersTable extends Migration
 
             // Status
             $table->enum('payment_status', ['Pending', 'Cash On', 'Paid'])->default('Cash On');
-            $table->enum('delivery_status', ['Processing', 'Shipped', 'Delivered', 'Cancelled'])->default('Processing');
+            $table->enum('delivery_status', ['Processing', 'Pending', 'Delivered', 'Cancelled'])->default('Pending');
 
             $table->timestamps();
 

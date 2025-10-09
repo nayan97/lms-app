@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 const ShoppingCart = () => {
   const axios = useAxiosSecure();
@@ -15,7 +15,7 @@ const ShoppingCart = () => {
   const navigate = useNavigate();
   const page = location.pathname;
 
-  // Fetch cart data
+  // ✅ Fetch cart data
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -39,61 +39,56 @@ const ShoppingCart = () => {
     fetchCart();
   }, [axios]);
 
-  // ✅ Subtotal
+  // ✅ Subtotal calculation
   const subtotal = cartItems.reduce((sum, item) => {
     const price = Number(item.price) || 0;
-    const qty = Number(item.product_qty) || 0;
-    return sum + price * qty;
+    return sum + price;
   }, 0);
 
+  // ✅ Update quantity (with backend sync)
+  const handleQtyChange = async (id, actionOrQty) => {
+    const currentItem = cartItems.find((item) => item.id === id);
+    if (!currentItem) return;
 
-  // ✅ Update quantity (supports + / − buttons)
+    const currentQty = Number(currentItem.product_qty) || 1;
+    let newQty;
+    if (actionOrQty === "inc") newQty = currentQty + 1;
+    else if (actionOrQty === "dec") newQty = Math.max(1, currentQty - 1);
+    else newQty = Number(actionOrQty) || 1;
 
- const handleQtyChange = async (id, actionOrQty) => {
-  // 1️⃣ Find the current cart item
-  const currentItem = cartItems.find((item) => item.id === id);
-  if (!currentItem) return;
+    // Optimistic UI update
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, product_qty: newQty } : item
+      )
+    );
 
-  const currentQty = Number(currentItem.product_qty) || 1;
-  const price = Number(currentItem.price) || 0;
+    // Send update request to backend
+    try {
+      const res = await axios.put(`/cart/${id}`, {
+        qty: newQty, // ✅ matches backend validation
+      });
 
-  // 2️⃣ Determine new quantity
-  let newQty;
-  if (actionOrQty === "inc") newQty = currentQty + 1;
-  else if (actionOrQty === "dec") newQty = Math.max(1, currentQty - 1);
-  else newQty = Number(actionOrQty) || 1;
+      if (res.data.success) {
+        // Update the item with the latest price returned from backend
+        const updatedItem = res.data.cartItem;
 
-  // 3️⃣ Calculate total price for the item
-  const totalPrice = price * newQty;
+        setCartItems((prev) =>
+          prev.map((item) => (item.id === id ? updatedItem : item))
+        );
 
-  // 4️⃣ Update UI instantly (optimistic update)
-  setCartItems((prevItems) =>
-    prevItems.map((item) =>
-      item.id === id ? { ...item, product_qty: newQty } : item
-    )
-  );
-
-  // 5️⃣ Send update request to backend
-  try {
-    await axios.put(`/cart/${id}`, {
-      product_qty: newQty,
-      price: price,
-      total_price: totalPrice,
-    });
-
-    Swal.fire({
-      icon: "success",
-      title: t("qtyUpdated"),
-      text: `${t("productQtyUpdated")}`,
-      timer: 1000,
-      showConfirmButton: false,
-    });
-  } catch (error) {
-    console.error("Error updating quantity:", error);
-  }
-};
-
-
+        Swal.fire({
+          icon: "success",
+          title: t("qtyUpdated"),
+          text: `${t("productQtyUpdated")}`,
+          timer: 1000,
+          showConfirmButton: false,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
 
   // ✅ Remove item
   const handleRemove = async (id) => {
@@ -142,15 +137,10 @@ const ShoppingCart = () => {
           >
             ←
           </Link>
-          <h1 className="text-white  font-bold"> {t("mycart")}</h1>
+          <h1 className="text-white font-bold"> {t("mycart")}</h1>
         </div>
       </div>
       <main className="shadow-sm mx-auto min-h-screen max-w-[1280px] bg-gray-100 rounded-t-[50px] px-6 py-2">
-        {/* navbar */}
-
-       
-
-        {/* Cart Section */}
         <section className="shopping-cart">
           <div className="container mx-auto">
             {cartItems.length > 0 ? (
@@ -170,9 +160,9 @@ const ShoppingCart = () => {
                     </thead>
                     <tbody>
                       {cartItems.map((item) => {
-                        const price = Number(item.price) || 0;
+                        const unitPrice = Number(item.price) / item.product_qty || 0;
                         const qty = Number(item.product_qty) || 0;
-                        const total = price * qty;
+                        const total = Number(item.price) || 0;
 
                         return (
                           <tr key={item.id}>
@@ -187,7 +177,7 @@ const ShoppingCart = () => {
                                 {item.product_title}
                               </h5>
                             </td>
-                            <td>${price}</td>
+                            <td>${unitPrice.toFixed(2)}</td>
                             <td>
                               <input
                                 type="number"
@@ -202,7 +192,7 @@ const ShoppingCart = () => {
                                 }
                               />
                             </td>
-                            <td>${total}</td>
+                            <td>${total.toFixed(2)}</td>
                             <td>
                               <button
                                 onClick={() => handleRemove(item.id)}
@@ -218,12 +208,12 @@ const ShoppingCart = () => {
                   </table>
                 </div>
 
-                {/* Card layout for mobile */}
+                {/* Mobile card layout */}
                 <div className="block sm:hidden space-y-4">
                   {cartItems.map((item) => {
-                    const price = Number(item.price) || 0;
+                    const unitPrice = Number(item.price) / item.product_qty || 0;
                     const qty = Number(item.product_qty) || 0;
-                    const total = price * qty;
+                    const total = Number(item.price) || 0;
 
                     return (
                       <div
@@ -232,58 +222,56 @@ const ShoppingCart = () => {
                       >
                         <div className="card-body p-4">
                           <div className="flex gap-2 items-center">
-                            
                             <img
                               src={item.image_url}
                               alt={item.product_title}
                               className="w-20 h-20 object-cover rounded-lg"
                             />
                             <div className="flex flex-col w-full">
-                              <h3 className="font-semibold  text-lg">
+                              <h3 className="font-semibold text-lg">
                                 {item.product_title}
                               </h3>
                               <p className="text-gray-600">
-                                {t("price")}: ${price}
+                                {t("price")}: ${unitPrice.toFixed(2)}
                               </p>
                               <p className="text-gray-600">
-                                {t("total")}: ${total}
+                                {t("total")}: ${total.toFixed(2)}
                               </p>
                               <div className="flex justify-between gap-2 items-center mt-4">
-                            <div className="w-1/2 flex">
-                              <button
-                              type="button"
-                              onClick={() => handleQtyChange(item.id, "dec")}
-                              className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                            >
-                              −
-                            </button>
+                                <div className="w-1/2 flex">
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleQtyChange(item.id, "dec")
+                                    }
+                                    className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                                  >
+                                    −
+                                  </button>
 
-                            <span className="px-3 text-base font-medium">
-                              {item?.product_qty}
-                            </span>
+                                  <span className="px-3 text-base font-medium">
+                                    {item?.product_qty}
+                                  </span>
 
-                            <button
-                              type="button"
-                              onClick={() => handleQtyChange(item.id, "inc")}
-                              className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                            >
-                              +
-                            </button>
-
-
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleQtyChange(item.id, "inc")
+                                    }
+                                    className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                                <button
+                                  onClick={() => handleRemove(item.id)}
+                                  className="btn btn-error btn-sm text-white"
+                                >
+                                  <FaTrash />
+                                </button>
+                              </div>
                             </div>
-                            <button
-                              onClick={() => handleRemove(item.id)}
-                              className="btn btn-error btn-sm text-white"
-                            >
-                              <FaTrash />
-                            </button>
                           </div>
-                            </div>
-                             
-                          </div>
-
-                         
                         </div>
                       </div>
                     );
@@ -292,34 +280,27 @@ const ShoppingCart = () => {
 
                 {/* Totals & Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                  
-
                   <div className="card bg-white shadow rounded-xl p-4">
-  <div className="grid grid-cols-2 items-center gap-4">
-    
-    {/* Left Column - Total */}
-    <div>
-      <ul className="text-gray-700 space-y-1">
-        <li className="flex flex-col font-medium">
-          <span className="text-base">{t("total")}</span>
-          <span>${subtotal}</span>
-        </li>
-      </ul>
-    </div>
+                    <div className="grid grid-cols-2 items-center gap-4">
+                      <div>
+                        <ul className="text-gray-700 space-y-1">
+                          <li className="flex flex-col font-medium">
+                            <span className="text-base">{t("total")}</span>
+                            <span>${subtotal.toFixed(2)}</span>
+                          </li>
+                        </ul>
+                      </div>
 
-    {/* Right Column - Checkout Button */}
-    <div className="flex justify-end">
-      <Link
-        to="/checkout"
-        className="btn bg-[#ff9100] rounded-xl px-4 py-2 w-full sm:w-auto"
-      >
-        {t("proceedCheckout")}
-      </Link>
-    </div>
-
-  </div>
-</div>
-
+                      <div className="flex justify-end">
+                        <Link
+                          to="/checkout"
+                          className="btn bg-[#ff9100] rounded-xl px-4 py-2 w-full sm:w-auto"
+                        >
+                          {t("proceedCheckout")}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             ) : (

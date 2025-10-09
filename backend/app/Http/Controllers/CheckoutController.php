@@ -130,7 +130,7 @@ public function checkoutOrders(Request $request)
 
         // Status
         $order->payment_status  = 'Cash On';
-        $order->delivery_status = 'Processing';
+        $order->delivery_status = 'Pending';
 
         $order->save();
 
@@ -144,6 +144,25 @@ public function checkoutOrders(Request $request)
     ], 200);
 }
 
+        public function myOrders(Request $request)
+        {
+            $user = $request->user();
+
+            $orders = CheckoutOrder::with('product:id,title,image')
+                ->where('user_id', $user->id)
+                ->latest()
+                ->get()
+                ->map(function ($order) {
+                    // Add full product image URL
+                    $order->product_image_url = $order->product && $order->product->image
+                        ? asset('storage/' . $order->product->image)
+                        : asset('images/default-product.jpg'); // fallback image if needed
+
+                    return $order;
+                });
+
+            return response()->json($orders);
+        }
 
 
 }

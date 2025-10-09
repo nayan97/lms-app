@@ -13,15 +13,15 @@ class Product extends Model
 
     protected $fillable = [
         'title',
-        'user_id',
-        'category_id',
         'description',
         'sizes',
         'colors',
+        'category_id',
+        'user_id',
         'price',
-        'cross_price',
         'source_price',
         'source_url',
+        'cross_price',
         'max_price',
         'profit',
         'status',
@@ -34,6 +34,12 @@ class Product extends Model
         'sizes' => 'array',
         'colors' => 'array',
         'image_gal' => 'array',
+             // ✅ force integer casting
+        'price' => 'integer',
+        'source_price' => 'integer',
+        'cross_price' => 'integer',
+        'max_price' => 'integer',
+        'profit' => 'integer',
     ];
 
 
@@ -48,6 +54,10 @@ class Product extends Model
     public function orders()
     {
         return $this->hasMany(CheckoutOrder::class);
+    }
+        public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 

@@ -75,14 +75,25 @@ class AccountController extends Controller
         ], 200);
     }
 
-    // ✅ Logout
-    public function logout(Request $request)
+    // // ✅ Logout
+    // public function logout(Request $request)
+    // {
+    //     $request->user()->currentAccessToken()->delete();
+
+    //     return response()->json([
+    //         'status'  => 200,
+    //         'message' => 'Logged out successfully',
+    //     ]);
+    // }
+
+        public function logout(Request $request)
     {
+        // ✅ Revoke the token that was used to authenticate the current request
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'status'  => 200,
-            'message' => 'Logged out successfully',
+            'success' => true,
+            'message' => 'Logged out successfully'
         ]);
     }
 
