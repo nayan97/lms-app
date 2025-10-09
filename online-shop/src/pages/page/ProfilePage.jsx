@@ -4,6 +4,7 @@ import HeaderProfile from "../Shared/HeaderProfile";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { t } from "i18next";
 import Swal from "sweetalert2";
+import Spinner from "../../components/Spinner";
 
 const ProfilePage = () => {
   const axiosSecure = useAxiosSecure();
@@ -93,7 +94,7 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner></Spinner>;
   if (error) return <p>Error loading profile</p>;
   if (!profile) return <p>No profile data available</p>;
 
@@ -101,7 +102,6 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-50 font-sans antialiased flex flex-col">
       {/* Top Header */}
       <HeaderProfile />
-
       {/* Profile Section */}
       <main className="flex-1 pb-20 z-20">
         {/* Profile Image and Name */}
@@ -109,7 +109,7 @@ const ProfilePage = () => {
           <div className="avatar mx-auto">
             <div className="w-28 h-28 rounded-full ring-2 ring-white ring-offset-1 ring-offset-yellow-500 overflow-hidden shadow-xl">
               <img
-                src={profile}
+                src={profile?.avatar_url}
                 alt="Profile"
                 onError={(e) => {
                   e.target.onerror = null;

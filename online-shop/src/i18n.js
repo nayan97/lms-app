@@ -241,6 +241,8 @@ i18n
           daysEarning:"30 days income",
           AllTimeEarning:"All Time Earning",
           TotalIncomeWithdraw:"Total Income Withdraw"
+          profileUpdate: "Your profile has been updated successfully",
+          ProfileUpdated: "Profile Updated!",
 
 
 
@@ -254,6 +256,8 @@ i18n
           AllTimeEarning:"এখন পর্যন্ত মোট ইনকাম",
           daysEarning:"৩০ দিনের ইনকাম",
           DaysEarning:"৭ দিনের ইনকাম",
+          ProfileUpdated: "প্রোফাইল আপডেট হয়েছে",
+          profileUpdate:"তোমার প্রোফাইল সফলভাবে আপডেট করা হয়েছে |",
           Account:"অ্যাকাউন্ট",
           Language:"ভাষা",
           YesterdayEarning:"গতকালের ইনকাম",
