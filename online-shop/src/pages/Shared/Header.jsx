@@ -308,7 +308,10 @@ const Header = ({ showitem }) => {
         </div>}
         {page=="/wallet" && 
           <div className="rounded-full p-3 shadow-sm text-white">
-                      <FaHistory />
+             <Link to={"/incomehistory"}>
+              <FaHistory />
+             </Link>
+                     
                   </div>
          }
 

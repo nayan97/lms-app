@@ -17,13 +17,13 @@ import microjobimg from "../../assets/microjob.png"
 // You can use local images stored in /public/assets/
 const projects1 = [
   { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
-  { name: "DriveOffer", icon: offerimg, isActive: true, link: "comingsoon" },
-  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "/shop"},
+  { name: "DriveOffer", icon: offerimg, isActive: true, link: "/driveoffer" },
+  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "commingsoon"},
   { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "adsview" },
   { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
-  { name: "JobPost", icon: jobimg, isActive: true , link: "comingsoon"},
-  { name: "TypingJob", icon: microimg, isActive: true, link: "/typing-job" },
-  { name: "QuizJob", icon: quizimg, isActive: true, link: "quizjob" },
+  { name: "JobPost", icon: jobimg, isActive: true , link: "/typing-job"},
+  { name: "TypingJob", icon: microimg, isActive: true, link: "commingsoon" },
+  { name: "QuizJob", icon: quizimg, isActive: true, link: "commingsoon" },
   { name: "WatchVideo", icon: videoimg, isActive: true, link: "comingsoon" },
   { name: "MarkSalary", icon: bonusimg, isActive: true, link: "comingsoon" },
   { name: "DailyTargetBonus", icon: dailyimg, isActive: true, link: "comingsoon" },
@@ -77,9 +77,13 @@ export default function LifeGoodHome() {
 
       {/* Free Ads Banner */}
       <div className="px-4 pb-20 mt-6">
-        <div className="w-full py-4 mb-4 bg-white text-green-400 font-bold rounded-xl text-center shadow">
+        <Link to={"/adsmarketing"}>
+         <div className="w-full py-4 mb-4 bg-white text-green-400 font-bold rounded-xl text-center shadow">
           {t("Free")} {t("Ads")} {t("Banner")}
         </div>
+        
+        </Link>
+       
       </div>
     </div>
   );

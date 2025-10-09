@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          earning:"Earning",
           voucherbalance:"Voucher Balance",
           Country:"Country",
           Email:"Email",
@@ -256,6 +257,7 @@ i18n
       },
       bn: {
         translation: {
+          earning:"ইনকাম",
           LogoutfailedPleasetryagain:"আপনি লগড আউট হননি, আবার চেষ্টা করুন।",
           Youhavesuccessfullyloggedout:"আপনি সফলভাবে লগ আউট হয়েছেন",
           Loggedout:"লগড আউট",

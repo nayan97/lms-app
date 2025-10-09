@@ -9,6 +9,7 @@ const Header_wallet = () => {
   const location = useLocation();
   const page = location.pathname;
   const navigate = useNavigate();
+  console.log(page);
   
 
   // Get the last segment of the path
@@ -32,9 +33,13 @@ const Header_wallet = () => {
         <h1 className="text-white mr-20 font-bold capitalize">
           {t(lastSegment || "wallet")}
         </h1>
+        {page!=="/incomehistory" && <Link to={"/incomehistory"}>
         <div className="rounded-full p-3 shadow-sm text-white">
             <FaHistory />
         </div>
+        
+        </Link>}
+        
 
       </div>
     </div>
