@@ -57,16 +57,23 @@ const Checkout = () => {
     0
   );
   const maxPrice = carts.reduce(
-    (sum, item) => sum + (item?.product?.max_price || 0),
+    (sum, item) => sum + (item.product_qty * item?.product?.max_price || 0),
     0
   );
+
+  console.log(maxPrice);
+  
 
   const total = carts.reduce(
     (sum, item) => sum + (parseFloat(item.reseller_sell_price) || 0),
     0
   );
-  const totalResellerProfit = total - adminPrice;
-
+const totalResellerProfit = carts.reduce(
+  (sum, item) =>
+    sum + ((parseFloat(item.reseller_sell_price) || 0) - (parseFloat(item.price) || 0)),
+  0
+);
+//  (cart.reseller_sell_price || 0) - (cart?.price || 0);
   // ✅ Fetch districts
   useEffect(() => {
     const fetchDistricts = async () => {
@@ -107,7 +114,7 @@ const Checkout = () => {
   // ✅ Handle reseller price change for each cart
   const handleResellerPriceChange = (index, value) => {
     const updatedCarts = [...carts];
-    const maxP = updatedCarts[index]?.product?.max_price || 0;
+    const maxP = maxPrice || 0;
 
     if (value > maxP) {
       toast.error(`${t("priceExceed")} (${maxP}৳)`);
@@ -141,7 +148,7 @@ const Checkout = () => {
         carts: carts.map((item) => ({
           product_id: item.product_id,
           reseller_sell_price: item.reseller_sell_price,
-          quantity: formData.quantity || 1,
+          quantity: formData.quantity || item.product_qty,
         })),
         total,
         total_reseller_profit: totalResellerProfit,
@@ -221,7 +228,7 @@ const Checkout = () => {
           <div className="lg:col-span-2 space-y-6">
             {carts.map((cart, i) => {
               const resellerProfit =
-                (cart.reseller_sell_price || 0) - (cart?.product?.price || 0);
+                (cart.reseller_sell_price || 0) - (cart?.price || 0);
 
               return (
                 <div
@@ -297,7 +304,7 @@ const Checkout = () => {
                       </label>
                       <input
                         type="text"
-                        value={`${cart?.product?.price || 0} ৳`}
+                        value={`${cart.price || 0} ৳`}
                         readOnly
                         className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                       />
@@ -309,7 +316,7 @@ const Checkout = () => {
                       </label>
                       <input
                         type="text"
-                        value={`${cart?.product?.max_price || 0} ৳`}
+                        value={`${ maxPrice  || 0} ৳`}
                         readOnly
                         className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
                       />
