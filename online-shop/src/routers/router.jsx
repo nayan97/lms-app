@@ -43,6 +43,7 @@ import ErrorPage from "../components/ErrorPage";
 import AdsMarketing from "../pages/page/AdsMarketing";
 import IncomeHistory from "../pages/page/IncomeHistory";
 import DriveOffer from "../pages/page/DriveOffer";
+import AllOrders from "../pages/page/AllOrders";
 
 
 export const router = createBrowserRouter([
@@ -297,6 +298,10 @@ export const router = createBrowserRouter([
       {
         path: "add-product",
         Component: ProductsPage,
+      },
+      {
+        path: "all-order",
+        Component: AllOrders,
       },
       {
         path: "add-product-detail",

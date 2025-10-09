@@ -171,6 +171,74 @@ const HeaderProfile = ({ showitem }) => {
     </>
   );
 
+  const Navlinkslarge = (
+  <>
+  
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaHistory size={15}/> {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <IoWalletOutline size={15} /> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/add-balance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("Withdrawl")}
+      </NavLink>
+    </li>
+   
+    <li>
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
+    </li>
+   
+   
+      <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaSignOutAlt size={15} /> {t("Logout")}
+      </NavLink>
+    </li>
+    
+  </>
+);
+
   return (
     <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
@@ -202,7 +270,7 @@ const HeaderProfile = ({ showitem }) => {
       </Link>
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
+        <ul className="menu menu-horizontal px-1">{Navlinkslarge}</ul>
       </div>
 
       {/* Mobile Menu */}

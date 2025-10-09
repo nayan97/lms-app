@@ -123,12 +123,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </NavLink>
 
               <NavLink
-                to="/dashboard/products"
+                to="/dashboard/all-order"
                 onClick={handleLinkClick}
                 className={linkClasses}
               >
                 <PackageSearch className="w-5 h-5" />
-                <span>{t("AllProducts")}</span>
+                <span>{t("Orders")}</span>
               </NavLink>
 
               <NavLink
@@ -140,14 +140,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <span>{t("ManageUsers")}</span>
               </NavLink>
 
-              <NavLink
-                to="/dashboard/orders"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <ShieldCheck className="w-5 h-5" />
-                <span>{t("Orders")}</span>
-              </NavLink>
+              
             </>
           )}
 
