@@ -3,11 +3,13 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
-import { IoCartOutline } from "react-icons/io5";
+import { IoCartOutline, IoLanguageOutline, IoWalletOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { CiHeart } from "react-icons/ci";
+import { MdAttachMoney } from "react-icons/md";
+import { FaHistory, FaSignOutAlt } from "react-icons/fa";
 
 const HeaderProfile = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -16,7 +18,6 @@ const HeaderProfile = ({ showitem }) => {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const axiosSecure = useAxiosSecure();
-  
 
   const location = useLocation();
   const page = location.pathname;
@@ -24,36 +25,33 @@ const HeaderProfile = ({ showitem }) => {
   const [show, setShowItem] = useState(showitem);
 
   // Close menu when clicking outside
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setOpenMenu(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenu(false);
+      }
+    };
 
-  const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-      setOpenMenu(false);
-    }
-  };
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setOpenMenu(false);
+      }
+    };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  window.addEventListener("resize", handleResize);
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", handleResize);
 
-  // Cleanup
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-    window.removeEventListener("resize", handleResize);
-  };
-}, []);
-
+    // Cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   // Update showitem prop
   useEffect(() => {
     setShowItem(showitem);
   }, [showitem]);
-
-  
 
   const handleLogout = () => {
     logout()
@@ -69,120 +67,103 @@ useEffect(() => {
     alert("Refer code copied!");
   };
   const Navlinks = (
-    <>
-      <li>
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Home")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/shop"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Shop")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/wishlist"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("Wishlist")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/order-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("OrderHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/transaction-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2 "
-          }
-        >
-          {t("TransactionHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/add-balance"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("AddBalance")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/withdrawl"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Withdrawl")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          onClick={handleLogout}
-          className={({ isActive }) =>
-            isActive ? "text-red-900 font-bold my-2" : "my-2"
-          }
-        >
-          {t("Logout")}
-        </NavLink>
-      </li>
-    </>
+   <>
+   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaHistory size={15}/> {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <IoWalletOutline size={15} /> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/add-balance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <MdAttachMoney size={15} /> {t("Withdrawl")}
+      </NavLink>
+    </li>
+    </span>
+    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
+    <li>
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
+    </li>
+    </span>
+    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
+    <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+        <FaSignOutAlt size={15} /> {t("Logout")}
+      </NavLink>
+    </li>
+    </span>
+  </>
   );
 
   return (
     <div className="navbar bg-[#ff9100]   ">
       {/* Navbar Start */}
-     
-{/* Hamburger icon for mobile */}
-        <button
-          onClick={() => setOpenMenu(!openMenu)}
-          className="btn text-white btn-ghost lg:hidden"
+
+      {/* Hamburger icon for mobile */}
+      <button
+        onClick={() => setOpenMenu(!openMenu)}
+        className="btn text-white btn-ghost lg:hidden"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h8m-8 6h16"
-            />
-          </svg>
-        </button>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h8m-8 6h16"
+          />
+        </svg>
+      </button>
 
-
-        {/* Logo */}
-                <Link className="ml-2 text-xl text-white font-bold" to="/">
-                  {t("Profile")}
-                </Link>
+      {/* Logo */}
+      <Link className="ml-2 text-xl text-white font-bold" to="/">
+        {t("Profile")}
+      </Link>
       {/* Navbar Center (Large screens) */}
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{Navlinks}</ul>
@@ -190,70 +171,80 @@ useEffect(() => {
 
       {/* Mobile Menu */}
       {/* Mobile Menu + Overlay */}
-{openMenu && (
-  <>
-    {/* Overlay */}
-    <div
-      onClick={() => setOpenMenu(false)}
-      className="fixed inset-0 bg-black/50 z-40"
-    ></div>
+      {openMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            onClick={() => setOpenMenu(false)}
+            className="fixed inset-0 bg-black/50 z-40"
+          ></div>
 
-    {/* Sidebar Menu */}
-    <ul
-      ref={menuRef}
-      className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
+          {/* Sidebar Menu */}
+          <ul
+            ref={menuRef}
+            className="menu p-0 menu-sm bg-base-100 fixed top-0 left-0 h-screen w-64 z-50 
                  shadow overflow-y-auto transform transition-transform duration-300"
-    >
-      <div>
-        <div className="flex justify-between items-center ">
-          <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
-            <div className="flex flex-col items-start gap-4 ">
-              <div className="avatar mr-3">
-                <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
-                  <img
-                    src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
-                    alt="User Profile"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
-                    }}
-                  />
-                </div>
-              </div>
+          >
+            <div>
+              <div className="flex justify-between items-center ">
+                <div className="bg-yellow-500 w-full h-full text-white p-2 flex flex-col justify-start">
+                  <div className="flex flex-col items-start gap-4 ">
+                    <div className="avatar mr-3">
+                      <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
+                        <img
+                          src="https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg"
+                          alt="User Profile"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
+                          }}
+                        />
+                      </div>
+                    </div>
 
-              <div>
-                <p className="text-lg font-bold leading-none">Md. ÃL~Ãmĩn</p>
-                <div className="flex items-center text-white">
-                  <span>Refer Code: {referCode}</span>
-                  <Copy
-                    onClick={handleCopy}
-                    className="size-4 ml-2 cursor-pointer text-white transition"
-                  />
+                    <div>
+                      <p className="text-lg font-bold leading-none">
+                        Md. ÃL~Ãmĩn
+                      </p>
+                      <div className="flex items-center text-white">
+                        <span>Refer Code: {referCode}</span>
+                        <Copy
+                          onClick={handleCopy}
+                          className="size-4 ml-2 cursor-pointer text-white transition"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {Navlinks}
-    </ul>
-  </>
-)}
-
+            {Navlinks}
+          </ul>
+        </>
+      )}
 
       {/* Navbar End */}
       <div className="navbar-end flex items-center space-x-2">
-        
-       <Link to={"/profileEditPage"}>
-               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide p-2 text-white rounded-full shadow-sm lucide-user-round-pen-icon lucide-user-round-pen"><path d="M2 21a8 8 0 0 1 10.821-7.487"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="8" r="5"/></svg>
-
-       </Link>
-
-        
-
-        
+        <Link to={"/profileEditPage"}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide p-2 text-white rounded-full shadow-sm lucide-user-round-pen-icon lucide-user-round-pen"
+          >
+            <path d="M2 21a8 8 0 0 1 10.821-7.487" />
+            <path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+            <circle cx="10" cy="8" r="5" />
+          </svg>
+        </Link>
       </div>
     </div>
   );

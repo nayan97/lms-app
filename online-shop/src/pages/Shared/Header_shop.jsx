@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
-import { IoCartOutline } from "react-icons/io5";
+import { IoCartOutline, IoLanguageOutline } from "react-icons/io5";
 import { FaDownLong } from "react-icons/fa6";
 import { ArrowBigDownDash, BellIcon, Copy } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -111,60 +111,71 @@ useEffect(() => {
     alert("Refer code copied!");
   };
  const Navlinks = (
-  <>
+ <>
+   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
     <li>
       <NavLink
         to="/order-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaHistory /> {t("OrderHistory")}
+        <FaHistory size={15}/> {t("OrderHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/transaction-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <IoWalletOutline /> {t("TransactionHistory")}
+        <IoWalletOutline size={15} /> {t("TransactionHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/add-balance"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney /> {t("AddBalance")}
+        <MdAttachMoney size={15} /> {t("AddBalance")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/withdrawl"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney /> {t("Withdrawl")}
+        <MdAttachMoney size={15} /> {t("Withdrawl")}
       </NavLink>
     </li>
+    </span>
+    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
     <li>
-      <LanguageSwitcher />
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
     </li>
+    </span>
+    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
     <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
-          isActive ? "text-red-900 font-bold my-2 flex items-center gap-2" : "my-2 flex items-center gap-2"
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaSignOutAlt /> {t("Logout")}
+        <FaSignOutAlt size={15} /> {t("Logout")}
       </NavLink>
     </li>
+    </span>
   </>
 );
 
