@@ -60,6 +60,8 @@ export default function ProductPage() {
         const { data } = await axios.get(`/product/${id}`);
 
         setProduct(data.data.product);
+        // console.log(setProduct);
+        
         setSizes(data.data.sizes || []);
         setColors(data.data.colors || []);
         setSelectedImage(data?.product?.image_gal[0]);
@@ -349,58 +351,52 @@ export default function ProductPage() {
       });
   };
 
-  const handleDownloadGallery = async () => {
+  const handleDownloadGallery = () => {
     if (!product?.image_gal?.length) {
-      Swal.fire({
-        icon: "info",
-        title: t("noGalleryImages") || "No gallery images available",
-      });
+      alert("No gallery images found!");
       return;
     }
 
-    try {
-      Swal.fire({
-        title: t("preparingDownload") || "Preparing your download...",
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
+    product.image_gal.forEach((image, index) => {
+      // Full URL to Laravel public storage
+      const imageUrl = `/${image}`;
 
-      // Request ZIP from backend
-      const response = await axiosSecure.get(
-        `/products/${product.id}/download-images`,
-        {
-          responseType: "blob",
-        }
-      );
-
-      // Create download link for the ZIP file
-      const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute(
-        "download",
-        `${product.title.replace(/\s/g, "_")}_gallery.zip`
-      );
+      link.href = imageUrl;
+      link.download = image; // filename
       document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
 
-      Swal.fire({
-        icon: "success",
-        title: t("downloadStarted") || "Download started!",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      console.error("Error downloading images:", error);
-      Swal.fire({
-        icon: "error",
-        title: t("downloadFailed") || "Download failed",
-        text: error.message,
-      });
-    }
+      // Delay to avoid browser blocking multiple downloads
+      setTimeout(() => {
+        link.click();
+        document.body.removeChild(link);
+      }, index * 1000);
+    });
   };
+
+  
+
+//   const handleDownloadGallery = () => {
+//     if (!product?.image_gal?.length) {
+//       alert("No gallery images found!");
+//       return;
+//     }
+// console.log( product.image_gal);
+
+//     product.image_gal.forEach((image, index) => {
+//       const imageUrl = `/storage/products/gallery/${image}`; // ✅ full URL
+
+//       const link = document.createElement("a");
+//       link.href = imageUrl;
+//       link.download = image.split("/").pop(); // just filename
+//       document.body.appendChild(link);
+
+//       setTimeout(() => {
+//         link.click();
+//         document.body.removeChild(link);
+//       }, index * 1000);
+//     });
+//   };
 
   return (
     <div className="min-h-screen rounded-t-[50px] flex flex-col bg-[#ff9100]">
