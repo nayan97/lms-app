@@ -247,6 +247,9 @@ i18n
           Loggedout:"Logged out",
           Youhavesuccessfullyloggedout:"You have successfully logged out.",
           LogoutfailedPleasetryagain:"Logout failed, Please try again.",
+          status_updated:"status updated",
+          order_status_changed:"order status changed",
+          
           
 
 
@@ -257,6 +260,9 @@ i18n
       },
       bn: {
         translation: {
+          Cancelled:"ক্যানসেলড",
+          order_status_changed:"অর্ডার স্ট্যাটাস চেঞ্জড",
+          status_updated:"স্ট্যাটাস আপডেটেড",
           earning:"ইনকাম",
           LogoutfailedPleasetryagain:"আপনি লগড আউট হননি, আবার চেষ্টা করুন।",
           Youhavesuccessfullyloggedout:"আপনি সফলভাবে লগ আউট হয়েছেন",
