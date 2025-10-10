@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import useUserAxios from "../../hooks/useUserAxios";
 
 const Register = () => {
+  const { t } = useTranslation(); // <-- added
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from || "/";
@@ -20,37 +22,36 @@ const Register = () => {
   } = useForm();
 
   const [loading, setLoading] = useState(false);
-
-  const password = watch("password"); // to validate confirm password
+  const axios=useUserAxios()
+  const password = watch("password");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/register",
+      const response = await axios.post("/register",
         {
           name: data.name,
           email: data.email,
           password: data.password,
           password_confirmation: data.confirmPassword,
-          role: "user", // hidden default role
+          role: "user",
           referred_code: data.referred_code,
         }
       );
 
       if (response.data.status === 200) {
-        toast.success("Account created successfully!");
+        toast.success(t("Account_created_successfully")); // <-- translated
         reset();
-        navigate(from, { replace: true });
+        navigate("/login");
       }
     } catch (err) {
       if (err.response?.data?.errors) {
         const errorMessages = Object.values(err.response.data.errors).flat();
-        errorMessages.forEach((msg) => toast.error(msg));
+        errorMessages.forEach((msg) => toast.error(t(msg))); // <-- translated
       } else {
-        toast.error("Registration failed. Try again.");
+        toast.error(t("Registration_failed_Try_again")); // <-- translated
       }
     } finally {
       setLoading(false);
@@ -62,18 +63,20 @@ const Register = () => {
       <div className="flex justify-center py-10 px-4">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
-            <h1 className="text-3xl font-bold text-center mb-4">Register</h1>
+            <h1 className="text-3xl font-bold text-center mb-4">
+              {t("Register")}
+            </h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <fieldset className="space-y-2">
                 {/* Name */}
                 <label className="label">
-                  Name <span className="text-red-500">*</span>
+                  {t("Name")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  {...register("name", { required: "Name is required" })}
+                  {...register("name", { required: t("Name_is_required") })}
                   className="input input-bordered w-full"
-                  placeholder="Your Name"
+                  placeholder={t("Your_Name")}
                 />
                 {errors.name && (
                   <p className="text-red-500">{errors.name.message}</p>
@@ -81,19 +84,19 @@ const Register = () => {
 
                 {/* Email */}
                 <label className="label">
-                  Email <span className="text-red-500">*</span>
+                  {t("Email")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
                   {...register("email", {
-                    required: "Email is required",
+                    required: t("Email_is_required"),
                     pattern: {
                       value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-                      message: "Invalid email address",
+                      message: t("Invalid_email_address"),
                     },
                   })}
                   className="input input-bordered w-full"
-                  placeholder="Email"
+                  placeholder={t("Email")}
                 />
                 {errors.email && (
                   <p className="text-red-500">{errors.email.message}</p>
@@ -102,20 +105,20 @@ const Register = () => {
                 {/* Password */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">
-                    Password <span className="text-red-500">*</span>
+                    {t("Password")} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative mt-1">
                     <input
                       type={showPassword ? "text" : "password"}
                       {...register("password", {
-                        required: "Password is required",
+                        required: t("Password_is_required"),
                         minLength: {
                           value: 6,
-                          message: "Minimum 6 characters required",
+                          message: t("Minimum_6_characters_required"),
                         },
                       })}
                       className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Password"
+                      placeholder={t("Password")}
                     />
                     <button
                       type="button"
@@ -139,18 +142,18 @@ const Register = () => {
                 {/* Confirm Password */}
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">
-                    Confirm Password <span className="text-red-500">*</span>
+                    {t("Confirm_Password")} <span className="text-red-500">*</span>
                   </label>
                   <div className="relative mt-1">
                     <input
                       type={showConfirm ? "text" : "password"}
                       {...register("confirmPassword", {
-                        required: "Confirm Password is required",
+                        required: t("Confirm_Password_is_required"),
                         validate: (value) =>
-                          value === password || "Passwords do not match",
+                          value === password || t("Passwords_do_not_match"),
                       })}
                       className="w-full rounded-md border border-gray-300 py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      placeholder="Confirm Password"
+                      placeholder={t("Confirm_Password")}
                     />
                     <button
                       type="button"
@@ -173,15 +176,15 @@ const Register = () => {
 
                 {/* Referral Code */}
                 <label className="label">
-                  Referral Code <span className="text-red-500">*</span>
+                  {t("Referral_Code")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   {...register("referred_code", {
-                    required: "Referral code is required",
+                    required: t("Referral_code_is_required"),
                   })}
                   className="input input-bordered w-full"
-                  placeholder="Referral Code"
+                  placeholder={t("Referral_Code")}
                 />
                 {errors.referred_code && (
                   <p className="text-red-500">{errors.referred_code.message}</p>
@@ -196,13 +199,13 @@ const Register = () => {
                   className="btn bg-green-400 w-full mt-4 text-white"
                   disabled={loading}
                 >
-                  {loading ? "Registering..." : "Register"}
+                  {loading ? t("Registering...") : t("Register")}
                 </button>
 
                 <p className="text-center mt-4 text-sm">
-                  Already have an account?{" "}
+                  {t("Already_have_an_account")}{" "}
                   <a href="/login" className="text-green-500 hover:underline">
-                    Login here
+                    {t("Login_here")}
                   </a>
                 </p>
               </fieldset>

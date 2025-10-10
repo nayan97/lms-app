@@ -5,6 +5,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { t } from "i18next";
 import Swal from "sweetalert2";
 import Spinner from "../../components/Spinner";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
   const axiosSecure = useAxiosSecure();
@@ -13,6 +14,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -32,67 +34,67 @@ const ProfilePage = () => {
   }, []);
 
   const handleDeleteAccount = async () => {
-    const { value: password } = await Swal.fire({
-      title: "Confirm Deletion",
-      input: "password",
-      inputLabel: "Enter your current password to confirm",
-      inputPlaceholder: "Enter your password",
-      inputAttributes: {
-        autocapitalize: "off",
-        autocorrect: "off",
-      },
-      showCancelButton: true,
-      confirmButtonText: "Delete Account",
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      preConfirm: (password) => {
-        if (!password) {
-          Swal.showValidationMessage("Password is required");
-        }
-        return password;
-      },
+   // Make sure to import useTranslation from 'react-i18next'
+  const { value: password } = await Swal.fire({
+    title: t("confirm_deletion"),
+    input: "password",
+    inputLabel: t("enter_your_current_password_to_confirm"),
+    inputPlaceholder: t("enter_your_password"),
+    inputAttributes: {
+      autocapitalize: "off",
+      autocorrect: "off",
+    },
+    showCancelButton: true,
+    confirmButtonText: t("delete_account"),
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    preConfirm: (password) => {
+      if (!password) {
+        Swal.showValidationMessage(t("password_is_required"));
+      }
+      return password;
+    },
+  });
+
+  if (!password) return;
+
+  setDeleting(true);
+  try {
+    const response = await axiosSecure.post(
+      "/profile/delete",
+      { password },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    Swal.fire({
+      icon: "success",
+      title: t("account_deleted"),
+      text: response.data?.message || t("your_account_has_been_deleted_successfully"),
+      timer: 2000,
+      showConfirmButton: false,
     });
 
-    if (!password) return;
+    // Clear localStorage and redirect
+    setTimeout(() => {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }, 2000);
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      title: t("delete_failed"),
+      text:
+        err.response?.data?.message ||
+        t("incorrect_password_or_something_went_wrong_while_deleting_your_account"),
+    });
+  } finally {
+    setDeleting(false);
+  }
+};
 
-    setDeleting(true);
-    try {
-      const response = await axiosSecure.post(
-        "/profile/delete",
-        { password },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      Swal.fire({
-        icon: "success",
-        title: "Account Deleted",
-        text:
-          response.data?.message ||
-          "Your account has been deleted successfully.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      // Clear localStorage and redirect
-      setTimeout(() => {
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("user");
-        window.location.href = "/login";
-      }, 2000);
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Delete Failed",
-        text:
-          err.response?.data?.message ||
-          "Incorrect password or something went wrong while deleting your account.",
-      });
-    } finally {
-      setDeleting(false);
-    }
-  };
 
   if (loading) return <Spinner></Spinner>;
   if (error) return <p>Error loading profile</p>;
@@ -179,7 +181,7 @@ const ProfilePage = () => {
                   : "text-red-500 hover:text-red-600"
               } font-bold text-lg transition-colors duration-200`}
             >
-              {deleting ? "Deleting..." : "Delete Account"}
+              {deleting ? "Deleting..." : t("Delete_Account")}
             </button>
           </div>
         </div>
