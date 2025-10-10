@@ -12,7 +12,7 @@ export default function OrderHistory() {
   const [filter, setFilter] = useState("Pending");
   const [loading, setLoading] = useState(true);
 
-  const tabs = [t("Pending"), t("Processing"), t("Delivered"), t("Cancelled")];
+  const tabs = ["Pending", "Processing", "Delivered", "Cancelled"];
 
   useEffect(() => {
     const fetchOrders = async () => {
