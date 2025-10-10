@@ -100,12 +100,12 @@ const Header = ({ showitem }) => {
     .then(() => {
       // Show SweetAlert success message
       Swal.fire({
-        icon: "success",
-        title: "Logged out",
-        text: "You have successfully logged out.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+  icon: "success",
+  title: t("logout_title"),
+  text: t("logout_message"),
+  timer: 2000,
+  showConfirmButton: false,
+});
 
       // Navigate to login page after 2 seconds
       setTimeout(() => {
@@ -117,8 +117,8 @@ const Header = ({ showitem }) => {
       // Optional: Show error alert
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "Logout failed. Please try again.",
+    title: t("logout_error_title"),
+    text: t("logout_error_message"),
       });
     });
 };
@@ -155,7 +155,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/add-balance"
+        to="/addbalance"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
@@ -223,7 +223,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/add-balance"
+        to="/addbalance"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }

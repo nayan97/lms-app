@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Header_wallet from '../Shared/Header_wallet';
 
 // Main App component for adding voucher balance
 const AddBalance = () => {
@@ -31,31 +32,8 @@ const AddBalance = () => {
       <div className="w-full bg-[#ff9100]  p-4 pb-16 shadow-lg text-white">
         
         {/* Header Bar */}
-        <div className="flex justify-between items-center mb-10 pt-4">
-          {/* Back Arrow Icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7 cursor-pointer"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          <h1 className="text-xl font-bold">{t("AddVoucherBalance")}</h1>
-          {/* History Icon (Clock/Reload) */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-7 w-7 cursor-pointer"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </div>
+        <Header_wallet></Header_wallet>
+        
 
         {/* Voucher Balance Display */}
         <div className="text-center mt-4">

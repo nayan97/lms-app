@@ -101,10 +101,10 @@ const Header_shop = ({ showitem }) => {
         // Show SweetAlert success message
         Swal.fire({
           icon: "success",
-          title: "Logged out",
-          text: "You have successfully logged out.",
-          timer: 2000,
-          showConfirmButton: false,
+         title: t("logout_title"),
+  text: t("logout_message"),
+  timer: 2000,
+  showConfirmButton: false,
         });
 
         // Navigate to login page after 2 seconds
@@ -117,8 +117,8 @@ const Header_shop = ({ showitem }) => {
         // Optional: Show error alert
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: "Logout failed. Please try again.",
+          title: t("logout_error_title"),
+    text: t("logout_error_message"),
         });
       });
   };

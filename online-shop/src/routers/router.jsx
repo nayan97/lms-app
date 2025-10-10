@@ -245,7 +245,7 @@ export const router = createBrowserRouter([
         ),
       },
             {
-        path: "add-balance",
+        path: "addbalance",
         element: (
           <PrivateRoute>
            <AddBalance></AddBalance>

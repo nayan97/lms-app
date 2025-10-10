@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { CiHeart } from "react-icons/ci";
 import { MdAttachMoney } from "react-icons/md";
 import { FaHistory, FaSignOutAlt } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const HeaderProfile = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -27,6 +28,7 @@ const HeaderProfile = ({ showitem }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -75,8 +77,30 @@ const HeaderProfile = ({ showitem }) => {
 
   const handleLogout = () => {
     logout()
-      .then(() => console.log("Logout successful"))
-      .catch((err) => console.log(err));
+       .then(() => {
+         // Show SweetAlert success message
+         Swal.fire({
+     icon: "success",
+     title: t("logout_title"),
+     text: t("logout_message"),
+     timer: 2000,
+     showConfirmButton: false,
+   });
+   
+         // Navigate to login page after 2 seconds
+         setTimeout(() => {
+           navigate("/login");
+         }, 2000);
+       })
+       .catch((err) => {
+         console.error(err);
+         // Optional: Show error alert
+         Swal.fire({
+           icon: "error",
+    title: t("logout_error_title"),
+    text: t("logout_error_message"),
+         });
+       });
   };
   const referCode = profile?.referred_code;
 
