@@ -488,7 +488,7 @@ export default function ProductPage() {
               <h2 className="text-lg font-bold">{product.title}</h2>
               <Copy
                 onClick={handleCopyProductName}
-                className="size-6 ml-2 cursor-pointer text-black transition"
+                className="size-18 lg:size-6 ml-2 cursor-pointer text-black transition"
               />
             </div>
             <div className="ml-25 rounded-full h-8 bg-red-100 p-2">
