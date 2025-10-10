@@ -18,7 +18,7 @@ const DashboardLayout = () => {
         <div className="flex-1 flex flex-col">
           <Navbar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
-          <main className="p-4 flex-1 overflow-y-auto">
+          <main className="p-4 lg:ml-10 flex-1 overflow-y-auto">
             <Outlet />
           </main>
         </div>

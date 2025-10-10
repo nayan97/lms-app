@@ -1,11 +1,44 @@
 import { Menu } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router";
-
+import { useEffect, useState } from "react";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Spinner from "../../components/Spinner"
+ 
 const Navbar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // console.log(user);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await axiosSecure.get("/profile");
+        setProfile(response.data.user || response.data);
+      } catch (err) {
+        console.error("Failed to fetch profile:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [axiosSecure]);
+
+  // 👇 Show spinner while loading
+  if (loading) {
+    return <Spinner></Spinner>;
+  }
+
+  // 👇 Handle error
+  if (error) {
+    return <p className="text-red-500 text-center">Failed to load profile.</p>;
+  }
 
   const handleLogout = async (e) => {
     e.preventDefault(); // stop reload
@@ -32,8 +65,20 @@ const Navbar = ({ toggleSidebar }) => {
                 role="button"
                 className="btn btn-ghost btn-circle avatar"
               >
-                <div className="w-10 rounded-full"></div>
+                <div className="w-10 rounded-full overflow-hidden">
+                  <img
+                    src={profile?.avatar_url}
+                    alt="User Profile"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://www.svgrepo.com/show/384670/account-avatar-profile-user.svg";
+                    }}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
+
               <ul
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-black rounded-box z-1 mt-3 w-52 p-2 shadow"

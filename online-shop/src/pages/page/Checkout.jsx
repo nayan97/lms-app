@@ -62,18 +62,19 @@ const Checkout = () => {
   );
 
   console.log(maxPrice);
-  
 
   const total = carts.reduce(
     (sum, item) => sum + (parseFloat(item.reseller_sell_price) || 0),
     0
   );
-const totalResellerProfit = carts.reduce(
-  (sum, item) =>
-    sum + ((parseFloat(item.reseller_sell_price) || 0) - (parseFloat(item.price) || 0)),
-  0
-);
-//  (cart.reseller_sell_price || 0) - (cart?.price || 0);
+  const totalResellerProfit = carts.reduce(
+    (sum, item) =>
+      sum +
+      ((parseFloat(item.reseller_sell_price) || 0) -
+        (parseFloat(item.price) || 0)),
+    0
+  );
+  //  (cart.reseller_sell_price || 0) - (cart?.price || 0);
   // ✅ Fetch districts
   useEffect(() => {
     const fetchDistricts = async () => {
@@ -199,288 +200,284 @@ const totalResellerProfit = carts.reduce(
 
   return (
     <div>
-       <div className="bg-[#ff9100] h-20">
-              <div className="flex items-center gap-4">
-                <Link
-                to={"/shop"}
-                className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
-              >
-                ← 
-              </Link>
-              <h1 className="text-white  font-bold"> {t("Checkout")}
-      </h1>
-      
-              </div>
-              
-             
-            </div>
-             <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-t-[50px] px-6 pt-2 pb-6">
-      <div className="container mx-auto">
-        <h4 className="text-2xl font-semibold mb-4 text-center pt-2">
-          {t("checkout")}
-        </h4>
-
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        >
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-6">
-            {carts.map((cart, i) => {
-              const resellerProfit =
-                (cart.reseller_sell_price || 0) - (cart?.price || 0);
-
-              return (
-                <div
-                  key={i}
-                  className="bg-white shadow p-5 rounded-2xl space-y-4 border border-gray-100"
-                >
-                  <div className="flex gap-4">
-                    <img
-                      src={cart.image_url}
-                      alt={cart.product_title}
-                      className="w-20 h-20 rounded-lg object-cover"
-                    />
-                    <div className="flex-1">
-                      <h5 className="font-semibold text-lg">
-                        {cart.product_title}
-                      </h5>
-                      <div className="flex items-center gap-2 mt-2">
-                        <button
-                          type="button"
-                          onClick={() => handleQtyChange("dec")}
-                          className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                        >
-                          −
-                        </button>
-                        <span className="px-3 text-base font-medium">
-                          {formData.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleQtyChange("inc")}
-                          className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("resellerSellPrice")} *
-                      </label>
-                      <input
-                        type="number"
-                        placeholder={t("resellerSellPrice")}
-                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                        value={cart.reseller_sell_price || ""}
-                        onChange={(e) =>
-                          handleResellerPriceChange(
-                            i,
-                            parseFloat(e.target.value) || 0
-                          )
-                        }
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("resellerProfit")}
-                      </label>
-                      <input
-                        type="text"
-                        value={`${resellerProfit} ৳`}
-                        readOnly
-                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("adminPrice")}
-                      </label>
-                      <input
-                        type="text"
-                        value={`${cart.price || 0} ৳`}
-                        readOnly
-                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-1 ml-2">
-                        {t("maxSellPrice")}
-                      </label>
-                      <input
-                        type="text"
-                        value={`${ maxPrice  || 0} ৳`}
-                        readOnly
-                        className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                      />
-                    </div>
-
-                    {cart.size && (
-                      <div>
-                        <label className="block text-sm font-medium mb-1 ml-2">
-                          {t("size")}
-                        </label>
-                        <input
-                          type="text"
-                          value={cart.size}
-                          readOnly
-                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                        />
-                      </div>
-                    )}
-
-                    {cart.color && (
-                      <div>
-                        <label className="block text-sm font-medium mb-1 ml-2">
-                          {t("color")}
-                        </label>
-                        <input
-                          type="text"
-                          value={cart.color}
-                          readOnly
-                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* Customer Info */}
-            <div className="bg-white shadow p-4 rounded-xl space-y-4">
-              <h4 className="text-lg font-semibold text-center">{t("customerDetails")}</h4>
-
-              <div>
-                <label className="label">{t("customerName")}*</label>
-                <input
-                  type="text"
-                  name="customer_name"
-                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                  value={formData.customer_name}
-                  onChange={handleChange}
-                  placeholder={t("customerNamePlaceholder")}
-                />
-              </div>
-
-              <div>
-                <label className="label">{t("phone")}*</label>
-                <input
-                  type="text"
-                  name="customer_number"
-                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                  value={formData.customer_number}
-                  onChange={handleChange}
-                  placeholder={t("phonePlaceholder")}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="label">{t("district")}</label>
-                  <select
-                    name="district_id"
-                    className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                    value={formData.district_id}
-                    onChange={(e) => {
-                      handleChange(e);
-                      setDistrictId(e.target.value);
-                    }}
-                  >
-                    <option value="">{t("districtPlaceholder")}</option>
-                    {districts.map((district) => {
-                      const lang = i18n.language;
-                      const label =
-                        lang === "bn" ? district.bn_name : district.name;
-                      return (
-                        <option key={district.id} value={district.id}>
-                          {label}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="label">{t("thana")}</label>
-                  <select
-                    name="upazila_id"
-                    className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                    value={formData.upazila_id}
-                    onChange={handleChange}
-                    disabled={!districtId}
-                  >
-                    <option value="">{t("thanaPlaceholder")}</option>
-                    {subdistricts.map((sub) => {
-                      const lang = i18n.language;
-                      const label = lang === "bn" ? sub.bn_name : sub.name;
-                      return (
-                        <option key={sub.id} value={sub.id}>
-                          {label}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="label">{t("address")}*</label>
-                <input
-                  type="text"
-                  name="delivery_address"
-                  className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                  value={formData.delivery_address}
-                  onChange={handleChange}
-                  placeholder={t("addressPlaceholder")}
-                />
-              </div>
-
-              <div>
-                <label className="label">{t("instructions")}</label>
-                <textarea
-                  name="additional_instruction"
-                  className="textarea border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
-                  value={formData.additional_instruction}
-                  onChange={handleChange}
-                  placeholder={t("instructionsPlaceholder")}
-                ></textarea>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="bg-white shadow-lg rounded-xl p-4 pb-4 space-y-4">
-            <div className="flex justify-between">
-              <span>{t("resellerProfit")}</span>
-              <span>{totalResellerProfit}৳</span>
-            </div>
-
-            <div className="flex justify-between font-bold text-lg">
-              <span>{t("total")}</span>
-              <span>{total}৳</span>
-            </div>
-
-            <button
-              type="submit"
-              className="btn mb-20 text-white bg-[#ff9100] w-full rounded-2xl"
-            >
-              {t("placeOrder")}
-            </button>
-          </div>
-        </form>
+      <div className="bg-[#ff9100] h-20">
+        <div className="flex items-center gap-4">
+          <Link
+            to={"/shop"}
+            className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
+          >
+            ←
+          </Link>
+          <h1 className="text-white  font-bold"> {t("Checkout")}</h1>
+        </div>
       </div>
-    </main>
+      <main className="mx-auto min-h-screen shadow-sm max-w-6xl bg-gray-100 rounded-t-[50px] px-6 pt-2 pb-6">
+        <div className="container mx-auto">
+          <h4 className="text-2xl font-semibold mb-4 text-center pt-2">
+            {t("checkout")}
+          </h4>
 
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            {/* Left Column */}
+            <div className="lg:col-span-2 space-y-6">
+              {carts.map((cart, i) => {
+                const resellerProfit =
+                  (cart.reseller_sell_price || 0) - (cart?.price || 0);
+
+                return (
+                  <div
+                    key={i}
+                    className="bg-white shadow p-5 rounded-2xl space-y-4 border border-gray-100"
+                  >
+                    <div className="flex gap-4">
+                      <img
+                        src={cart.image_url}
+                        alt={cart.product_title}
+                        className="w-20 h-20 rounded-lg object-cover"
+                      />
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-lg">
+                          {cart.product_title}
+                        </h5>
+                        <div className="flex items-center gap-2 mt-2">
+                          <button
+                            type="button"
+                            onClick={() => handleQtyChange("dec")}
+                            className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                          >
+                            −
+                          </button>
+                          <span className="px-3 text-base font-medium">
+                            {cart.product_qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleQtyChange("inc")}
+                            className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("resellerSellPrice")} *
+                        </label>
+                        <input
+                          type="number"
+                          placeholder={t("resellerSellPrice")}
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                          value={cart.reseller_sell_price || ""}
+                          onChange={(e) =>
+                            handleResellerPriceChange(
+                              i,
+                              parseFloat(e.target.value) || 0
+                            )
+                          }
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("resellerProfit")}
+                        </label>
+                        <input
+                          type="text"
+                          value={`${resellerProfit} ৳`}
+                          readOnly
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("adminPrice")}
+                        </label>
+                        <input
+                          type="text"
+                          value={`${cart.price || 0} ৳`}
+                          readOnly
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-1 ml-2">
+                          {t("maxSellPrice")}
+                        </label>
+                        <input
+                          type="text"
+                          value={`${maxPrice || 0} ৳`}
+                          readOnly
+                          className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                        />
+                      </div>
+
+                      {cart.size && (
+                        <div>
+                          <label className="block text-sm font-medium mb-1 ml-2">
+                            {t("size")}
+                          </label>
+                          <input
+                            type="text"
+                            value={cart.size}
+                            readOnly
+                            className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                          />
+                        </div>
+                      )}
+
+                      {cart.color && (
+                        <div>
+                          <label className="block text-sm font-medium mb-1 ml-2">
+                            {t("color")}
+                          </label>
+                          <input
+                            type="text"
+                            value={cart.color}
+                            readOnly
+                            className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Customer Info */}
+              <div className="bg-white shadow p-4 rounded-xl space-y-4">
+                <h4 className="text-lg font-semibold text-center">
+                  {t("customerDetails")}
+                </h4>
+
+                <div>
+                  <label className="label">{t("customerName")}*</label>
+                  <input
+                    type="text"
+                    name="customer_name"
+                    className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                    value={formData.customer_name}
+                    onChange={handleChange}
+                    placeholder={t("customerNamePlaceholder")}
+                  />
+                </div>
+
+                <div>
+                  <label className="label">{t("phone")}*</label>
+                  <input
+                    type="text"
+                    name="customer_number"
+                    className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                    value={formData.customer_number}
+                    onChange={handleChange}
+                    placeholder={t("phonePlaceholder")}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label">{t("district")}</label>
+                    <select
+                      name="district_id"
+                      className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                      value={formData.district_id}
+                      onChange={(e) => {
+                        handleChange(e);
+                        setDistrictId(e.target.value);
+                      }}
+                    >
+                      <option value="">{t("districtPlaceholder")}</option>
+                      {districts.map((district) => {
+                        const lang = i18n.language;
+                        const label =
+                          lang === "bn" ? district.bn_name : district.name;
+                        return (
+                          <option key={district.id} value={district.id}>
+                            {label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="label">{t("thana")}</label>
+                    <select
+                      name="upazila_id"
+                      className="select border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                      value={formData.upazila_id}
+                      onChange={handleChange}
+                      disabled={!districtId}
+                    >
+                      <option value="">{t("thanaPlaceholder")}</option>
+                      {subdistricts.map((sub) => {
+                        const lang = i18n.language;
+                        const label = lang === "bn" ? sub.bn_name : sub.name;
+                        return (
+                          <option key={sub.id} value={sub.id}>
+                            {label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="label">{t("address")}*</label>
+                  <input
+                    type="text"
+                    name="delivery_address"
+                    className="input border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                    value={formData.delivery_address}
+                    onChange={handleChange}
+                    placeholder={t("addressPlaceholder")}
+                  />
+                </div>
+
+                <div>
+                  <label className="label">{t("instructions")}</label>
+                  <textarea
+                    name="additional_instruction"
+                    className="textarea border-0 w-full font-semibold rounded-2xl bg-[#f6f1f1]"
+                    value={formData.additional_instruction}
+                    onChange={handleChange}
+                    placeholder={t("instructionsPlaceholder")}
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="bg-white shadow-lg rounded-xl p-4 pb-4 space-y-4">
+              <div className="flex justify-between">
+                <span>{t("resellerProfit")}</span>
+                <span>{totalResellerProfit}৳</span>
+              </div>
+
+              <div className="flex justify-between font-bold text-lg">
+                <span>{t("total")}</span>
+                <span>{total}৳</span>
+              </div>
+
+              <button
+                type="submit"
+                className="btn mb-20 text-white bg-[#ff9100] w-full rounded-2xl"
+              >
+                {t("placeOrder")}
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
-   
   );
 };
 

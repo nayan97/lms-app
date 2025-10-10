@@ -43,7 +43,7 @@ import ErrorPage from "../components/ErrorPage";
 import AdsMarketing from "../pages/page/AdsMarketing";
 import IncomeHistory from "../pages/page/IncomeHistory";
 import DriveOffer from "../pages/page/DriveOffer";
-import AllOrders from "../pages/page/AllOrders";
+import AllOrders from "../pages/Admin/AllOrder/AllOrders";
 
 
 export const router = createBrowserRouter([

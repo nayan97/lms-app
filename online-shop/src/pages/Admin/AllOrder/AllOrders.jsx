@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { t } from "i18next";
 import { Link } from "react-router";
 
@@ -43,16 +43,6 @@ const AllOrders = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-[#ff9100] text-white py-4 px-6 flex items-center gap-4">
-        <Link
-          to="/shop"
-          className="bg-white text-[#ff9100] p-2 rounded-full text-lg hover:bg-gray-100 transition"
-        >
-          ←
-        </Link>
-        <h1 className="text-lg font-bold">{t("All Orders")}</h1>
-      </div>
 
       {/* Table */}
       <div className="p-4 overflow-x-auto">

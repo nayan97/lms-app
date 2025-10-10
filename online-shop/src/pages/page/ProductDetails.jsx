@@ -349,7 +349,7 @@ export default function ProductPage() {
       });
   };
 
-  const handleDownloadGallery = () => {
+  const handleDownloadGallery = async () => {
     if (!product?.image_gal?.length) {
       Swal.fire({
         icon: "info",
@@ -358,27 +358,48 @@ export default function ProductPage() {
       return;
     }
 
-    product.image_gal.forEach((imgUrl, index) => {
+    try {
+      Swal.fire({
+        title: t("preparingDownload") || "Preparing your download...",
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      // Request ZIP from backend
+      const response = await axiosSecure.get(
+        `/products/${product.id}/download-images`,
+        {
+          responseType: "blob",
+        }
+      );
+
+      // Create download link for the ZIP file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
-      link.href = imgUrl;
-
-      // filename
-      link.download = `${product.title.replace(/\s/g, "_")}_image_${
-        index + 1
-      }.jpg`;
-
-      // append, click, remove
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `${product.title.replace(/\s/g, "_")}_gallery.zip`
+      );
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    });
 
-    Swal.fire({
-      icon: "success",
-      title: t("downloadStarted") || "Download started!",
-      timer: 1500,
-      showConfirmButton: false,
-    });
+      Swal.fire({
+        icon: "success",
+        title: t("downloadStarted") || "Download started!",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Error downloading images:", error);
+      Swal.fire({
+        icon: "error",
+        title: t("downloadFailed") || "Download failed",
+        text: error.message,
+      });
+    }
   };
 
   return (
