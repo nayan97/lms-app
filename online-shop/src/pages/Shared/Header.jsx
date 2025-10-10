@@ -155,7 +155,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/add-balance"
+        to="/addbalance"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
@@ -223,7 +223,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/add-balance"
+        to="/addbalance"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }

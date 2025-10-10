@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          addbalance:"Add Balance",
           earning:"Earning",
           voucherbalance:"Voucher Balance",
           Country:"Country",
@@ -310,6 +311,7 @@ i18n
       },
       bn: {
         translation: {
+          addbalance:"এড ব্যালেন্স",
           confirm_deletion: "ডিলিট কনফার্ম",
   enter_your_current_password_to_confirm: "ডিলিট কনফার্ম এর জন্য আপনার বর্তমান পাসওয়ার্ড লিখুন",
   enter_your_password: "আপনার পাসওয়ার্ড লিখুন",
@@ -595,7 +597,7 @@ i18n
           thanaPlaceholder: "থানা নির্বাচন করুন",
 
           SelectThana: "থানা নির্বাচন করুন",
-          OurProjects: "আমাদের প্রকল্পসমূহ",
+          OurProjects: "আমাদের প্রজেক্ট",
           Free: "ফ্রি",
           Ads: "বিজ্ঞাপন",
           LifeChange: "লাইফ চেঞ্জ",
