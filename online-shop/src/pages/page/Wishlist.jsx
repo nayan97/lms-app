@@ -228,7 +228,7 @@ const Wishlist = () => {
                       key={item.id}
                       className="card bg-white shadow-lg rounded-xl p-4 flex flex-col gap-2"
                     >
-                      <Link to={`/shop/${item.id}`}>
+                      <Link to={`/shop/${item.product_id}`}>
                         <img
                           src={item.image_url}
                           alt={item.product_title}
@@ -238,7 +238,7 @@ const Wishlist = () => {
 
                       <div className="flex flex-col gap-2 w-36">
                         {/* Product title */}
-                        <Link to={`/shop/${item.id}`}>
+                        <Link to={`/shop/${item.product_id}`}>
                           <h5 className="font-semibold text-sm truncate">
                             {item.product_title}
                           </h5>
