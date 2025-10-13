@@ -271,45 +271,6 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/home",
-    element: (
-      <PrivateRoute>
-        <DashboardLayout></DashboardLayout>,
-      </PrivateRoute>
-    ),
-    children: [
-      {
-        index: true,
-        Component: Body,
-      },
-
-      {
-        path: "add-size",
-        Component: ProductSizePage,
-      },
-      {
-        path: "add-color",
-        Component: AddColorPage,
-      },
-      {
-        path: "add-category",
-        Component: CategoryPage,
-      },
-      {
-        path: "add-product",
-        Component: ProductsPage,
-      },
-      {
-        path: "all-order",
-        Component: AllOrders,
-      },
-      {
-        path: "add-product-detail",
-        Component: ProductDetailPage,
-      },
-    ],
-  },
-    {
     path: "/dashboard",
     element: (
       <PrivateRoute>
