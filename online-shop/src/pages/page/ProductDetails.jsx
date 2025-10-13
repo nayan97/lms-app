@@ -58,9 +58,9 @@ export default function ProductPage() {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`/product/${id}`);
-
+        console.log(data.data.product);
         setProduct(data.data.product);
-        // console.log(setProduct);
+        
         
         setSizes(data.data.sizes || []);
         setColors(data.data.colors || []);
@@ -484,7 +484,7 @@ export default function ProductPage() {
               <h2 className="text-lg font-bold">{product.title}</h2>
               <Copy
                 onClick={handleCopyProductName}
-                className="size-18 lg:size-6 ml-2 cursor-pointer text-black transition"
+                className="size-6 ml-2 cursor-pointer text-black transition"
               />
             </div>
             <div className="ml-25 rounded-full h-8 bg-red-100 p-2">

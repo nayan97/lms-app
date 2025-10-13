@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 const LatestProducts = () => {
   const axios = useUserAxios();
   const axiosSecure = useAxiosSecure();
-  const { id } = useParams();
+    const { id } = useParams();
   const [latestProducts, setLatestProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
@@ -62,7 +62,7 @@ const LatestProducts = () => {
           "Failed to add to wishlist.",
       });
     }
-  };
+  }
   return (
     <section className="py-6 mx-auto container max-w-[1280px] bg-gray-100">
       <div className="px-4">
@@ -141,7 +141,8 @@ const LatestProducts = () => {
                         </h5>
                       </Link>
                     </div>
-                    <form onSubmit={(e) => handleAddToWishlist(product.id, e)}>
+
+                    <form onSubmit={handleAddToWishlist}>
                       {/* Hidden inputs */}
                       <input
                         type="hidden"
@@ -150,11 +151,7 @@ const LatestProducts = () => {
                       />
                       <input type="hidden" name="qty" value={qty || 1} />
                       <input type="hidden" name="size" value={size || "M"} />
-                      <input
-                        type="hidden"
-                        name="color"
-                        value={color || "White"}
-                      />
+                      <input type="hidden" name="color" value={color || "White"} />
 
                       <button type="submit" className="flex items-center">
                         <CiHeart size={20} />
