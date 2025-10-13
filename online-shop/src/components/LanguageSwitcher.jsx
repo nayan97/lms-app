@@ -12,9 +12,9 @@ const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className=" bg-white  text-sm font-medium hover:bg-yellow-100 transition"
+      className=" bg-white  text-lg font-medium hover:bg-yellow-100 transition"
     >
-      {i18n.language === "bn" ? "English" : "বাংলা"}
+      {i18n.language === "bn" ? "En" : "বাংলা"}
     </button>
   );
 };

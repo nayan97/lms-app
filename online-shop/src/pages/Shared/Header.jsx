@@ -32,6 +32,7 @@ const Header = ({ showitem }) => {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showNotice, setShowNotice] = useState(false);
 
 
 
@@ -132,49 +133,49 @@ const Header = ({ showitem }) => {
   };
  const Navlinks = (
   <>
-   <span className="pt-5" > <span className="p-3">{t("Account")}</span>
+   <span className="pt-5" > <span className="font-bold text-md p-4">{t("Account")}</span>
     <li>
       <NavLink
         to="/order-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <FaHistory size={15}/> {t("OrderHistory")}
+       <img className="w-6" src="/offer.png"></img>{t("OrderHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/transaction-history"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <IoWalletOutline size={15} /> {t("TransactionHistory")}
+        <img className="w-6" src="/offer.png"></img> {t("TransactionHistory")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/addbalance"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <MdAttachMoney size={15} /> {t("AddBalance")}
+        <img className="w-6" src="/offer.png"></img> {t("AddBalance")}
       </NavLink>
     </li>
     <li>
       <NavLink
         to="/withdrawl"
         className={({ isActive }) =>
-          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <MdAttachMoney size={15} /> {t("Withdrawl")}
+        <img className="w-6" src="/offer.png"></img> {t("Withdrawl")}
       </NavLink>
     </li>
     </span>
-    <span className="pt-3" > <span className="p-3">{t("Language")}</span>
+    <span className="pt-3" > <span className="font-bold text-md p-4">{t("Language")}</span>
     <li>
       <div className="flex">
         <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
@@ -184,15 +185,15 @@ const Header = ({ showitem }) => {
       
     </li>
     </span>
-    <span className="pt-5"> <span className="p-3">{t("Logout")}</span>
+    <span className="pt-5"> <span className="font-bold text-md p-4">{t("Logout")}</span>
       <li>
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
-          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+          isActive ? "text-red-900 font-bold text-lg flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <FaSignOutAlt size={15} /> {t("Logout")}
+        <img className="w-6" src="/offer.png"></img> {t("Logout")}
       </NavLink>
     </li>
     </span>
@@ -201,48 +202,48 @@ const Header = ({ showitem }) => {
  const Navlinkslarge = (
   <>
   
-    <li>
+    <li className="bg-white flex justify-center rounded-xl m-2">
       <NavLink
         to="/order-history"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaHistory size={15}/> {t("OrderHistory")}
+         {t("OrderHistory")}
       </NavLink>
     </li>
-    <li>
+    <li className="bg-white flex justify-center rounded-xl m-2">
       <NavLink
         to="/transaction-history"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <IoWalletOutline size={15} /> {t("TransactionHistory")}
+         {t("TransactionHistory")}
       </NavLink>
     </li>
-    <li>
+    <li className="bg-white  flex justify-center rounded-xl m-2">
       <NavLink
         to="/addbalance"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney size={15} /> {t("AddBalance")}
+         {t("AddBalance")}
       </NavLink>
     </li>
-    <li>
+    <li className="bg-white  flex justify-center rounded-xl m-2">
       <NavLink
         to="/withdrawl"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <MdAttachMoney size={15} /> {t("Withdrawl")}
+       {t("Withdrawl")}
       </NavLink>
     </li>
    
-    <li>
+    <li className="bg-white  flex justify-center rounded-xl m-2">
       <div className="flex">
         <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
         <LanguageSwitcher />
@@ -252,21 +253,21 @@ const Header = ({ showitem }) => {
     </li>
    
    
-      <li>
+      <li className="bg-white  flex justify-center rounded-xl m-2">
       <NavLink
         onClick={handleLogout}
         className={({ isActive }) =>
           isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
         }
       >
-        <FaSignOutAlt size={15} /> {t("Logout")}
+         {t("Logout")}
       </NavLink>
     </li>
     
   </>
 );
   return (
-    <div className="navbar bg-[#ff9100]   ">
+    <div className="navbar bg-[#ff9100] mx-auto max-w-7xl ">
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger icon for mobile */}
@@ -291,9 +292,17 @@ const Header = ({ showitem }) => {
         </button>}
 
         {/* Logo */}
-        {page=="/" && <Link className="ml-2 text-xl text-white font-bold" to="/">
+        {page=="/" && <div className="flex gap-3">
+          <Link to="/">
+          <img  className="hidden lg:block w-13" src="/logo.png" alt="" />
+          </Link>
+          
+          <Link className="ml-2 block lg:hidden text-xl text-white font-bold" to="/">
           {t("LifeChange")}
-        </Link>}
+
+        </Link>
+
+        </div> }
         {page=="/wallet" && <Link className="ml-2 text-xl text-white font-bold" to="/">
           {t("Wallet")}
         </Link>}
@@ -325,9 +334,9 @@ const Header = ({ showitem }) => {
                 <div className="bg-[#ff9100] w-full h-full text-white p-2 flex flex-col justify-start">
                   <div className="flex flex-col items-start gap-4 ">
                     <div className="avatar mr-3">
-                      <div className="w-10 h-10 rounded-full ring ring-white ring-offset-1 overflow-hidden">
+                      <div className="w-13 h-13  rounded-full ring ring-white ring-offset-1 overflow-hidden">
                         <img
-                          src={profile.avatar_url}
+                          src={profile?.avatar_url}
                           alt="User Profile"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -339,10 +348,10 @@ const Header = ({ showitem }) => {
                     </div>
 
                     <div>
-                      <p className="text-lg font-bold leading-none">
+                      <p className="text-lg p-1 font-bold leading-none">
                         {profile?.name}
                       </p>
-                      <div className="flex items-center text-white">
+                      <div className="flex p-1 items-center text-white">
                         <span>Refer Code: {referCode}</span>
                         <Copy
                           onClick={handleCopy}
@@ -366,12 +375,17 @@ const Header = ({ showitem }) => {
 
         {/* Notification bell */}
        {page!=="/wallet" && <div className="relative">
-          <button className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0">
-            <BellIcon className="w-5 h-5" />
-          </button>
-          <span className="absolute text-white top-0 right-0 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
+        
+       <button
+  onClick={() => setShowNotice(true)}
+  className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0"
+>
+  <BellIcon className="w-10 h-10" />
+</button>
+          <span className="absolute text-white -top-3 -right-3 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
             1
           </span>
+          
         </div>}
         {page=="/wallet" && 
           <div className="rounded-full p-3 shadow-sm text-white">
@@ -411,6 +425,49 @@ const Header = ({ showitem }) => {
           </div>
         )}
       </div>
+       {/* ✅ Life Good Notice Modal */}
+      {showNotice && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999]">
+          <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative">
+            <button
+              onClick={() => setShowNotice(false)}
+              className="absolute top-3 right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center"
+            >
+              ✕
+            </button>
+
+            <div className=" text-center">
+              
+              <h2 className="text-xl font-bold p-3 text-gray-800 mb-3">Life Change Global Business</h2>
+              <div className="bg-[#ff9100] ">
+                <img src="/offer.png" alt="Life Good Logo" className="w-30 h-30  mx-auto mb-2" />
+              </div>
+               <div className="p-5">
+                
+             
+              <div className="text-gray-700 text-left space-y-3">
+                <p>💎 আপনাকে স্বাগতম লাইফ চেঞ্জ গ্লোবাল বিজনেস কোম্পানিতে!</p>
+                <p>বাংলাদেশের সরকারিভাবে নিবন্ধিত ও বিশ্বস্ত এই প্রতিষ্ঠানে ইতোমধ্যে প্রায় ৭ লক্ষাধিক গ্রাহক সফলতার সাথে কাজ করছেন।</p>
+                <p>🚀 বর্তমানে লাইফ চেঞ্জ-এ রয়েছে ১৮টি ইনকাম প্রজেক্ট...</p>
+                <p>💥 ইনশাআল্লাহ খুব শীঘ্রই আরো কিছু চমকপ্রদ নতুন প্রজেক্ট যুক্ত হচ্ছে...</p>
+                <p>👉 আমাদের অফিসিয়াল ফেসবুক গ্রুপে যুক্ত হোন:</p>
+                <a
+                  href="https://www.facebook.com/share/g/1HVLNaGK8d/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline break-all"
+                >
+                  https://www.facebook.com/share/g/1HVLNaGK8d/
+                </a>
+              </div>
+
+               </div>
+              
+            </div>
+          </div>
+        </div>
+      )}
+      {/* ✅ End of Modal */}
     </div>
   );
 };
