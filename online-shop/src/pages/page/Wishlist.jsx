@@ -108,41 +108,42 @@ const Wishlist = () => {
     );
   };
   const handleDelete = (itemId) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This item will be removed from your wishlist!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await axios.delete(`/wishlist/remove/${itemId}`);
-          if (res.status === 200) {
-            setWishlistItems((prev) =>
-              prev.filter((item) => item.id !== itemId)
-            ); // ✅ update UI instantly
-            Swal.fire({
-              title: "Deleted!",
-              text: "The item has been removed from your wishlist.",
-              icon: "success",
-              timer: 1500,
-              showConfirmButton: false,
-            });
-          }
-        } catch (error) {
+  Swal.fire({
+    title: t("are_you_sure"),
+    text: t("this_item_will_be_removed_from_your_wishlist"),
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: t("yes_delete_it"),
+    cancelButtonText: t("cancel"),
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const res = await axios.delete(`/wishlist/remove/${itemId}`);
+        if (res.status === 200) {
+          setWishlistItems((prev) =>
+            prev.filter((item) => item.id !== itemId)
+          ); // ✅ update UI instantly
           Swal.fire({
-            title: "Error!",
-            text: "Failed to delete item. Please try again.",
-            icon: "error",
+            title: t("deleted"),
+            text: t("the_item_has_been_removed_from_your_wishlist"),
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
           });
         }
+      } catch (error) {
+        Swal.fire({
+          title: t("error"),
+          text: t("failed_to_delete_item_please_try_again"),
+          icon: "error",
+        });
       }
-    });
-  };
+    }
+  });
+};
+
 
   return (
     <div>

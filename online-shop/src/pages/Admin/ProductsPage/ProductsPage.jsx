@@ -207,7 +207,7 @@ const ProductsPage = () => {
                           "—"
                         )}
                       </td>
-                      <td className="p-3 border break-words max-w-[120px] sm:max-w-none">
+                      <td className="p-3 border break-words truncate max-w-[120px] sm:max-w-none">
                         {p.title}
                       </td>
                       <td className="p-3 border whitespace-nowrap">
@@ -263,10 +263,10 @@ const ProductsPage = () => {
                       </figure>
 
                       <div className="card-body">
-                        <h2 className="card-title">
-                          {p.title}
+                        <h2 className="card-title flex items-center gap-2 max-w-[200px] sm:max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
+                          <span className="truncate">{p.title}</span>
                           {p.is_featured && (
-                            <div className="badge badge-secondary">
+                            <div className="badge badge-secondary flex-shrink-0">
                               {t("Featured")}
                             </div>
                           )}
