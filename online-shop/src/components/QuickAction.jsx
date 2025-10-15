@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
-import orderimg from "../assets/resell.png";
-import vendorimg from "../assets/bonus.png"
-import catimg from "../assets/free.png"
-import wishimg from "../assets/offer.png"
+import orderimg from "../assets/cart.png";
+import vendorimg from "../assets/vendor.png"
+import catimg from "../assets/category.png"
+import wishimg from "../assets/wishlist.png"
 import { t } from 'i18next';
 
 const QuickAction = () => {

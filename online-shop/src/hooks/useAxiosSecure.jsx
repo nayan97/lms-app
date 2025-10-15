@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosSecure = axios.create({
-  baseURL: "https://api.lifechangebda.com/api",
+  baseURL: "http://127.0.0.1:8000/api",
 });
 
 // ✅ Attach interceptor right away
