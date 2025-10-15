@@ -64,7 +64,7 @@ const IncomeHistory = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col max-w-xl mx-auto font-sans">
+    <div className="min-h-screen bg-gray-100 flex flex-col max-w-xl lg:max-w-7xl mx-auto font-sans">
       {/* Header */}
       <Header_wallet></Header_wallet>
       <div className="bg-[#ff9100]">

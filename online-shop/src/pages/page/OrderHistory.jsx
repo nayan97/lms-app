@@ -71,7 +71,7 @@ export default function OrderHistory() {
           </div>
         </div>
       </div>
-      <main className="bg-gray-100 rounded-t-[50px] pt-4 pb-6">
+      <main className="bg-gray-100 min-h-screen rounded-t-[50px] pt-4 pb-6">
         {/* Tabs */}
         <div className="flex gap-2 mb-4 justify-around px-4">
           {tabs.map((tab) => (

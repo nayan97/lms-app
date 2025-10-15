@@ -18,7 +18,7 @@ const Layout = () => {
         </div>} 
       
       
-      <div className="max-w-[1440px] mx-auto">
+      <div className="lg:max-w-[1440px] mx-auto">
           <Outlet></Outlet>
       </div>
       <div>

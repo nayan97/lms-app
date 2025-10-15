@@ -21,8 +21,8 @@ const Header_wallet = () => {
   };
 
   return (
-    <div>
-      <div className="bg-[#ff9100] h-20 flex justify-around items-center gap-4 px-4">
+    <>
+      <div className="bg-[#ff9100] w-full max-w-7xl mx-auto h-20 flex justify-around items-center gap-4 px-4">
         <Link
           onClick={handleGoBack}
           className="text-white bg-[#ff9100] p-3 rounded-full shadow-sm text-xl"
@@ -30,7 +30,7 @@ const Header_wallet = () => {
           <FaArrowLeft />
 
         </Link>
-        <h1 className="text-white mr-20 font-bold capitalize">
+        <h1 className="text-white mr-20 lg:mr-0 font-bold capitalize">
           {t(lastSegment || "wallet")}
         </h1>
         {page!=="/incomehistory" && <Link to={"/incomehistory"}>
@@ -42,7 +42,7 @@ const Header_wallet = () => {
         
 
       </div>
-    </div>
+    </>
   );
 };
 

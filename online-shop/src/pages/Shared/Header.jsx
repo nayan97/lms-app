@@ -187,7 +187,7 @@ const Header = ({ showitem }) => {
    <span className="pt-5" > <span className="font-bold text-md p-4">{t("Support")}</span>
     <li>
       <NavLink
-        to="/commingsoon"
+        to="comingsoon"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -197,7 +197,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/commingsoon"
+        to="comingsoon"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -207,7 +207,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="/commingsoon"
+        to="comingsoon"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -472,7 +472,7 @@ const Header = ({ showitem }) => {
           <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative">
             <button
               onClick={() => setShowNotice(false)}
-              className="absolute top-3 right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center"
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center"
             >
               ✕
             </button>
