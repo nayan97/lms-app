@@ -419,11 +419,11 @@ const Header = ({ showitem }) => {
         
        <button
   onClick={() => setShowNotice(true)}
-  className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0"
+  className="btn mr-3 btn-circle btn-sm bg-[#ff9100] text-white border-0"
 >
   <BellIcon className="w-10 h-10" />
 </button>
-          <span className="absolute text-white -top-3 -right-3 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute text-white -top-2 -right-2 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
             1
           </span>
           

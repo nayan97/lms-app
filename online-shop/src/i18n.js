@@ -311,6 +311,8 @@ i18n
           Telegramgroup:"Telegram Group",
           Facebookgroup:"Facebook Group",
           Support:"Support",
+          Rank:"Rank",
+          Applyvendor:"Apply Vendor",
 
 
           // extra as per your given format
@@ -318,6 +320,8 @@ i18n
       },
       bn: {
         translation: {
+          Applyvendor:"এপলাই ভেন্ডর",
+          Rank:"র‍্যাঙ্ক",
           Support:"সাপোর্ট",
           Facebookgroup:"ফেসবুক গ্রুপ",
           Telegramgroup:"টেলিগ্রাম গ্রুপ",
@@ -507,9 +511,9 @@ i18n
           JobPost: "জব পোস্ট",
           TypingJob: "টাইপিং জব",
           QuizJob: "কুইজ জব",
-          WatchVideo: "ভিডিও দেখে আয় করুন",
+          WatchVideo: "ভিডিও দেখে ইনকাম",
           MarkSalary: " দৈনিক বেতন চিহ্নিত করুন",
-          DailyTargetBonus: "দৈনিক লক্ষ্য বোনাস",
+          DailyTargetBonus: "দৈনিক টার্গেট বোনাস",
           FreelancingCourse: "ফ্রিল্যান্সিং কোর্স",
           Mobile: "মোবাইল",
           Recharge: "রিচার্জ",

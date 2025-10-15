@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import offerimg from "../../assets/offer.png"
+import driveimg from "../../assets/drive.png"
 import videoimg from "../../assets/video.png"
 import applyvendor from "../../assets/applyvendor.png"
 import videocourseimg from "../../assets/videocourse.png"
@@ -20,7 +20,7 @@ import microjobimg from "../../assets/microjob.png"
 // You can use local images stored in /public/assets/
 const projects1 = [
   { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
-  { name: "DriveOffer", icon: offerimg, isActive: true, link: "/driveoffer" },
+  { name: "DriveOffer", icon: driveimg, isActive: true, link: "/driveoffer" },
   { name: "ResellingProduct", icon: resellimg, isActive: true , link: "commingsoon"},
   { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "adsview" },
   { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
