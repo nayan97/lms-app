@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import offerimg from "../../assets/offer.png"
+import driveimg from "../../assets/drive.png"
 import videoimg from "../../assets/video.png"
+import applyvendor from "../../assets/applyvendor.png"
+import videocourseimg from "../../assets/videocourse.png"
+import rankimg from "../../assets/rank.png"
 import addsimg from "../../assets/add.png"
 import quizimg from "../../assets/quiz.png"
 import rechargeimg from "../../assets/recharge.png"
@@ -10,25 +13,27 @@ import jobimg from "../../assets/job.png"
 import microimg from "../../assets/micro.png"
 import resellimg from "../../assets/resell.png"
 import bonusimg from "../../assets/bonus.png"
-import freeimg from "../../assets/free.png"
+import freeimg from "../../assets/freelance.png"
 import dailyimg from "../../assets/daily.png"
 import microjobimg from "../../assets/microjob.png"
 
 // You can use local images stored in /public/assets/
 const projects1 = [
   { name: "MobileRecharge", icon: rechargeimg, isActive: true, link: "comingsoon" },
-  { name: "DriveOffer", icon: offerimg, isActive: true, link: "/driveoffer" },
-  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "commingsoon"},
+  { name: "DriveOffer", icon: driveimg, isActive: true, link: "/driveoffer" },
+  { name: "ResellingProduct", icon: resellimg, isActive: true , link: "comingsoon"},
   { name: "AdsViewIncome", icon: addsimg, isActive: true, link: "adsview" },
   { name: "MicroJob", icon: microjobimg, isActive: true , link: "comingsoon"},
   { name: "JobPost", icon: jobimg, isActive: true , link: "/typing-job"},
-  { name: "TypingJob", icon: microimg, isActive: true, link: "commingsoon" },
-  { name: "QuizJob", icon: quizimg, isActive: true, link: "commingsoon" },
+  { name: "TypingJob", icon: microimg, isActive: true, link: "comingsoon" },
+  { name: "QuizJob", icon: quizimg, isActive: true, link: "comingsoon" },
   { name: "WatchVideo", icon: videoimg, isActive: true, link: "comingsoon" },
   { name: "MarkSalary", icon: bonusimg, isActive: true, link: "comingsoon" },
   { name: "DailyTargetBonus", icon: dailyimg, isActive: true, link: "comingsoon" },
   { name: "FreelancingCourse", icon: freeimg, isActive: true, link: "comingsoon" },
-  { name: "VideoCourse", icon: videoimg, isActive: true, link: "comingsoon" },
+  { name: "VideoCourse", icon: videocourseimg, isActive: true, link: "comingsoon" },
+  { name: "Rank", icon: rankimg, isActive: true, link: "comingsoon" },
+  { name: "Applyvendor", icon: applyvendor, isActive: true, link: "comingsoon" },
 ];
 
 export default function LifeGoodHome() {
@@ -64,7 +69,7 @@ export default function LifeGoodHome() {
                 <img
                   src={p.icon}
                   alt={p.name}
-                  className="w-10 h-10 object-contain"
+                  className="w-10 h-10 rounded-full object-contain"
                 />
               ) : (
                 <span className="text-2xl">❓</span> // fallback if no image

@@ -14,7 +14,7 @@ const WalletIcon = ({ className = 'h-5 w-5', fill = 'currentColor' }) => (
 
 // --- List Item Component ---
 const WalletFeatureItem = ({ label, Icon }) => (
-  <div className="flex justify-between items-center w-full py-4 px-2 border-b border-gray-100 hover:bg-gray-50 transition-colors rounded-lg">
+  <div className="flex lg:max-w-7xl justify-between items-center w-full py-4 px-2 border-b border-gray-100 hover:bg-gray-50 transition-colors rounded-lg">
     <div className="flex items-center w-full">
       <div className="bg-[#ff9100]/20 text-yellow-500 p-2 rounded-full mr-4">
         <Icon className="h-5 w-5" />
@@ -40,7 +40,7 @@ const VoucherBalance = () => {
   ];
 
   return (
-    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
+    <div className="min-h-screen lg:max-w-7xl mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
       {/* Header */}
       <Header_wallet />
 

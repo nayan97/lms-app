@@ -32,7 +32,7 @@ const Withdrawl = () => {
   };
 
   return (
-    <div className="min-h-screen bg-yellow-50 font-sans antialiased flex flex-col items-center">
+    <div className="min-h-screen lg:max-w-7xl bg-yellow-50 font-sans antialiased flex flex-col items-center">
       {/* Top Header Section (Yellow Background) */}
       <div className="w-full bg-[#ff9100] p-4 pb-16 shadow-lg text-white">
         <div className="flex items-center space-x-4 mb-8 pt-4">
@@ -68,7 +68,7 @@ const Withdrawl = () => {
       </div>
 
       {/* Withdrawal Form Card (White Background) */}
-      <div className="w-full max-w-lg -mt-10 p-6 bg-white rounded-t-3xl rounded-b-lg shadow-2xl space-y-5">
+      <div className="w-full max-w-lg lg:max-w-7xl -mt-10 p-6 bg-white rounded-t-3xl rounded-b-lg shadow-2xl space-y-5">
 
         {/* Select Wallet (DaisyUI select class) */}
         <div className="form-control w-full">

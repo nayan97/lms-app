@@ -26,7 +26,7 @@ const DriveOffer = () => {
   const [selectedOperator, setSelectedOperator] = useState(1);
 
   return (
-    <div className="min-h-screen bg-[#ff9100]">
+    <div className="min-h-screen mx-auto lg:max-w-7xl bg-[#ff9100]">
       {/* Header */}
       <Header_wallet></Header_wallet>
 

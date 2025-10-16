@@ -101,11 +101,11 @@ const ProfilePage = () => {
   if (!profile) return <p>No profile data available</p>;
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans antialiased flex flex-col">
+    <div className="min-h-screen bg-[#ff9100] font-sans antialiased flex flex-col">
       {/* Top Header */}
       <HeaderProfile />
       {/* Profile Section */}
-      <main className="flex-1 pb-20 z-20">
+      <main className="flex-1 z-20">
         {/* Profile Image and Name */}
         <div className="w-full bg-[#ff9100] text-center py-6">
           <div className="avatar mx-auto">
@@ -125,23 +125,23 @@ const ProfilePage = () => {
             {profile?.name}
           </h2>
         </div>
-        <div className="rounded-t-[50px]">
+        <div className="rounded-t-[50px] ">
           {/* Profile Details Card */}
-          <div className="max-w-lg mx-auto bg-gray-100 shadow-md rounded-2xl p-6 mt-6">
-            <div className="space-y-3">
-              <div className="flex justify-between bg-white p-2 rounded-2xl">
+          <div className="max-w-lg lg:max-w-7xl mx-auto min-h-[615px] bg-gray-100 shadow-md rounded-t-[50px] p-6 mt-6">
+            <div className="space-y-3 bg-white">
+              <div className="flex justify-between bg-white border-b border-b-gray-200 p-6">
                 <span className="font-medium text-gray-600">{t("Email")}:</span>
                 <span className="text-gray-800">{profile?.email || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between bg-white p-2 rounded-2xl">
+              <div className="flex justify-between border-b border-b-gray-200 bg-white p-6 ">
                 <span className="font-medium text-gray-600">
                   {t("Mobile")}:
                 </span>
                 <span className="text-gray-800">{profile?.phone || "N/A"}</span>
               </div>
 
-              <div className="flex justify-between bg-white p-2 rounded-2xl">
+              <div className="flex justify-between border-b border-b-gray-300 p-6 ">
                 <span className="font-medium text-gray-600">
                   {t("Gender")}:
                 </span>
@@ -150,7 +150,7 @@ const ProfilePage = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between bg-white p-2 rounded-2xl">
+              <div className="flex justify-between border-b border-b-gray-200 bg-white p-6 ">
                 <span className="font-medium text-gray-600">
                   {t("Country")}:
                 </span>
@@ -159,7 +159,7 @@ const ProfilePage = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between bg-white p-2 rounded-2xl">
+              <div className="flex justify-between border-b border-b-gray-300 p-6 ">
                 <span className="font-medium text-gray-600">
                   {t("Address")}:
                 </span>
@@ -168,10 +168,8 @@ const ProfilePage = () => {
                 </span>
               </div>
             </div>
-          </div>
-
-          {/* Delete Account Button */}
-          <div className="w-full max-w-lg mb-10 mx-auto text-center mt-8">
+            {/* Delete Account Button */}
+          <div className="w-full max-w-lg mb-20 mt-30 mx-auto text-center ">
             <button
               onClick={handleDeleteAccount}
               disabled={deleting}
@@ -184,6 +182,9 @@ const ProfilePage = () => {
               {deleting ? "Deleting..." : t("Delete_Account")}
             </button>
           </div>
+          </div>
+
+          
         </div>
       </main>
 

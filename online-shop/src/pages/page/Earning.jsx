@@ -58,7 +58,7 @@ const Earning = () => {
   const currentBalance = "150.44৳";
 
   return (
-    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
+    <div className="min-h-screen lg:max-w-7xl mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
       <Header_wallet />
 
       <main className="flex-1 w-full relative -mt-4 rounded-t-[50px] bg-white overflow-hidden">
