@@ -63,10 +63,10 @@ const ComingSoon = () => {
 
         {/* Translated Headings */}
         <h1 className="text-4xl md:text-6xl font-bold mb-4 text-center animate-pulse">
-          {t("comingSoon")} {/* ✅ translation key */}
+          {t("Coming Soon")} {/* ✅ translation key */}
         </h1>
         <p className="text-lg md:text-2xl text-center opacity-80 mb-8 animate-fadeIn">
-          {t("weAreWorkingOnIt")} {/* ✅ translation key */}
+          {t("We Are Working On It")} {/* ✅ translation key */}
         </p>
       </div>
     </div>

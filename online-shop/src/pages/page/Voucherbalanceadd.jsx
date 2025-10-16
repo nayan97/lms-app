@@ -16,7 +16,7 @@ const VoucherBalanceAdd = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#ff9100] flex flex-col items-center pt-8">
+    <div className="min-h-screen mx-auto lg:max-w-7xl bg-[#ff9100] flex flex-col items-center pt-8">
       {/* Header */}
       <div className="w-full">
         <Header_wallet />
@@ -31,7 +31,7 @@ const VoucherBalanceAdd = () => {
             </div>
 
       {/* Form Card */}
-      <div className="bg-gray-100 h-svh w-full md:w-3/5 rounded-t-[50px] p-6 shadow">
+      <div className="bg-gray-100 lg:max-w-7xl h-svh w-full rounded-t-[50px] p-6 shadow">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Amount Input */}
           <div>

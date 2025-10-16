@@ -12,6 +12,14 @@ import { FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { MdAttachMoney } from "react-icons/md";
 import { IoWalletOutline } from "react-icons/io5";
 import Swal from "sweetalert2";
+import help from "../../assets/help.png"
+import facebook from "../../assets/fb.png"
+import telegram from "../../assets/telegram.png"
+import historyimg from "../../assets/history.png"
+import balanceimg from "../../assets/balance.png"
+import withdrawlimg from "../../assets/withdraw.png"
+import orderhistoryimg from "../../assets/orderhistory.png"
+import logoutimg from "../../assets/logout.png"
 
 const Header_shop = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -131,159 +139,175 @@ const Header_shop = ({ showitem }) => {
     alert("Refer code copied!");
   };
   const Navlinks = (
-    <>
-      <span className="pt-5">
-        {" "}
-        <span className="p-3">{t("Account")}</span>
-        <li>
-          <NavLink
-            to="/order-history"
-            className={({ isActive }) =>
-              isActive
-                ? "text-gray-900 font-bold flex items-center gap-2"
-                : " flex items-center gap-2"
-            }
-          >
-            <FaHistory size={15} /> {t("OrderHistory")}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/transaction-history"
-            className={({ isActive }) =>
-              isActive
-                ? "text-gray-900 font-bold  flex items-center gap-2"
-                : " flex items-center gap-2"
-            }
-          >
-            <IoWalletOutline size={15} /> {t("TransactionHistory")}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/add-balance"
-            className={({ isActive }) =>
-              isActive
-                ? "text-gray-900 font-bold  flex items-center gap-2"
-                : " flex items-center gap-2"
-            }
-          >
-            <MdAttachMoney size={15} /> {t("AddBalance")}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/withdrawl"
-            className={({ isActive }) =>
-              isActive
-                ? "text-gray-900 font-bold  flex items-center gap-2"
-                : " flex items-center gap-2"
-            }
-          >
-            <MdAttachMoney size={15} /> {t("Withdrawl")}
-          </NavLink>
-        </li>
-      </span>
-      <span className="pt-3">
-        {" "}
-        <span className="p-3">{t("Language")}</span>
-        <li>
-          <div className="flex">
-            <span>
-              <IoLanguageOutline size={15} className="text-yellow-500" />
-            </span>
-            <LanguageSwitcher />
-          </div>
-        </li>
-      </span>
-      <span className="pt-5">
-        {" "}
-        <span className="p-3">{t("Logout")}</span>
-        <li>
-          <NavLink
-            onClick={handleLogout}
-            className={({ isActive }) =>
-              isActive
-                ? "text-red-900 font-bold  flex items-center gap-2"
-                : " flex items-center gap-2"
-            }
-          >
-            <FaSignOutAlt size={15} /> {t("Logout")}
-          </NavLink>
-        </li>
-      </span>
-    </>
+   <>
+   <span className="pt-5" > <span className="font-bold text-md p-4">{t("Account")}</span>
+    <li>
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+       <img className="w-6" src={orderhistoryimg}></img>{t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={historyimg}></img> {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/addbalance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={balanceimg}></img> {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={withdrawlimg}></img> {t("Withdrawl")}
+      </NavLink>
+    </li>
+    </span>
+   <span className="pt-5" > <span className="font-bold text-md p-4">{t("Support")}</span>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+       <img className="w-6" src={help}></img>{t("Helpcenter")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={telegram}></img> {t("Telegramgroup")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={facebook}></img> {t("Facebookgroup")}
+      </NavLink>
+    </li>
+    </span>
+    <span className="pt-3" > <span className="font-bold text-md p-4">{t("Language")}</span>
+    <li>
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
+      
+      
+    </li>
+    </span>
+    <span className="pt-5"> <span className="font-bold text-md p-4">{t("Logout")}</span>
+      <li>
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold text-lg flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={logoutimg}></img> {t("Logout")}
+      </NavLink>
+    </li>
+    </span>
+  </>
   );
   const Navlinkslarge = (
     <>
-    
-      <li>
-        <NavLink
-          to="/order-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
-          }
-        >
-          <FaHistory size={15}/> {t("OrderHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/transaction-history"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-          }
-        >
-          <IoWalletOutline size={15} /> {t("TransactionHistory")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/add-balance"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-          }
-        >
-          <MdAttachMoney size={15} /> {t("AddBalance")}
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/withdrawl"
-          className={({ isActive }) =>
-            isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-          }
-        >
-          <MdAttachMoney size={15} /> {t("Withdrawl")}
-        </NavLink>
-      </li>
-     
-      <li>
-        <div className="flex">
-          <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
-          <LanguageSwitcher />
-        </div>
-        
-        
-      </li>
-     
-     
-        <li>
-        <NavLink
-          onClick={handleLogout}
-          className={({ isActive }) =>
-            isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
-          }
-        >
-          <FaSignOutAlt size={15} /> {t("Logout")}
-        </NavLink>
-      </li>
+  
+    <li className="bg-white flex justify-center rounded-xl m-2">
+      <NavLink
+        to="/order-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+         {t("OrderHistory")}
+      </NavLink>
+    </li>
+    <li className="bg-white flex justify-center rounded-xl m-2">
+      <NavLink
+        to="/transaction-history"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+         {t("TransactionHistory")}
+      </NavLink>
+    </li>
+    <li className="bg-white  flex justify-center rounded-xl m-2">
+      <NavLink
+        to="/addbalance"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+         {t("AddBalance")}
+      </NavLink>
+    </li>
+    <li className="bg-white  flex justify-center rounded-xl m-2">
+      <NavLink
+        to="/withdrawl"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+       {t("Withdrawl")}
+      </NavLink>
+    </li>
+   
+    <li className="bg-white  flex justify-center rounded-xl m-2">
+      <div className="flex">
+        <span><IoLanguageOutline size={15} className="text-yellow-500" /></span>
+        <LanguageSwitcher />
+      </div>
       
-    </>
+      
+    </li>
+   
+   
+      <li className="bg-white  flex justify-center rounded-xl m-2">
+      <NavLink
+        onClick={handleLogout}
+        className={({ isActive }) =>
+          isActive ? "text-red-900 font-bold  flex items-center gap-2" : " flex items-center gap-2"
+        }
+      >
+         {t("Logout")}
+      </NavLink>
+    </li>
+    
+  </>
   );
 
   return (
-    <div className="navbar bg-[#ff9100]   ">
+    <div className="navbar mx-auto max-w-7xl bg-[#ff9100]   ">
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         {/* Hamburger icon for mobile */}

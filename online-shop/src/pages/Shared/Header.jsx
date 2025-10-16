@@ -11,6 +11,15 @@ import { IoWalletOutline } from "react-icons/io5";
 import { FaHistory, FaSignOutAlt } from "react-icons/fa";
 import { MdAttachMoney } from "react-icons/md";
 import Swal from "sweetalert2";
+import help from "../../assets/help.png"
+import facebook from "../../assets/fb.png"
+import telegram from "../../assets/telegram.png"
+import historyimg from "../../assets/history.png"
+import balanceimg from "../../assets/balance.png"
+import withdrawlimg from "../../assets/withdraw.png"
+import orderhistoryimg from "../../assets/orderhistory.png"
+import logoutimg from "../../assets/logout.png"
+
 
 const Header = ({ showitem }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -141,7 +150,7 @@ const Header = ({ showitem }) => {
           isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-       <img className="w-6" src="/offer.png"></img>{t("OrderHistory")}
+       <img className="w-6" src={orderhistoryimg}></img>{t("OrderHistory")}
       </NavLink>
     </li>
     <li>
@@ -151,7 +160,7 @@ const Header = ({ showitem }) => {
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <img className="w-6" src="/offer.png"></img> {t("TransactionHistory")}
+        <img className="w-6" src={historyimg}></img> {t("TransactionHistory")}
       </NavLink>
     </li>
     <li>
@@ -161,7 +170,7 @@ const Header = ({ showitem }) => {
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <img className="w-6" src="/offer.png"></img> {t("AddBalance")}
+        <img className="w-6" src={balanceimg}></img> {t("AddBalance")}
       </NavLink>
     </li>
     <li>
@@ -171,7 +180,39 @@ const Header = ({ showitem }) => {
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <img className="w-6" src="/offer.png"></img> {t("Withdrawl")}
+        <img className="w-6" src={withdrawlimg}></img> {t("Withdrawl")}
+      </NavLink>
+    </li>
+    </span>
+   <span className="pt-5" > <span className="font-bold text-md p-4">{t("Support")}</span>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+       <img className="w-6" src={help}></img>{t("Helpcenter")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={telegram}></img> {t("Telegramgroup")}
+      </NavLink>
+    </li>
+    <li>
+      <NavLink
+        to="comingsoon"
+        className={({ isActive }) =>
+          isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
+        }
+      >
+        <img className="w-6" src={facebook}></img> {t("Facebookgroup")}
       </NavLink>
     </li>
     </span>
@@ -193,7 +234,7 @@ const Header = ({ showitem }) => {
           isActive ? "text-red-900 font-bold text-lg flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
       >
-        <img className="w-6" src="/offer.png"></img> {t("Logout")}
+        <img className="w-6" src={logoutimg}></img> {t("Logout")}
       </NavLink>
     </li>
     </span>
@@ -378,11 +419,11 @@ const Header = ({ showitem }) => {
         
        <button
   onClick={() => setShowNotice(true)}
-  className="btn btn-circle btn-sm bg-[#ff9100] text-white border-0"
+  className="btn mr-3 btn-circle btn-sm bg-[#ff9100] text-white border-0"
 >
   <BellIcon className="w-10 h-10" />
 </button>
-          <span className="absolute text-white -top-3 -right-3 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute text-white -top-2 -right-2 bg-red-500  text-xs w-5 h-5 rounded-full flex items-center justify-center">
             1
           </span>
           
@@ -431,7 +472,7 @@ const Header = ({ showitem }) => {
           <div className="bg-white w-[90%] max-w-md rounded-2xl shadow-lg overflow-y-auto max-h-[90vh] relative">
             <button
               onClick={() => setShowNotice(false)}
-              className="absolute top-3 right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center"
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center"
             >
               ✕
             </button>

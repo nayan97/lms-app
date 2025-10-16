@@ -75,7 +75,7 @@ const TransactionHistory = () => {
   const [transactions, setTransactions] = useState(mockTransactions);
 
   return (
-    <div className="min-h-screen bg-yellow-50 font-sans antialiased flex flex-col items-center">
+    <div className="min-h-screen lg:max-w-7xl bg-yellow-50 font-sans antialiased flex flex-col items-center">
       {/* Top Header Section (Yellow Background) */}
       <div className="w-full bg-[#ff9100] p-4 pb-4 shadow-lg text-white">
         <div className="flex items-center space-x-4 mb-2 pt-4">
@@ -99,7 +99,7 @@ const TransactionHistory = () => {
       </div>
 
       {/* Transaction List Container (White Background Card) */}
-      <div className="w-full max-w-lg -mt-4 p-0 bg-[#ff9100] rounded-t-3xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-lg lg:max-w-7xl  -mt-4 p-0 bg-[#ff9100] rounded-t-3xl shadow-2xl overflow-hidden">
         {/* The transaction list */}
         <div className="divide-y divide-gray-100">
           {transactions.map(tx => (

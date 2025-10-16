@@ -46,7 +46,7 @@ const WalletPage = () => {
   ];
 
   return (
-    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl mx-auto">
+    <div className="min-h-screen mb-10 bg-[#ff9100] font-sans antialiased flex flex-col max-w-xl lg:max-w-7xl mx-auto">
       <Header />
       <main className="flex-1 w-full relative -mt-4 rounded-t-3xl bg-gray-100 shadow-2xl overflow-hidden">
         <div className="p-6 md:p-8">

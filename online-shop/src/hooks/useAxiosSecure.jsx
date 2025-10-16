@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const axiosSecure = axios.create({
-  baseURL: "https://api.lifechangebda.com/api",
-  withCredentials: true, // ✅ Important for cross-domain requests with tokens
+  baseURL: "http://127.0.0.1:8000/api",
 });
 
 // ✅ Attach Authorization token automatically
