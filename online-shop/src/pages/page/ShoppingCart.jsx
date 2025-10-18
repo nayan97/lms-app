@@ -83,6 +83,8 @@ const ShoppingCart = () => {
           text: `${t("productQtyUpdated")}`,
           timer: 1000,
           showConfirmButton: false,
+        }).then(() => {
+          window.location.reload();
         });
       }
     } catch (error) {
@@ -160,7 +162,8 @@ const ShoppingCart = () => {
                     </thead>
                     <tbody>
                       {cartItems.map((item) => {
-                        const unitPrice = Number(item.price) / item.product_qty || 0;
+                        const unitPrice =
+                          Number(item.price) / item.product_qty || 0;
                         const qty = Number(item.product_qty) || 0;
                         const total = Number(item.price) || 0;
 
@@ -211,7 +214,8 @@ const ShoppingCart = () => {
                 {/* Mobile card layout */}
                 <div className="block sm:hidden space-y-4">
                   {cartItems.map((item) => {
-                    const unitPrice = Number(item.price) / item.product_qty || 0;
+                    const unitPrice =
+                      Number(item.price) / item.product_qty || 0;
                     const qty = Number(item.product_qty) || 0;
                     const total = Number(item.price) || 0;
 

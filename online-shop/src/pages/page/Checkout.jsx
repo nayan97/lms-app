@@ -13,6 +13,7 @@ const Checkout = () => {
   const axiosUser = useUserAxios();
 
   const [carts, setCarts] = useState([]);
+  // const [carts, setCarts] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [subdistricts, setSubdistricts] = useState([]);
   const [districtId, setDistrictId] = useState("");
@@ -127,12 +128,50 @@ const Checkout = () => {
   };
 
   // ✅ Handle quantity change
-  const handleQtyChange = (type) => {
-    setFormData((prev) => ({
-      ...prev,
-      quantity:
-        type === "inc" ? prev.quantity + 1 : Math.max(1, prev.quantity - 1),
-    }));
+  const handleQtyChange = async (id, actionOrQty) => {
+    const currentItem = carts.find((item) => item.id === id);
+    if (!currentItem) return;
+
+    const currentQty = Number(currentItem.product_qty) || 1;
+    let newQty;
+    if (actionOrQty === "inc") newQty = currentQty + 1;
+    else if (actionOrQty === "dec") newQty = Math.max(1, currentQty - 1);
+    else newQty = Number(actionOrQty) || 1;
+
+    // Optimistic UI update
+    setCarts((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, product_qty: newQty } : item
+      )
+    );
+
+    // Send update request to backend
+    try {
+      const res = await axiosSecure.put(`/cart/${id}`, {
+        qty: newQty, // ✅ matches backend validation
+      });
+
+      if (res.data.success) {
+        // Update the item with the latest price returned from backend
+        const updatedItem = res.data.cartItem;
+
+        setCarts((prev) =>
+          prev.map((item) => (item.id === id ? updatedItem : item))
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: t("qtyUpdated"),
+          text: `${t("productQtyUpdated")}`,
+          timer: 1000,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
   };
 
   // ✅ Fixed Submit
@@ -245,17 +284,17 @@ const Checkout = () => {
                         <div className="flex items-center gap-2 mt-2">
                           <button
                             type="button"
-                            onClick={() => handleQtyChange("dec")}
+                            onClick={() => handleQtyChange(cart.id, "dec")}
                             className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
                           >
-                            −
+                            -
                           </button>
                           <span className="px-3 text-base font-medium">
                             {cart.product_qty}
                           </span>
                           <button
                             type="button"
-                            onClick={() => handleQtyChange("inc")}
+                            onClick={() => handleQtyChange(cart.id, "inc")}
                             className="btn btn-sm border border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-white"
                           >
                             +
