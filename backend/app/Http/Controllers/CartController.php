@@ -68,7 +68,7 @@ public function store(Request $request, $id)
     $cart->product_title = $product->title;
 
     // ✅ ensure price is integer
-    $unitPrice = (int) ($product->cross_price ?? $product->price);
+    $unitPrice = (int) ($product->price ?? $product->price);
     $qty = (int) $request->qty;
     $cart->size =  $request->size;
      $cart->color =  $request->color;
@@ -110,7 +110,7 @@ public function update(Request $request, $id)
     $product = Product::findOrFail($cart->product_id);
 
     // Calculate updated price
-    $unitPrice = (int) ($product->cross_price ?? $product->price);
+    $unitPrice = (int) ($product->price ?? $product->price);
     $qty = (int) $request->qty;
 
     // Update fields
@@ -144,6 +144,8 @@ public function destroy($id)
             ], 404);
         }
     }
+
+
 
 
 

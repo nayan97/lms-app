@@ -8,6 +8,7 @@ use App\Http\Controllers\AdController;
 use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProxyController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\SizeController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\AddColorController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\front\CourseController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\Api\ProductDetailController;
 use App\Http\Controllers\PasswordResetLinkController;
 
@@ -25,6 +27,7 @@ use App\Http\Controllers\PasswordResetLinkController;
 
 
 Route::post('/register', [AccountController::class, 'register']);
+
 
 // Route::post('/forgot-password', [PasswordResetLinkController::class, 'sendResetLinkEmail']);
 // Route::post('/reset-password', [PasswordResetLinkController::class, 'resetPassword']);
@@ -45,6 +48,8 @@ Route::get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
 
+     Route::get('/users/{email}', [UserController::class, 'show']);
+
       // ✅ Logout route
     Route::post('/logout', [AccountController::class, 'logout']);
     Route::resource('/admin/categories', CategoryController::class);
@@ -53,12 +58,15 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::resource('/admin/products', ProductController::class);
     
     Route::get('/products-detail', [ProductDetailController::class, 'index']);
-    Route::get('/users/{email}', [UserController::class, 'show']);
+   
+    
+    Route::get('/products/{id}/download-images', [ProductImageController::class, 'downloadAll']);
 
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart/{id}', [CartController::class, 'store']);
     Route::put('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/removecart/{id}',[CartController::class, 'destroy']);
+
 
     //------------------------Wishlist------------------------//
 
@@ -70,6 +78,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/checkout-data', [CheckoutController::class, 'checkoutData']);
     Route::post('/checkout-data', [CheckoutController::class, 'checkoutOrders']);
     Route::get('/checkout-orders', [CheckoutController::class, 'myOrders']);
+    Route::get('/admin/checkout-orders', [CheckoutController::class, 'index']);
+    Route::put('/admin/checkout-orders/{id}', [CheckoutController::class, 'update']);
 
     // Common profile routes for ALL authenticated users
 
@@ -85,4 +95,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('ads/{ad}/create-session', [AdController::class, 'createSession']);
     Route::post('ads/complete', [AdController::class, 'completeView']);
     // Route::post('withdrawals', [WithdrawalController::class, 'requestWithdrawal']);
+
+
+
+    Route::get('/proxy', [ProxyController::class, 'loadSite']);
+
+
 });

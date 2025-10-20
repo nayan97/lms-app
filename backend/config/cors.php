@@ -1,28 +1,61 @@
 <?php
 
+// return [
+
+//     'paths' => [
+//         'api/*',
+//         'login',
+//         'logout',
+//         'user',
+//     ],
+
+//     'allowed_methods' => ['*'],
+
+//     'allowed_origins' => [
+//         '*', // or specify frontend URLs
+//     ],
+
+//     'allowed_origins_patterns' => [],
+
+//     'allowed_headers' => ['*'],
+
+//     'exposed_headers' => [],
+
+//     'max_age' => 0,
+
+//     'supports_credentials' => false, // ❌ no cookies needed
+// ];
+
+
+
+
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    */
-
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => [
+        'api/*',
+        'login',
+        'logout',
+        'user',
+    ],
 
     'allowed_methods' => ['*'],
 
- // config/cors.php
-    'allowed_origins' => ['http://localhost:5173', 'http://192.168.110.207'], // Make sure to include both just in case!
+    'allowed_origins' => [
+        'https://lifechangebda.com',
+        'https://lifechangebda.com/dashboard',
+        'http://localhost:5173',
+    ],
 
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => [],
+    'exposed_headers' => ['Authorization'],
 
     'max_age' => 0,
 
     'supports_credentials' => true,
 
 ];
+
+

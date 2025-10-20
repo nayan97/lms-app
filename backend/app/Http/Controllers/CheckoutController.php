@@ -111,7 +111,7 @@ public function checkoutOrders(Request $request)
         $order->customer_number = $validated['customer_number'];
         $order->district_id     = $validated['district_id'];
         $order->upazila_id      = $validated['upazila_id'];
-       $order->address =         $validated['delivery_address'];
+        $order->address =         $validated['delivery_address'];
         $order->additional_instruction = $request->additional_instruction;
 
         // User & Product
@@ -123,10 +123,10 @@ public function checkoutOrders(Request $request)
         $order->admin_price         = (int) ($product->admin_price ?? 0);
         $order->max_sell_price      = (int) ($product->max_sell_price ?? 0);
         $order->reseller_sell_price = (int) $validated['reseller_sell_price'];
-        $order->reseller_profit     = $order->reseller_sell_price - $order->admin_price;
+        $order->reseller_profit     = $request->total_reseller_profit;
 
-        $order->delivery_charge   = 130; 
-        $order->total             = ($order->reseller_sell_price * $order->quantity) + $order->delivery_charge;
+        $order->delivery_charge   = 0; 
+        $order->total             = $request->reseller_sell_price + $order->delivery_charge;
 
         // Status
         $order->payment_status  = 'Cash On';
@@ -163,6 +163,44 @@ public function checkoutOrders(Request $request)
 
             return response()->json($orders);
         }
+
+
+    public function index()
+    {
+        $orders = CheckoutOrder::orderBy('id', 'desc')->get();
+
+        return response()->json($orders);
+    }
+
+public function update(Request $request, $id)
+{
+    if (!Auth::check()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized'
+        ], 401);
+    }
+
+    // Validate allowed ENUM values
+    $request->validate([
+        'delivery_status' => 'required|in:Pending,Processing,Delivered,Cancelled',
+    ]);
+
+    // Find the order
+    $order = CheckoutOrder::findOrFail($id);
+
+    // Update status
+    $order->delivery_status = $request->delivery_status;
+    $order->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Order delivery status updated successfully',
+        'order' => $order
+    ]);
+}
+
+//   Route::put('/admin/checkout-orders/{id}', [CheckoutController::class, 'update']);
 
 
 }
