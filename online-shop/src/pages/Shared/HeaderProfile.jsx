@@ -110,7 +110,7 @@ const HeaderProfile = ({ showitem }) => {
          });
        });
   };
-  const referCode = profile?.referred_code;
+  const referCode = profile?.code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -165,7 +165,7 @@ const HeaderProfile = ({ showitem }) => {
    <span className="pt-5" > <span className="font-bold text-md p-4">{t("Support")}</span>
     <li>
       <NavLink
-        to="comingsoon"
+        to="/support"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -175,7 +175,7 @@ const HeaderProfile = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="comingsoon"
+        to="https://t.me/+8g9iSB9QBo0zZjZl"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -185,7 +185,7 @@ const HeaderProfile = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="comingsoon"
+        to="https://www.facebook.com/groups/1652606692365478/?ref=share_group_link&rdid=wezxRuNRR7pvYkcM&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fg%2F1A21B55pHp%2F#"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }

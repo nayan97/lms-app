@@ -60,7 +60,7 @@ const ProductModal = ({
         setMainImagePreview(
           product.image.startsWith("http")
             ? product.image
-            : `http://127.0.0.1:8000/storage/${product.image}`
+            : `https://apiv.lifechangebda.com/storage/${product.image}`
         );
       } else {
         setMainImagePreview(null);
@@ -71,7 +71,7 @@ const ProductModal = ({
         const normalized = product.image_gal.map((img) =>
           img.startsWith("http")
             ? img
-            : `http://127.0.0.1:8000/storage/${img}`
+            : `https://apiv.lifechangebda.com/storage/${img}`
         );
         setGalleryPreviews(normalized);
       } else {
@@ -458,7 +458,7 @@ const ProductModal = ({
                   <img
                     src={
                       product?.name
-                        ? `http://127.0.0.1:8000/api/storage/${src}`
+                        ? `https://apiv.lifechangebda.com/api/storage/${src}`
                         : src
                     }
                     alt="Gallery"

@@ -32,6 +32,7 @@ const CategoryPage = () => {
       const res = await axiosSecure.get("/admin/categories");
       const cats = Array.isArray(res.data) ? res.data : res.data.data;
       setCategories(cats || []);
+      // console.log(cats);
     } catch (error) {
       console.error(error);
       setCategories([]);
@@ -124,7 +125,7 @@ const CategoryPage = () => {
     });
     setPreview(
       category.image
-        ? `http://127.0.0.1:8000/storage/${category.image}`
+        ? `https://apiv.lifechangebda.com/storage/${category.image}`
         : null
     );
     setIsEditOpen(true);
@@ -267,7 +268,7 @@ const CategoryPage = () => {
                         {category.name}
                       </td>
                       <td className="px-4 py-2">
-                        {category.status ? (
+                        {category.status == 1 ? (
                           <span className="px-2 py-1 bg-green-100 text-green-700 rounded">
                             Active
                           </span>
@@ -321,12 +322,12 @@ const CategoryPage = () => {
                         Status:{" "}
                         <span
                           className={`badge ${
-                            category.status === 1
+                            category.status == 1
                               ? "badge-success"
                               : "badge-error"
                           }`}
                         >
-                          {category.status === 1 ? "Active" : "Inactive"}
+                          {category.status == 1 ? "Active" : "Inactive"}
                         </span>
                       </h4>
                     </div>

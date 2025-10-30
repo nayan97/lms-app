@@ -33,7 +33,7 @@ const Footer_Nav = () => {
           to={"/shop"}
           className="bg-[#ff9100] object-fill drop-shadow-lg relative bottom-10 p-1 text-white rounded-full shadow-lg hover:bg-yellow-600 transition-colors"
         >
-          <img src={logo} className="w-17 h-17" />
+          <img src={logo} className="w-12 h-12" />
         </Link>
 
         <Link to={"/mynetwork"} className="hover:text-yellow-500 mr-10 transition-colors flex flex-col items-center">

@@ -12,12 +12,11 @@ import {
   PackageSearch,
   UserCog,
 } from "lucide-react";
-import useUserRole from "../../hooks/useUserRole";
+
 import logo from "../../../public/logo.png";
 import { t } from "i18next";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const { role, isLoading } = useUserRole();
   const menuRef = useRef(null);
 
   // 🔹 Handle outside click + resize
@@ -73,111 +72,72 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <div className="p-4 space-y-2">
           {/* Logo */}
           <div className="flex items-center gap-2 p-2 mb-4 border-b pb-3">
-         <img src={logo} className="w-15 h-15" />
+            <img src={logo} className="w-15 h-15" />
             <span className="text-lg font-semibold">{t("LifeChange")}</span>
           </div>
-
-          {/* Common */}
-          <NavLink to="/dashboard" onClick={handleLinkClick} className={linkClasses}>
-            <LayoutDashboard className="w-5 h-5" />
-            <span>{t("Dashboard")}</span>
-          </NavLink>
-
-          {/* ADMIN LINKS */}
-          {!isLoading && role === "admin" && (
-            <>
-              <NavLink
-                to="/dashboard/add-category"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <FileText className="w-5 h-5" />
-                <span> {t("Category")}</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/add-size"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <Boxes className="w-5 h-5" />
-                <span> {t("AddSize")}</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/add-color"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <Boxes className="w-5 h-5" />
-                <span>{t("AddColor")}</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/add-product"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <PackagePlus className="w-5 h-5" />
-                <span>{t("AddProduct")}</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/all-order"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <PackageSearch className="w-5 h-5" />
-                <span>{t("Orders")}</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/manage-users"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <UserCog className="w-5 h-5" />
-                <span>{t("ManageUsers")}</span>
-              </NavLink>
-
-              
-            </>
-          )}
-
-          {/* USER LINKS */}
-          {!isLoading && role === "user" && (
-            <>
-              <NavLink
-                to="/dashboard/join_as_guide"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <Briefcase className="w-5 h-5" />
-                <span>Join As Guide</span>
-              </NavLink>
-
-              <NavLink
-                to="/dashboard/my-bookings"
-                onClick={handleLinkClick}
-                className={linkClasses}
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span>My Bookings</span>
-              </NavLink>
-            </>
-          )}
-
-          {/* GUIDE LINKS */}
-          {!isLoading && role === "guide" && (
+          <>
             <NavLink
-              to="/dashboard/assigned-tours"
+              to="/dashboard"
               onClick={handleLinkClick}
               className={linkClasses}
             >
-              <ShoppingBag className="w-5 h-5" />
-              <span>My Assigned Tours</span>
+              <LayoutDashboard className="w-5 h-5" />
+              <span>{t("Dashboard")}</span>
             </NavLink>
-          )}
+            <NavLink
+              to="/dashboard/add-category"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <FileText className="w-5 h-5" />
+              <span> {t("Category")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/add-size"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <Boxes className="w-5 h-5" />
+              <span> {t("AddSize")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/add-color"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <Boxes className="w-5 h-5" />
+              <span>{t("AddColor")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/add-product"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <PackagePlus className="w-5 h-5" />
+              <span>{t("AddProduct")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/all-order"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <PackageSearch className="w-5 h-5" />
+              <span>{t("Orders")}</span>
+            </NavLink>
+
+            <NavLink
+              to="/dashboard/manage-users"
+              onClick={handleLinkClick}
+              className={linkClasses}
+            >
+              <UserCog className="w-5 h-5" />
+              <span>{t("ManageUsers")}</span>
+            </NavLink>
+          </>
         </div>
       </aside>
     </>

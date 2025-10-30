@@ -9,6 +9,7 @@ i18n
     resources: {
       en: {
         translation: {
+          support: "Support",
           addbalance: "Add Balance",
           earning: "Earning",
           voucherbalance: "Voucher Balance",
@@ -88,7 +89,7 @@ i18n
           TypingJob: "Typing Job",
           QuizJob: "Quiz Job",
           WatchVideo: "Income by watching Video",
-          MarkSalary: "Daily Mark Salary",
+          MarkSalary: "Monthly Salary",
           DailyTargetBonus: "Daily Target Bonus",
           FreelancingCourse: "Freelancing Course",
           MobileRecharge: "Mobile Recharge",
@@ -320,6 +321,7 @@ i18n
       },
       bn: {
         translation: {
+          support: "সাপোর্ট",
           Applyvendor:"এপলাই ভেন্ডর",
           Rank:"র‍্যাঙ্ক",
           Support:"সাপোর্ট",
@@ -512,7 +514,7 @@ i18n
           TypingJob: "টাইপিং জব",
           QuizJob: "কুইজ জব",
           WatchVideo: "ভিডিও দেখে ইনকাম",
-          MarkSalary: " দৈনিক বেতন চিহ্নিত করুন",
+          MarkSalary: "মাসিক বেতন",
           DailyTargetBonus: "দৈনিক টার্গেট বোনাস",
           FreelancingCourse: "ফ্রিল্যান্সিং কোর্স",
           Mobile: "মোবাইল",

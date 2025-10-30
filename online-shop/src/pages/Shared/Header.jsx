@@ -132,7 +132,7 @@ const Header = ({ showitem }) => {
       });
     });
 };
-  const referCode = profile?.referred_code;
+  const referCode = profile?.code;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referCode);
@@ -187,7 +187,7 @@ const Header = ({ showitem }) => {
    <span className="pt-5" > <span className="font-bold text-md p-4">{t("Support")}</span>
     <li>
       <NavLink
-        to="comingsoon"
+        to="/support"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -197,7 +197,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="comingsoon"
+        to="https://t.me/+8g9iSB9QBo0zZjZl"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -207,7 +207,7 @@ const Header = ({ showitem }) => {
     </li>
     <li>
       <NavLink
-        to="comingsoon"
+        to="https://www.facebook.com/groups/1652606692365478/?ref=share_group_link&rdid=wezxRuNRR7pvYkcM&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fg%2F1A21B55pHp%2F#"
         className={({ isActive }) =>
           isActive ? "text-gray-900 font-bold  flex items-center gap-2" : " flex text-lg p-3 items-center gap-2"
         }
@@ -493,12 +493,12 @@ const Header = ({ showitem }) => {
                 <p>💥 ইনশাআল্লাহ খুব শীঘ্রই আরো কিছু চমকপ্রদ নতুন প্রজেক্ট যুক্ত হচ্ছে...</p>
                 <p>👉 আমাদের অফিসিয়াল ফেসবুক গ্রুপে যুক্ত হোন:</p>
                 <a
-                  href="https://www.facebook.com/share/g/1HVLNaGK8d/"
+                  href="https://www.facebook.com/groups/1338623641105891/?ref=share_group_link&rdid=htFzf047P1Wubd4B&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fg%2F1BP9C5kVA6%2F#"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline break-all"
                 >
-                  https://www.facebook.com/share/g/1HVLNaGK8d/
+                  https://www.facebook.com/groups/1338623641105891/?ref=share_group_link&rdid=htFzf047P1Wubd4B&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2Fg%2F1BP9C5kVA6%2F#
                 </a>
               </div>
 

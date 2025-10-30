@@ -184,7 +184,7 @@ export default function ProductPage() {
     }
 
     try {
-      const res = await axiosSecure.post(`/cart/${id}`, {
+      const res = await axiosSecure.post(`/oneclickorder/${id}`, {
         qty: Number(qty),
         ...(selectedSize && { size: selectedSize }),
         ...(selectedColor && { color: selectedColor }),
@@ -193,7 +193,7 @@ export default function ProductPage() {
       if (res.data.success) {
         // ✅ Reset quantity & go to checkout
         setQty(1);
-        navigate("/checkout");
+        navigate("/oneclickorder");
       } else {
         Swal.fire({
           icon: "error",

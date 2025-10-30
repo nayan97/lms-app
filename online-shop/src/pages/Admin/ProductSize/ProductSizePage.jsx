@@ -180,7 +180,7 @@ const ProductSizePage = () => {
                       <tr key={size.id} className="border-b">
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{size.name}</td>
-                        <td className="px-4 py-2">{size.status === 1 ? "Active" : "Inactive"}</td>
+                        <td className="px-4 py-2">{size.status == 1 ? "Active" : "Inactive"}</td>
                         <td className="px-4 py-2 flex space-x-2 justify-center">
                          <button
                           onClick={() => handleEdit(size)}
@@ -217,13 +217,13 @@ const ProductSizePage = () => {
                           Status:{" "}
                           <span
                             className={`badge ${
-                              size.status === 1
+                              size.status == 1
                                 ? "badge-success"
                                 : "badge-error"
                             }`}
                           >
                             {" "}
-                            {size.status === 1 ? "Active" : "Inactive"}
+                            {size.status == 1 ? "Active" : "Inactive"}
                           </span>
                         </h4>
                       </div>

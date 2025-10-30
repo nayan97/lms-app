@@ -12,44 +12,43 @@ export default function AdView() {
 
   const currentAd = ads[currentAdIndex];
 
-  // Fetch ads
+  // 🧠 Fetch ads
   useEffect(() => {
     const fetchAds = async () => {
       try {
         const res = await axios.get("/ads");
         setAds(res.data);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching ads:", err);
+      } finally {
         setLoading(false);
       }
     };
     fetchAds();
   }, [axios]);
 
-  // Countdown logic
+  // ⏱ Fixed countdown logic
   useEffect(() => {
     if (!currentAd) return;
 
     setButtonDisabled(true);
     setTimeLeft(10);
 
-    let counter = 10;
-
     const interval = setInterval(() => {
-      counter -= 1;
-      setTimeLeft(counter);
-
-      if (counter <= 0) {
-        clearInterval(interval);
-        setButtonDisabled(false);
-      }
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setButtonDisabled(false);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
 
-    // Cleanup interval when ad changes or component unmounts
     return () => clearInterval(interval);
-  }, [currentAdIndex, currentAd]);
+  }, [currentAdIndex]);
 
+  // 🖱 Handle Next Ad
   const handleNextAd = async () => {
     try {
       const res = await axios.post(`/ads/${currentAd.id}/view`);
@@ -76,6 +75,7 @@ export default function AdView() {
     }
   };
 
+  // 🌀 Loading
   if (loading)
     return (
       <div className="flex justify-center items-center h-64">
@@ -83,6 +83,7 @@ export default function AdView() {
       </div>
     );
 
+  // ❌ No ads
   if (ads.length === 0)
     return (
       <div className="flex justify-center items-center h-64">
@@ -90,26 +91,20 @@ export default function AdView() {
       </div>
     );
 
+  // 🧩 Main UI
   return (
     <div className="flex justify-center items-center min-h-[80vh] p-4 bg-gray-50">
       <div className="card bg-white shadow-xl rounded-xl overflow-hidden max-w-5xl w-full">
-                <iframe
-          // src={currentAd.icon}
-          src={`https://www.startech.com.bd/amd-ryzen-5-3400g-processor`}
-          title={currentAd.title}
-          className="w-full h-[500px] border-0"
-           sandbox="allow-scripts allow-forms allow-popups"
-        ></iframe>
-        {/* Ad iframe */}
+
+        {/* 🎥 Ad iframe */}
         <iframe
-          // src={currentAd.icon}
-          src={`http://127.0.0.1:8000/proxy?url=${encodeURIComponent(currentAd.icon)}`}
+          src={`https://apiv.lifechangebda.com/proxy?url=${encodeURIComponent(currentAd.icon)}`}
           title={currentAd.title}
           className="w-full h-[500px] border-0"
-           sandbox="allow-scripts allow-forms allow-popups"
+          sandbox="allow-scripts allow-forms allow-popups"
         ></iframe>
 
-        {/* Controls */}
+        {/* ⚙️ Controls */}
         <div className="p-4 flex flex-col sm:flex-row justify-between items-center">
           <h3 className="text-lg font-semibold mb-2 sm:mb-0 text-gray-800">
             {currentAd.title}
@@ -136,7 +131,7 @@ export default function AdView() {
           </div>
         </div>
 
-        {/* Progress info */}
+        {/* 📊 Progress info */}
         <div className="text-center pb-4 text-gray-500 text-sm">
           Ad {currentAdIndex + 1} of {ads.length}
         </div>
@@ -144,33 +139,3 @@ export default function AdView() {
     </div>
   );
 }
-
-
-// import { useEffect } from "react";
-
-// export default function AdBanner() {
-//   useEffect(() => {
-//     // Remove any existing script to prevent duplicates
-//     const existing = document.getElementById("revenuecpm-script");
-//     if (existing) existing.remove();
-
-//     const script = document.createElement("script");
-//     script.id = "revenuecpm-script";
-//     script.src = "https://www.revenuecpmgate.com/v0wv4wkd4?key=fe882fe82b4acf385f8137fa12bc51cf";
-//     script.async = true;
-
-//     const container = document.getElementById("ad-container");
-//     if (container) container.appendChild(script);
-
-//     return () => {
-//       // Cleanup on unmount
-//       if (container) container.innerHTML = "";
-//     };
-//   }, []);
-
-//   return (
-//     <div id="ad-container" className="w-full h-auto text-center">
-//       <p className="text-gray-400 text-sm">Loading ad...</p>
-//     </div>
-//   );
-// }

@@ -4,7 +4,7 @@ import Header from "../Shared/Header";
 import { Link } from "react-router";
 import { FaArrowRight } from "react-icons/fa";
 import { t } from "i18next"; // ✅ import t
-import walletimg from "../../assets/wallet.png"
+import walletimg from "../../assets/wallet.jpg";
 
 // --- Icon Component ---
 const WalletIcon = ({ className = "h-5 w-5", fill = "currentColor" }) => (
@@ -23,11 +23,9 @@ const WalletFeatureItem = ({ label, Icon, link }) => (
       <span className="text-gray-800 text-lg font-medium">{t(label)}</span>
     </div>
 
-    
-      <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-        <FaArrowRight />
-      </div>
-    
+    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+      <FaArrowRight />
+    </div>
   </div>
 );
 
@@ -36,7 +34,11 @@ const WalletPage = () => {
   const currentBalance = "150.44৳";
 
   const menuItems = [
-    { label: "SeeVoucherBalance", Icon: WalletIcon, link: "/wallet/voucherbalance" },
+    {
+      label: "SeeVoucherBalance",
+      Icon: WalletIcon,
+      link: "/wallet/voucherbalance",
+    },
     { label: "TodayEarning", Icon: WalletIcon, link: "/wallet/earning" },
     { label: "YesterdayEarning", Icon: WalletIcon, link: "/wallet/earning" },
     { label: "DaysEarning", Icon: WalletIcon, link: "/wallet/earning" },
@@ -52,39 +54,41 @@ const WalletPage = () => {
         <div className="p-6 md:p-8">
           {/* Wallet Balance Section */}
           <div className="flex flex-col bg-white rounded-2xl items-center justify-center p-8">
-            <div className="relative w-40 h-40 flex items-center justify-center">
-  {/* Wallet image */}
-  <img src={walletimg} alt="wallet" className="w-full h-full object-contain" />
+            <div className="relative w-60 h-60 flex items-center justify-center">
+              {/* Wallet image */}
+              <img
+                src={walletimg}
+                alt="wallet"
+                className="w-full h-full object-contain"
+              />
 
-  {/* Balance text overlay */}
-  <h1 className="absolute text-xl font-bold text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-    {currentBalance.replace("৳", "")}
-  </h1>
-</div>
-            <h2 className="text-xl font-bold text-gray-700 mt-4">{t("currentbalance")}</h2>
+              {/* Balance text overlay */}
+              <h1 className="absolute text-xl font-bold text-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-8 pr-2">
+                {currentBalance.replace("৳", "")}
+              </h1>
+            </div>
+            <h2 className="text-xl font-bold text-gray-700 mt-4">
+              {t("currentbalance")}
+            </h2>
           </div>
 
           {/* Feature List */}
           <div className="mt-8 space-y-1">
             {menuItems.map((item, index) => (
-                <div className="bg-white rounded-2xl">
-
-                    <Link
-      to={item.link}
-      state={{ name: item.label }}
-      className=" hover:bg-yellow-100 rounded-full items-center transition-colors"
-    >
-<WalletFeatureItem
-                key={index}
-                label={item.label}
-                Icon={item.Icon}
-                link={item.link}
-              />
-
-    </Link>
-                    
-                </div>
-              
+              <div className="bg-white rounded-2xl">
+                <Link
+                  to={item.link}
+                  state={{ name: item.label }}
+                  className=" hover:bg-yellow-100 rounded-full items-center transition-colors"
+                >
+                  <WalletFeatureItem
+                    key={index}
+                    label={item.label}
+                    Icon={item.Icon}
+                    link={item.link}
+                  />
+                </Link>
+              </div>
             ))}
           </div>
         </div>

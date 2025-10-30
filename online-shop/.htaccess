@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # ✅ Redirect ONLY the root ("/") to "/login"
+  RewriteCond %{REQUEST_URI} ^/$
+  RewriteRule ^$ /login [L,R=302]
+
+  # ✅ Allow direct access to existing files
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # ✅ Allow access to existing directories
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # ✅ Send all other routes to React's index.html (for client-side routing)
+  RewriteRule . /index.html [L]
+</IfModule>

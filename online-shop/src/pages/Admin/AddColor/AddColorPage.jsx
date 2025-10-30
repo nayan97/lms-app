@@ -177,7 +177,7 @@ const AddColorPage = () => {
                       <tr key={color.id} className="border-b">
                         <td className="px-4 py-2">{index + 1}</td>
                         <td className="px-4 py-2">{color.name}</td>
-                         <td className="px-4 py-2">{color.status === 1 ? "Active" : "Inactive"}</td>
+                         <td className="px-4 py-2">{color.status == 1 ? "Active" : "Inactive"}</td>
                         <td className="px-4 py-2 flex space-x-2 justify-center">
                               <button
                           onClick={() => handleEdit(color)}
@@ -214,13 +214,13 @@ const AddColorPage = () => {
                           Status:{" "}
                           <span
                             className={`badge ${
-                              color.status === 1
+                              color.status == 1
                                 ? "badge-success"
                                 : "badge-error"
                             }`}
                           >
                             {" "}
-                            {color.status === 1 ? "Active" : "Inactive"}
+                            {color.status == 1 ? "Active" : "Inactive"}
                           </span>
                         </h4>
                       </div>

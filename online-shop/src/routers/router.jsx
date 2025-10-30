@@ -16,7 +16,9 @@ import ProductDetailPage from "../pages/Admin/ProductdetailPage/ProductDetailPag
 import ProductDetails from "../pages/page/ProductDetails";
 import ShoppingCart from "../pages/page/ShoppingCart";
 import Checkout from "../pages/page/Checkout";
+import OneClickOrder from "../pages/page/OneClickOrder";
 import Wishlist from "../pages/page/Wishlist";
+
 import ComingSoon from "../pages/page/ComingSoon";
 import OrderHistory from "../pages/page/OrderHistory";
 import Withdrawl from "../pages/page/Withdrawl";
@@ -32,6 +34,7 @@ import AdsViewPage from "../pages/page/AdsViewPage";
 import LatestProduct from "../pages/page/LatestProduct";
 import PopularProduct from "../pages/page/PopularProduct";
 import MyNetwork from "../pages/page/MyNetwork";
+import Support from "../pages/page/Support";
 
 import ForgetPasswordPage from "../pages/Auth/ForgetPassaword";
 import VoucherBalance from "../pages/page/VoucherBalance";
@@ -79,6 +82,10 @@ export const router = createBrowserRouter([
       {
         path: "comingsoon",
         Component: ComingSoon
+      },
+            {
+        path: "/support",
+        Component: Support
       },
       {
         path:"categories",
@@ -260,11 +267,19 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-            {
+     {
         path: "checkout",
         element: (
           <PrivateRoute>
             <Checkout />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "oneclickorder",
+        element: (
+          <PrivateRoute>
+            <OneClickOrder />
           </PrivateRoute>
         ),
       },
